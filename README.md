@@ -1,3 +1,7 @@
+[Project Description](#description)
+[Ressources](#ressources)
+
+
 ## Description
 
 The goal of the project is to enhance your understanding of the computer graphics principles and your graphics
@@ -20,14 +24,14 @@ The project implementation report should clearly state what each member of
 Submission of Project Implementation Report
 Submit your project implementation report using Moodle.
 
-## Submission of Final Project
+#### Submission of Final Project
 Please create a zip file containing your C/C++ code, vertex shader, fragment shader, a readme text file (.txt) and
 representative screen shots of your project in action. In the readme file, document the input controls e.g.
 keyboard/mouse shortcuts, etc.
 Submission instructions will be provided on the course website.
 COMP371: Computer Graphics, 2016 Fall C. Poullis Team Project
 
-## PROJECT TOPICS
+#### PROJECT TOPICS
 1. Interior Furniture Layout Design in 3D
 The goal of this project is to create an interactive tool using OpenGl for layout of furniture in a room, say living
 room, dining room, bedroom, or an outdoor landscape, sports field with players, etc. The tool will allow a user
@@ -52,3 +56,10 @@ items, like a bridge, for textures, and so on, as needed in order to crea
 that you credit the source properly. You should have simple interaction mechanisms to navigate through the
 virtual world and view it from different angles. During navigation, the user must not be allowed to pass through
 objects.
+
+
+## Resources
+
+- Video: https://www.youtube.com/watch?v=-d2-PtK4F6Y
+- Blog city generation: http://www.shamusyoung.com/twentysidedtale/?p=2940
+- Blog landscape generation: http://www.shamusyoung.com/twentysidedtale/?p=11874
