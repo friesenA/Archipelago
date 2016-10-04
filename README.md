@@ -1,5 +1,5 @@
-[Project Description](#description)
-[Ressources](#ressources)
+- [Project Description](#description)
+- [Ressources](#ressources)
 
 
 ## Description
