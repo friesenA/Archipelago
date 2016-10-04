@@ -1,4 +1,3 @@
-
 ## Description
 
 The goal of the project is to enhance your understanding of the computer graphics principles and your graphics
@@ -41,6 +40,7 @@ properly. Items when being moved within the room for repositioning should 
 other items or through walls, floors, ceiling etc. The functionality to interactively select an object from a
 repository and to position/orient it at a desired location is mandatory. Absence of this functionality will result in
 a reduced score for the project.
+
 2. Walk Through a Procedurally Modelled World
 The goal of this project is to create a program using OpenGl for walking through a procedurally created virtual
 world, say a forest of trees, plants, bushes etc., or an urban city with roads, buildings, etc. All repeating items,
