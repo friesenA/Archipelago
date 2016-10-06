@@ -1,5 +1,11 @@
 #pragma once
 
+//OpenGL
+void initGLFWHints();
+
+// Window
+GLFWwindow* getWindowInstance();
+
 // Keyboard
 //////////////////////////////////////////////////////////////////////////
 void error_callback(int error, const char* description);

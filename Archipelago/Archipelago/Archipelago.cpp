@@ -15,26 +15,12 @@ const GLuint HEIGHT = 800;
 
 int main(void) {
 
-	// OpenGL Spec windows
-	//////////////////////////////////////////////////////////////////////////
-	glfwWindowHint(GLFW_SAMPLES, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+	// OpenGL Spec
+	initGLFWHints();
 
 	// OpenGl window creation
-	//////////////////////////////////////////////////////////////////////////
 	glfwInit();
-	GLFWwindow* window;
-	window = glfwCreateWindow(WIDTH, HEIGHT, "Spline -- Assignment 2", NULL, NULL);
-
-	if (window == nullptr) {
-		cout << "Failed to create GLFW window" << endl;
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-	}
+	GLFWwindow* window = getWindowInstance();
 
 	// Setup window
 	//////////////////////////////////////////////////////////////////////////
@@ -55,7 +41,6 @@ int main(void) {
 	//////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
 
-		glEnd();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -65,6 +50,38 @@ int main(void) {
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	exit(EXIT_SUCCESS);
+}
+
+
+// GLFW
+//////////////////////////////////////////////////////////////////////////
+
+/**
+ * Initial GLFW window hints
+ */
+void initGLFWHints() {
+	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+}
+
+/**
+ * Get a GLFW window instance
+ */
+GLFWwindow* getWindowInstance() {
+	GLFWwindow* window;
+	window = glfwCreateWindow(WIDTH, HEIGHT, "Height field", NULL, NULL);
+
+	if (window == nullptr) {
+		cout << "Failed to create GLFW window" << endl;
+		glfwTerminate();
+		exit(EXIT_FAILURE);
+	}
+
+	return window;
 }
 
 // Keyboard
@@ -77,3 +94,4 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 }
+
