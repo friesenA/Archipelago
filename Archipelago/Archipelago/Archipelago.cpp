@@ -6,6 +6,7 @@
 
 #include "stdHeader.h"
 #include "Archipelago.h"
+#include "Camera.h"
 
 using namespace std;
 
@@ -73,7 +74,7 @@ void initGLFWHints() {
  */
 GLFWwindow* getWindowInstance() {
 	GLFWwindow* window;
-	window = glfwCreateWindow(WIDTH, HEIGHT, "Height field", NULL, NULL);
+	window = glfwCreateWindow(WIDTH, HEIGHT, "Archipelago", NULL, NULL);
 
 	if (window == nullptr) {
 		cout << "Failed to create GLFW window" << endl;
