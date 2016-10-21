@@ -63,3 +63,14 @@ objects.
 - Video: https://www.youtube.com/watch?v=-d2-PtK4F6Y
 - Blog city generation: http://www.shamusyoung.com/twentysidedtale/?p=2940
 - Blog landscape generation: http://www.shamusyoung.com/twentysidedtale/?p=11874
+
+
+## Git convention
+
+- 1. For each new or existing feature, create a new issue
+- 2. Open the assigned or newly created issue and look for the button `New ranch`
+    _(this will create a new branch using the updated `master` branch. Note that work in progress from other branches are not reflected)_
+- 3. Once a feature is completed, update your local branch with the master branch
+    _(we want to make sure that your new feature does not break or come into conflict with completed features in the `master` branch)_
+- 4. Create a new merge resquest to merge your changes to the `master` branch
+- 5. The merge resquest will be reviewed and accepted by people with the profil `master`
