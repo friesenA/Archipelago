@@ -1,5 +1,6 @@
 - [Project Description](#description)
 - [Resources](#resources)
+- [Git Convention] (#git-convention)
 
 
 ## Description
