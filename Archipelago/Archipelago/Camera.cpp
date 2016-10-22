@@ -3,15 +3,11 @@
 
 
 
-Camera::Camera(glm::vec3 position, glm::vec3 forward, glm::vec3 up) : speed(SPEED), sensitivity(SENSITIVITY), worldUp(up)
+Camera::Camera(glm::vec3 position, glm::vec3 forward, glm::vec3 up, GLfloat yaw, GLfloat pitch) : speed(SPEED), sensitivity(SENSITIVITY), yaw(yaw), pitch(pitch)
 {
 	this->position = position;
+	this->worldUp = glm::normalize(up);
 	this->forward = glm::normalize(forward);
-
-	//Derive the initial values of pitch and yaw from the given attribute vectors
-	this->pitch = glm::acos(glm::dot(this->up, glm::vec3(0.0f, 1.0f, 0.0f)));
-	glm::vec3 forwardProjectionXZ = glm::normalize(glm::vec3(this->forward.x, 0.0f, this->forward.y));   //need to test
-	this->yaw = glm::acos(glm::dot(forwardProjectionXZ, glm::vec3(-1.0f, 0.0f, 0.0f)));
 
 	//Calculate the remaining attribute vectors
 	this->recalculateVectors();
