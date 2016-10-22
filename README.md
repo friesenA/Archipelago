@@ -1,4 +1,4 @@
-- [Project Description](#description)
+﻿- [Project Description](#description)
 - [Resources](#resources)
 - [Git Convention] (#git-convention)
 
@@ -64,6 +64,8 @@ objects.
 - Video: https://www.youtube.com/watch?v=-d2-PtK4F6Y
 - Blog city generation: http://www.shamusyoung.com/twentysidedtale/?p=2940
 - Blog landscape generation: http://www.shamusyoung.com/twentysidedtale/?p=11874
+- Procedural Terrain Generation (Perlin Noise): https://flafla2.github.io/2014/08/09/perlinnoise.html
+- Procedural Object Placement: http://devmag.org.za/2009/04/25/perlin-noise/
 
 
 ## Git convention
@@ -75,3 +77,5 @@ objects.
     _(we want to make sure that your new feature does not break or come into conflict with completed features in the `master` branch)_
 - 4. Create a new merge resquest to merge your changes to the `master` branch
 - 5. The merge resquest will be reviewed and accepted by people with the profil `master`
+=======
+
