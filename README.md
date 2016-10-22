@@ -1,4 +1,4 @@
-- [Project Description](#description)
+﻿- [Project Description](#description)
 - [Resources](#resources)
 
 
@@ -63,3 +63,5 @@ objects.
 - Video: https://www.youtube.com/watch?v=-d2-PtK4F6Y
 - Blog city generation: http://www.shamusyoung.com/twentysidedtale/?p=2940
 - Blog landscape generation: http://www.shamusyoung.com/twentysidedtale/?p=11874
+- Procedural Terrain Generation (Perlin Noise): https://flafla2.github.io/2014/08/09/perlinnoise.html
+- Procedural Object Placement: http://devmag.org.za/2009/04/25/perlin-noise/
