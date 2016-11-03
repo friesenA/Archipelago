@@ -65,7 +65,10 @@ objects.
 - Blog city generation: http://www.shamusyoung.com/twentysidedtale/?p=2940
 - Blog landscape generation: http://www.shamusyoung.com/twentysidedtale/?p=11874
 - Procedural Terrain Generation (Perlin Noise): https://flafla2.github.io/2014/08/09/perlinnoise.html
-- Procedural Object Placement: http://devmag.org.za/2009/04/25/perlin-noise/
+- Procedural Object Placement: 
+    - http://devmag.org.za/2009/04/25/perlin-noise/
+    - http://pcgbook.com/
+    - http://pcg.wikidot.com/category-pcg-algorithms
 
 
 ## Git convention
