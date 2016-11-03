@@ -5,17 +5,19 @@
 const int TERRAIN_WIDTH = 600;
 const int TERRAIN_LENGTH = 600;
 
+//Currently: Creates a plane at y=0, with given width and length, centered at the origin
 class Terrain
-{
-public:
+{	
 	int seed;
 	int width;
 	int length;
-	
+
 	GLuint VAO, vertex_VBO, index_EBO;
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> indicies;
 
+public:
+	
 	//Constructor initializes the terrain for rendering
 	Terrain(int seed);
 

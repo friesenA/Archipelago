@@ -25,8 +25,8 @@ void Terrain::buildVertexVBO()
 	int halfLength = length / 2;
 
 	//Creates a plane at y=0, with given width and length, centered at the origin
-	for (int l = halfLength; l <= halfLength; l++) {
-		for (int w = halfWidth; w <= halfWidth; w++) {
+	for (int l = -halfLength; l <= halfLength; l++) {
+		for (int w = -halfWidth; w <= halfWidth; w++) {
 			vertices.push_back(glm::vec3((GLfloat)w, 0.0f, (GLfloat)l));
 		}
 	}
