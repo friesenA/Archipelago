@@ -1,4 +1,4 @@
-#pragma once
+#pragma once;
 
 //Translation values
 enum Movement {

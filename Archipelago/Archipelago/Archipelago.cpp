@@ -65,7 +65,7 @@ int main(void) {
 		moveCamera();
 
 		glm::mat4 view_matrix;
-		view_matrix = camera.getViewMatrix;
+		view_matrix = camera.getViewMatrix();
 
 		glfwSwapBuffers(window);
 	}
