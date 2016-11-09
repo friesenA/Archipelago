@@ -82,3 +82,6 @@ objects.
 - 5. The merge resquest will be reviewed and accepted by people with the profil `master`
 =======
 
+## Good video playlist to look at
+https://www.youtube.com/watch?v=HusvGeEDU_U&list=PLRIWtICgwaX23jiqVByUs0bqhnalNTNZh
+
