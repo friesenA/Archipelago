@@ -6,8 +6,6 @@
 
 #include "Archipelago.h"
 
-
-
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
 //Key tracking
@@ -53,20 +51,28 @@ int main(void) {
 
 	// Shader
 	//////////////////////////////////////////////////////////////////////////
-	Shader shaderPlane("Shaders/vertex.shader", "Shaders/fragment.shader");
+	Shader shader("Shaders/vertex.shader", "Shaders/fragment.shader");
 
 	// Game loop
 	//////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
-
 		glfwPollEvents();
+
+		// Clear buffer
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//Camera
 		moveCamera();
+		view = camera.getViewMatrix();
 
-		glm::mat4 view_matrix;
-		view_matrix = camera.getViewMatrix();
+		//Foo water instance
+		Water water(100.0);
+		shader.Use();
+		//transformViewProj(&shader);
 
-		//shaderPlane.Use();
-		//shaders.Program
+		//glBindVertexArray(water.getVAO());
+		//glBindVertexArray(0);
 
 		glfwSwapBuffers(window);
 	}
@@ -85,11 +91,14 @@ void transformViewProj(Shader *shaders) {
 	//TODO complete this part of projection once it is defined
 	//projection = perspective(radians(fieldOView), (GLfloat)width_Perscpective / (GLfloat)height_Perspective, 0.1f, 100.0f);
 	//view = lookAt(cameraPosition, cameraFront, cameraUp);
+
 	projLoc = glGetUniformLocation(shaders->Program, "projection");
 	viewLoc = glGetUniformLocation(shaders->Program, "view");
 	modelLoc = glGetUniformLocation(shaders->Program, "model");
+
 	//glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-	//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 }
 
 
