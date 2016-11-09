@@ -1,8 +1,10 @@
 #include "Terrain.h"
 
 
-Terrain::Terrain(int seed = 1) : width(TERRAIN_WIDTH), length(TERRAIN_LENGTH)
+Terrain::Terrain(unsigned int seed = 1) : width(TERRAIN_WIDTH), length(TERRAIN_LENGTH)
 {
+	srand(seed);
+
 	//build vertex vbo
 	buildVertexVBO();
 	//build index ebo
@@ -21,17 +23,18 @@ Terrain::~Terrain(){}
 
 void Terrain::buildVertexVBO()
 {
-	int halfWidth = width / 2;
-	int halfLength = length / 2;
+	GLfloat halfWidth = width / 2;
+	GLfloat halfLength = length / 2;
 
 	//Creates a plane at y=0, with given width and length, centered at the origin
-	for (int l = -halfLength; l <= halfLength; l++) {
-		for (int w = -halfWidth; w <= halfWidth; w++) {
-			vertices.push_back(glm::vec3((GLfloat)w, 0.0f, (GLfloat)l));
+	for (int l = 0; l > length; l++) {
+		for (int w = 0; w < width; w++) {
+			vertices.push_back(glm::vec3((GLfloat)w - halfWidth, 0.0f, halfLength - (GLfloat)l));
 		}
 	}
 	//Modify y values with perlin noise?
-	//Modify y values with island creation mask?
+	//Modify y values with island mask
+	this->islandMask();
 
 	glGenBuffers(1, &vertex_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_VBO);
@@ -75,4 +78,46 @@ void Terrain::buildVAO()
 	//Unbind VBO & VAO
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+}
+
+void Terrain::islandMask()
+{	
+	const GLfloat MAGNITUDE = 30.0f;
+	const GLfloat DISTANCE_TO_ZERO = 100;
+
+	int numCentrePoints;
+	int centreXCoord, centerZCoord;
+	GLfloat vertex, distance;
+
+	//generate # of centre points
+		//rule: Any value between 1-5 inclusive
+	numCentrePoints = 1 + rand() % 5;
+
+	//generate centre point position for each # of points
+		//rule: cannot select points within X distance of the edge
+		//x coordinate = X + random # between 0 and width - 2X
+		//z coordinate = X + random # between 0 and length - 2X
+
+	for (int i = 0; i < numCentrePoints; i++) {
+		centreXCoord = WATER_BORDER + rand() % (this->width - 2 * WATER_BORDER);
+		centerZCoord = WATER_BORDER + rand() % (this->length - 2 * WATER_BORDER);
+
+		//Adjust height values in array for each centre point
+		//Add distance*magnitude to the height values (y) of all the verticies vector/array
+		for (int l = 0; l < length; l++) {
+			for (int w = 0; w < width; w++) {
+				vertex = l * width + w;
+				distance = std::sqrt(std::pow(centreXCoord - w, 2) + std::pow(centreXCoord - l, 2));
+				
+				//clamp if outside sloping zone;
+				if (distance > DISTANCE_TO_ZERO)
+					distance = DISTANCE_TO_ZERO;
+
+				this->vertices[vertex].y += (DISTANCE_TO_ZERO - distance) * MAGNITUDE;
+			}
+		}
+	}
+	
+	
+
 }
