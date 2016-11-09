@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClInclude Include="Archipelago.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="stdHeader.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Water.h" />
@@ -167,6 +168,10 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Water.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\fragment.shader" />
+    <None Include="Shaders\vertex.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

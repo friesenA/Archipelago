@@ -59,6 +59,10 @@ int main(void) {
 
 	glViewport(0, 0, width, height);
 
+	// Shader
+	//////////////////////////////////////////////////////////////////////////
+	Shader shaderPlane("Shaders/vertex.shader", "Shaders/fragment.shader");
+
 	// Game loop
 	//////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
@@ -68,8 +72,10 @@ int main(void) {
 
 		glm::mat4 view_matrix;
 		view_matrix = camera.getViewMatrix();
-		
-	
+
+		//shaderPlane.Use();
+		//shaders.Program
+
 		glfwSwapBuffers(window);
 	}
 
