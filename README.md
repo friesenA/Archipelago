@@ -74,7 +74,7 @@ objects.
 ## Git convention
 
 - 1. For each new or existing feature, create a new issue
-- 2. Open the assigned or newly created issue and look for the button `New ranch`
+- 2. Open the assigned or newly created issue and look for the button `New branch`
     _(this will create a new branch using the updated `master` branch. Note that work in progress from other branches are not reflected)_
 - 3. Once a feature is completed, update your local branch with the master branch
     _(we want to make sure that your new feature does not break or come into conflict with completed features in the `master` branch)_
