@@ -1,5 +1,4 @@
 //// Source : learnopengl.com --  shader
-//// Used for testing
 #pragma once
 
 #include "stdHeader.h"

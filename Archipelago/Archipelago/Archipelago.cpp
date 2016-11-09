@@ -86,26 +86,6 @@ int main(void) {
 	exit(EXIT_SUCCESS);
 }
 
-
-// GLFW
-//////////////////////////////////////////////////////////////////////////
-
-/**
- * Get a GLFW window instance
- */
-GLFWwindow* getWindowInstance() {
-	GLFWwindow* window;
-	window = glfwCreateWindow(WIDTH, HEIGHT, "Archipelago", NULL, NULL);
-
-	if (window == nullptr) {
-		cout << "Failed to create GLFW window" << endl;
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-	}
-
-	return window;
-}
-
 // Keyboard
 //////////////////////////////////////////////////////////////////////////
 void error_callback(int error, const char* description) {
