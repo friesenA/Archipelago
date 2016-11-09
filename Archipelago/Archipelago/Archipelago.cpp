@@ -4,10 +4,9 @@
  * Team 7
  */
 
-
 #include "Archipelago.h"
 
-using namespace glm;
+
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
@@ -78,6 +77,21 @@ int main(void) {
 	glfwTerminate();
 	exit(EXIT_SUCCESS);
 }
+
+
+// Transform
+//////////////////////////////////////////////////////////////////////////
+void transformViewProj(Shader *shaders) {
+	//TODO complete this part of projection once it is defined
+	//projection = perspective(radians(fieldOView), (GLfloat)width_Perscpective / (GLfloat)height_Perspective, 0.1f, 100.0f);
+	//view = lookAt(cameraPosition, cameraFront, cameraUp);
+	projLoc = glGetUniformLocation(shaders->Program, "projection");
+	viewLoc = glGetUniformLocation(shaders->Program, "view");
+	modelLoc = glGetUniformLocation(shaders->Program, "model");
+	//glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+	//glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+}
+
 
 // Keyboard
 //////////////////////////////////////////////////////////////////////////
