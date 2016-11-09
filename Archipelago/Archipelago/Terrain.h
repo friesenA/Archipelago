@@ -1,14 +1,16 @@
 #pragma once
 #include "stdHeader.h"
 
-// Dimensions of terrain plane: Must be even values
+// Dimensions of terrain plane
 const int TERRAIN_WIDTH = 600;
 const int TERRAIN_LENGTH = 600;
+
+const int WATER_BORDER = 100;
 
 //Currently: Creates a plane at y=0, with given width and length, centered at the origin
 class Terrain
 {	
-	int seed; // random input for the procedural generator
+	unsigned int seed; // random input for the procedural generator
 	int width;
 	int length;
 
@@ -19,7 +21,7 @@ class Terrain
 public:
 	
 	//Constructor initializes the terrain for rendering
-	Terrain(int seed);
+	Terrain(unsigned int seed);
 
 	//Public access to VAO for rendering
 	GLuint getVAO();
@@ -36,5 +38,7 @@ private:
 
 	//Loads VAO with all terrain VBO's, EBO's
 	void buildVAO();
+
+	void islandMask();
 };
 
