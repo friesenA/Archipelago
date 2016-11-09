@@ -4,17 +4,10 @@
  * Team 7
  */
 
-#include "stdHeader.h"
+
 #include "Archipelago.h"
-#include "Camera.h"
-#include "Water.h"
-#include "Terrain.h"
 
-using namespace std;
-
-// Window dimensions
-const GLuint WIDTH = 800;
-const GLuint HEIGHT = 800;
+using namespace glm;
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
