@@ -1,6 +1,19 @@
 #pragma once
 
-//OpenGL
+#include "stdHeader.h"
+#include "Camera.h"
+#include "Water.h"
+#include "Terrain.h"
+
+
+
+using namespace std;
+
+// Window dimensions
+const GLuint WIDTH = 800;
+const GLuint HEIGHT = 800;
+
+//////////////////////////////////////////////////////////////////////////////OpenGL
 /**
 * Initial GLFW window hints
 */
@@ -27,12 +40,12 @@ GLFWwindow* getWindowInstance() {
 	}
 
 	return window;
-}
+};
 
 // Keyboard & Mouse
 //////////////////////////////////////////////////////////////////////////
 void error_callback(int error, const char* description);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
-void moveCamera()
+void moveCamera();
 
