@@ -5,13 +5,22 @@
 #include "Water.h"
 #include "Terrain.h"
 
-
-
 using namespace std;
+using namespace glm;
 
 // Window dimensions
 const GLuint WIDTH = 800;
 const GLuint HEIGHT = 800;
+
+// Transform
+//////////////////////////////////////////////////////////////////////////
+mat4 view;
+mat4 model;
+mat4 projection;
+GLint modelLoc;
+GLint viewLoc;
+GLint projLoc;
+void transformViewProj(Shader *shaders);
 
 //////////////////////////////////////////////////////////////////////////////OpenGL
 /**
@@ -48,4 +57,6 @@ void error_callback(int error, const char* description);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 void moveCamera();
+
+
 
