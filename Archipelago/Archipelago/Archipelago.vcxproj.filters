@@ -30,6 +30,9 @@
     <ClInclude Include="Water.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Archipelago.cpp">
@@ -44,5 +47,9 @@
     <ClCompile Include="Water.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\vertex.shader" />
+    <None Include="Shaders\fragment.shader" />
   </ItemGroup>
 </Project>
