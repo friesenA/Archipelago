@@ -7,6 +7,8 @@
 #include "stdHeader.h"
 #include "Archipelago.h"
 #include "Camera.h"
+#include "Water.h"
+#include "Terrain.h"
 
 using namespace std;
 
@@ -66,7 +68,8 @@ int main(void) {
 
 		glm::mat4 view_matrix;
 		view_matrix = camera.getViewMatrix();
-
+		
+	
 		glfwSwapBuffers(window);
 	}
 

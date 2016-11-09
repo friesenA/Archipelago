@@ -8,7 +8,7 @@ const int TERRAIN_LENGTH = 600;
 //Currently: Creates a plane at y=0, with given width and length, centered at the origin
 class Terrain
 {	
-	int seed;
+	int seed; // random input for the procedural generator
 	int width;
 	int length;
 
