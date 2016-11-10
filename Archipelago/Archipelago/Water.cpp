@@ -1,17 +1,17 @@
 #include "Water.h"
 
 
-Water::Water(GLfloat height) : numTiles(NUMBER_OF_TILES_ACROSS), tileSize(TEXTURE_SIZE)
+Water::Water(GLfloat height) : numTiles(NUMBER_OF_TILES_ACROSS), tileSize(TEXTURE_SIZE), height(height)
 {
 	std::cout << "Generating Water" << std::endl;
 
 	//build vertex vbo
-//	buildVertexVBO();
+	buildVertexVBO();
 	//build index ebo
-//	buildIndexEBO();
+	buildIndexEBO();
 	//build VAO
-//	buildVAO();
-	fooTriangle();
+	buildVAO();
+//	fooTriangle();
 }
 
 GLuint Water::getVAO()
@@ -23,12 +23,12 @@ Water::~Water() {}
 
 void Water::buildVertexVBO()
 {
-	GLfloat half = numTiles / 2;
+	GLfloat half = (GLfloat)numTiles / 2.0f;
 
 	//Creates a plane at y=height, with given width and length, centered at the origin
-	for (int l = 0; l < numTiles; l++) {
-		for (int w = 0; w < numTiles; w++) {
-			vertices.push_back(glm::vec3((GLfloat)(w * tileSize - half * tileSize), height, (GLfloat)(half * tileSize - l * tileSize)));
+	for (int l = 0; l <= numTiles; l++) {
+		for (int w = 0; w <= numTiles; w++) {
+			vertices.push_back(glm::vec3((GLfloat)(w * tileSize - half * tileSize), height, (GLfloat)(l * tileSize - half * tileSize)));
 		}
 	}
 
@@ -55,41 +55,41 @@ void Water::buildUVVBO() {
 
 void Water::buildIndexEBO()
 {
-	for (int i = 0; i < numTiles; i++) {
-		for (int j = 0; j < numTiles; j++) {
-			GLuint point = i * (numTiles+1) + j;
+	for (int i = 0; i < this->numTiles; i++) {
+		for (int j = 0; j < this->numTiles; j++) {
+			GLuint point = i * (this->numTiles+1) + j;
 
-			indicies.push_back(glm::vec3(point, point + (numTiles+1), point + (numTiles + 1) + 1));
-			indicies.push_back(glm::vec3(point, point + (numTiles+1) + 1, point + 1));
+			this->indicies.push_back(glm::vec3(point, point + (this->numTiles+1), point + (this->numTiles + 1) + 1));
+			this->indicies.push_back(glm::vec3(point, point + (this->numTiles+1) + 1, point + 1));
 		}
 	}
 
-	glGenBuffers(1, &index_EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicies.size() * sizeof(glm::vec3), &indicies.front(), GL_STATIC_DRAW);
+	glGenBuffers(1, &this->index_EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indicies.size() * sizeof(glm::vec3), &this->indicies.front(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void Water::buildVAO()
 {
 	//Bind VAO
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	glGenVertexArrays(1, &this->VAO);
+	glBindVertexArray(this->VAO);
 
 	//Register Vertex Buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
 	//Register UV Buffer
-	glBindBuffer(GL_ARRAY_BUFFER, uv_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->uv_VBO);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(1);
 
 	//Register any other VBOs
 
 	//Bind EBO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
 
 	//Unbind VBO & VAO
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
