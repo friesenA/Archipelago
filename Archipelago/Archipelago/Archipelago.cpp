@@ -6,7 +6,7 @@
 
 #include "Archipelago.h"
 
-Camera camera(glm::vec3(0.0f, 3.0f, 0.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
 //Key tracking
 bool keys[1024];
@@ -50,6 +50,10 @@ int main(void) {
 
 	glViewport(0, 0, width, height);
 
+	//Object Creation
+	//////////////////////////////////////////////////////////////////////////
+	Water water(100.0);
+
 	// Shader
 	//////////////////////////////////////////////////////////////////////////
 	Shader shader("Shaders/vertex.shader", "Shaders/fragment.shader");
@@ -71,12 +75,12 @@ int main(void) {
 		view = camera.getViewMatrix();
 
 		//Foo water instance
-		Water water(100.0);
 		shader.Use();
 		transformViewProj(&shader);
 
 		glBindVertexArray(water.getVAO());
-		glDrawArrays(GL_TRIANGLES, 0, 200);
+//		glDrawElements(GL_TRIANGLES, 100, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 20);
 		glBindVertexArray(0);
 
 		glfwSwapBuffers(window);

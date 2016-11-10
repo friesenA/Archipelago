@@ -59,12 +59,12 @@ void Camera::rotateCamera(GLfloat xOffset, GLfloat yOffset)
 void Camera::recalculateVectors()
 {
 	glm::vec3 front;
-	front.x = cos(yaw) * cos(pitch);
-	front.y = sin(pitch);
-	front.z = sin(yaw) * cos(pitch);
+	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	front.y = sin(glm::radians(pitch));
+	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 
 	this->forward = glm::normalize(front);
 	this->right = glm::normalize(glm::cross(this->forward, worldUp));
-	this->up = glm::normalize(glm::cross(this->forward, this->right));
+	this->up = glm::normalize(glm::cross(this->right, this->forward));
 }
 

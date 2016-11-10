@@ -6,11 +6,11 @@ Water::Water(GLfloat height) : numTiles(NUMBER_OF_TILES_ACROSS), tileSize(TEXTUR
 	std::cout << "Generating Water" << std::endl;
 
 	//build vertex vbo
-	//buildVertexVBO();
+//	buildVertexVBO();
 	//build index ebo
-	//buildIndexEBO();
+//	buildIndexEBO();
 	//build VAO
-	//buildVAO();
+//	buildVAO();
 	fooTriangle();
 }
 
@@ -57,7 +57,7 @@ void Water::buildIndexEBO()
 {
 	for (int i = 0; i < numTiles; i++) {
 		for (int j = 0; j < numTiles; j++) {
-			GLuint point = i*(numTiles+1) + j;
+			GLuint point = i * (numTiles+1) + j;
 
 			indicies.push_back(glm::vec3(point, point + (numTiles+1), point + (numTiles + 1) + 1));
 			indicies.push_back(glm::vec3(point, point + (numTiles+1) + 1, point + 1));
