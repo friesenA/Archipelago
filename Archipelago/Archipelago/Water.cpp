@@ -3,6 +3,8 @@
 
 Water::Water(GLfloat height) : numTiles(NUMBER_OF_TILES_ACROSS), tileSize(TEXTURE_SIZE)
 {
+	std::cout << "Generating Water" << std::endl;
+
 	//build vertex vbo
 	buildVertexVBO();
 	//build index ebo
@@ -25,7 +27,7 @@ void Water::buildVertexVBO()
 	//Creates a plane at y=height, with given width and length, centered at the origin
 	for (int l = 0; l < numTiles; l++) {
 		for (int w = 0; w < numTiles; w++) {
-			vertices.push_back(glm::vec3((GLfloat)(w * tileSize - half * tileSize), height, (GLfloat)(half * tileSize - l * tileSize))));
+			vertices.push_back(glm::vec3((GLfloat)(w * tileSize - half * tileSize), height, (GLfloat)(half * tileSize - l * tileSize)));
 		}
 	}
 
