@@ -1,8 +1,9 @@
 #include "Terrain.h"
 
 
-Terrain::Terrain(unsigned int seed = 1) : width(TERRAIN_WIDTH), length(TERRAIN_LENGTH)
+Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGTH)
 {
+	std::cout << "Generating Terrain" << std::endl;
 	srand(seed);
 
 	//build vertex vbo
@@ -23,57 +24,57 @@ Terrain::~Terrain(){}
 
 void Terrain::buildVertexVBO()
 {
-	GLfloat halfWidth = width / 2;
-	GLfloat halfLength = length / 2;
+	GLfloat halfWidth = this->width / 2;
+	GLfloat halfLength = this->length / 2;
 
 	//Creates a plane at y=0, with given width and length, centered at the origin
-	for (int l = 0; l > length; l++) {
-		for (int w = 0; w < width; w++) {
-			vertices.push_back(glm::vec3((GLfloat)w - halfWidth, 0.0f, halfLength - (GLfloat)l));
+	for (int l = 0; l < this->length; l++) {
+		for (int w = 0; w < this->width; w++) {
+			this->vertices.push_back(glm::vec3((GLfloat)w - halfWidth, 0.0f, halfLength - (GLfloat)l));
 		}
 	}
 	//Modify y values with perlin noise?
 	//Modify y values with island mask
 	this->islandMask();
 
-	glGenBuffers(1, &vertex_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices.front(), GL_STATIC_DRAW);
+	glGenBuffers(1, &this->vertex_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
+	glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(glm::vec3), &this->vertices.front(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Terrain::buildIndexEBO()
 {
-	for (int l = 0; l < length-1; l++) {
-		for (int w = 0; w < width-1; w++) {
+	for (int l = 0; l < this->length-1; l++) {
+		for (int w = 0; w < this->width-1; w++) {
 			GLuint point = l*width + w;
 
-			indicies.push_back(glm::vec3(point, point + width, point + width + 1));
-			indicies.push_back(glm::vec3(point, point + width + 1, point + 1));
+			this->indicies.push_back(glm::vec3(point, point + this->width, point + this->width + 1));
+			this->indicies.push_back(glm::vec3(point, point + this->width + 1, point + 1));
 		}
 	}
 
-	glGenBuffers(1, &index_EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicies.size() * sizeof(glm::vec3), &indicies.front(), GL_STATIC_DRAW);
+	glGenBuffers(1, &this->index_EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indicies.size() * sizeof(glm::vec3), &this->indicies.front(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void Terrain::buildVAO()
 {
 	//Bind VAO
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	glGenVertexArrays(1, &this->VAO);
+	glBindVertexArray(this->VAO);
 
 	//Register Vertex Buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
 	//Register any other VBOs
 	
 	//Bind EBO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
 
 	//Unbind VBO & VAO
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -104,9 +105,9 @@ void Terrain::islandMask()
 
 		//Adjust height values in array for each centre point
 		//Add distance * magnitude to the height values (y) of all the verticies vector/array
-		for (int l = 0; l < length; l++) {
-			for (int w = 0; w < width; w++) {
-				vertex = l * width + w;
+		for (int l = 0; l < this->length; l++) {
+			for (int w = 0; w < this->width; w++) {
+				vertex = l * this->width + w;
 				distance = std::sqrt(std::pow(centreXCoord - w, 2) + std::pow(centreXCoord - l, 2));
 				
 				//clamp if outside sloping zone;
