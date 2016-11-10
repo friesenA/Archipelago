@@ -13,6 +13,7 @@ bool keys[1024];
 
 //Mouse tracking
 bool initializeMouse = true;
+bool clickedLeftButton = false;
 GLfloat lastX;
 GLfloat lastY;
 
@@ -29,10 +30,10 @@ int main(void) {
 	//////////////////////////////////////////////////////////////////////////
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetErrorCallback(error_callback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
 	// GLEW
 	//////////////////////////////////////////////////////////////////////////
@@ -73,10 +74,10 @@ int main(void) {
 		Water water(100.0);
 		shader.Use();
 		transformViewProj(&shader);
+
 		glBindVertexArray(water.getVAO());
 		glDrawArrays(GL_TRIANGLES, 0, 200);
 		glBindVertexArray(0);
-
 
 		glfwSwapBuffers(window);
 	}
@@ -92,10 +93,6 @@ int main(void) {
 // Transform
 //////////////////////////////////////////////////////////////////////////
 void transformViewProj(Shader *shaders) {
-	//TODO complete this part of projection once it is defined
-	
-	//view = lookAt(cameraPosition, cameraFront, cameraUp);
-
 	projLoc = glGetUniformLocation(shaders->Program, "projection");
 	viewLoc = glGetUniformLocation(shaders->Program, "view");
 	modelLoc = glGetUniformLocation(shaders->Program, "model");
@@ -160,5 +157,18 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	lastX = xpos;
 	lastY = ypos;
 
-	camera.rotateCamera(xOffset, yOffset);
+	if (clickedLeftButton) {
+		camera.rotateCamera(xOffset, yOffset);
+	}
+}
+
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
+
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+		clickedLeftButton = true;
+	}
+	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+		clickedLeftButton = false;
+	}
 }

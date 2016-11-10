@@ -6,12 +6,12 @@ Water::Water(GLfloat height) : numTiles(NUMBER_OF_TILES_ACROSS), tileSize(TEXTUR
 	std::cout << "Generating Water" << std::endl;
 
 	//build vertex vbo
-	buildVertexVBO();
+	//buildVertexVBO();
 	//build index ebo
-	buildIndexEBO();
+	//buildIndexEBO();
 	//build VAO
-	buildVAO();
-	//fooTriangle();
+	//buildVAO();
+	fooTriangle();
 }
 
 GLuint Water::getVAO()
