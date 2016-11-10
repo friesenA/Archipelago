@@ -5,9 +5,11 @@ Water::Water(GLfloat height) : numTiles(NUMBER_OF_TILES_ACROSS), tileSize(TEXTUR
 {
 	std::cout << "Generating Water" << std::endl;
 
-	//build vertex vbo
+	//build VBO's
 	buildVertexVBO();
-	//build index ebo
+	buildNormalsVBO();
+	buildUVVBO();
+	//build EBO
 	buildIndexEBO();
 	//build VAO
 	buildVAO();
@@ -34,6 +36,19 @@ void Water::buildVertexVBO()
 	glGenBuffers(1, &vertex_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_VBO);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices.front(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Water::buildNormalsVBO()
+{	
+	//Water is a flat plane in x and z, all normals are in the positive y direction
+	for (int i = 0; i < vertices.size(); i++) {
+		normals.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
+	}
+
+	glGenBuffers(1, &normals_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, normals_VBO);
+	glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals.front(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -80,10 +95,15 @@ void Water::buildVAO()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
+	//Register Normals Buffer
+	glBindBuffer(GL_ARRAY_BUFFER, normals_VBO);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(1);
+
 	//Register UV Buffer
 	glBindBuffer(GL_ARRAY_BUFFER, uv_VBO);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(2);
 
 	//Register any other VBOs
 
