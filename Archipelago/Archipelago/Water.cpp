@@ -20,23 +20,12 @@ Water::~Water() {}
 
 void Water::buildVertexVBO()
 {
-	int half = numTiles / 2;
+	GLfloat half = numTiles / 2;
 
 	//Creates a plane at y=height, with given width and length, centered at the origin
-	//Case 1: numTiles odd
-	if (2 * half != numTiles) {  
-		for (int l = -half; l < half; l++) {
-			for (int w = -half; w < half; w++) {
-				vertices.push_back(glm::vec3((GLfloat)(w * tileSize + (tileSize/2)), height, (GLfloat)(l * tileSize + (tileSize / 2))));
-			}
-		}
-	}
-	//Case 2: numTiles even
-	else { 
-		for (int l = -half; l <= half; l++) {
-			for (int w = -half; w <= half; w++) {
-				vertices.push_back(glm::vec3((GLfloat)(w * tileSize), height, (GLfloat)(l * tileSize)));
-			}
+	for (int l = 0; l < numTiles; l++) {
+		for (int w = 0; w < numTiles; w++) {
+			vertices.push_back(glm::vec3((GLfloat)(w * tileSize - half * tileSize), height, (GLfloat)(half * tileSize - l * tileSize))));
 		}
 	}
 

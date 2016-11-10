@@ -103,7 +103,7 @@ void Terrain::islandMask()
 		centerZCoord = WATER_BORDER + rand() % (this->length - 2 * WATER_BORDER);
 
 		//Adjust height values in array for each centre point
-		//Add distance*magnitude to the height values (y) of all the verticies vector/array
+		//Add distance * magnitude to the height values (y) of all the verticies vector/array
 		for (int l = 0; l < length; l++) {
 			for (int w = 0; w < width; w++) {
 				vertex = l * width + w;

@@ -21,7 +21,7 @@ class Terrain
 public:
 	
 	//Constructor initializes the terrain for rendering
-	Terrain(unsigned int seed);
+	Terrain(unsigned int seed = 1);
 
 	//Public access to VAO for rendering
 	GLuint getVAO();
@@ -39,6 +39,7 @@ private:
 	//Loads VAO with all terrain VBO's, EBO's
 	void buildVAO();
 
+	//Modifies vertex height values to form a random number of cone style extrusions
 	void islandMask();
 };
 
