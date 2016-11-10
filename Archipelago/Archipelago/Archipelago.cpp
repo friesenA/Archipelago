@@ -6,7 +6,7 @@
 
 #include "Archipelago.h"
 
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 3.0f, 0.0f));
 
 //Key tracking
 bool keys[1024];
@@ -29,7 +29,7 @@ int main(void) {
 	//////////////////////////////////////////////////////////////////////////
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetErrorCallback(error_callback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
@@ -56,11 +56,14 @@ int main(void) {
 	// Game loop
 	//////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
+
 		glfwPollEvents();
 
 		// Clear buffer
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
 
 		//Camera
 		moveCamera();
@@ -69,10 +72,11 @@ int main(void) {
 		//Foo water instance
 		Water water(100.0);
 		shader.Use();
-		//transformViewProj(&shader);
+		transformViewProj(&shader);
+		glBindVertexArray(water.getVAO());
+		glDrawArrays(GL_TRIANGLES, 0, 200);
+		glBindVertexArray(0);
 
-		//glBindVertexArray(water.getVAO());
-		//glBindVertexArray(0);
 
 		glfwSwapBuffers(window);
 	}
@@ -89,16 +93,16 @@ int main(void) {
 //////////////////////////////////////////////////////////////////////////
 void transformViewProj(Shader *shaders) {
 	//TODO complete this part of projection once it is defined
-	//projection = perspective(radians(fieldOView), (GLfloat)width_Perscpective / (GLfloat)height_Perspective, 0.1f, 100.0f);
+	
 	//view = lookAt(cameraPosition, cameraFront, cameraUp);
 
 	projLoc = glGetUniformLocation(shaders->Program, "projection");
 	viewLoc = glGetUniformLocation(shaders->Program, "view");
 	modelLoc = glGetUniformLocation(shaders->Program, "model");
 
-	//glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-	//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 }
 
 

@@ -38,5 +38,7 @@ private:
 
 	//Loads VAO with all water VBO's, EBO's
 	void buildVAO();
+
+	void fooTriangle();
 };
 
