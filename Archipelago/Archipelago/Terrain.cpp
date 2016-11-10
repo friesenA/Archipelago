@@ -43,14 +43,35 @@ void Terrain::buildVertexVBO()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void Terrain::buildNormalsVBO()
+{
+	GLfloat vertex;
+
+	//Find normals. Reference: https://stackoverflow.com/questions/6656358/calculating-normals-in-a-triangle-mesh
+	for (int l = 0; l < this->length - 1; l++) {
+		for (int w = 0; w < this->width - 1; w++) {
+			vertex = l * this->width + w;
+
+
+		}
+	}
+
+	glGenBuffers(1, &this->normals_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->normals_VBO);
+	glBufferData(GL_ARRAY_BUFFER, this->normals.size() * sizeof(glm::vec3), &this->normals.front(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
 void Terrain::buildIndexEBO()
 {
+	GLuint vertex;
+
 	for (int l = 0; l < this->length-1; l++) {
 		for (int w = 0; w < this->width-1; w++) {
-			GLuint point = l*width + w;
+			vertex = l*width + w;
 
-			this->indicies.push_back(glm::vec3(point, point + this->width, point + this->width + 1));
-			this->indicies.push_back(glm::vec3(point, point + this->width + 1, point + 1));
+			this->indicies.push_back(glm::vec3(vertex, vertex + this->width, vertex + this->width + 1));
+			this->indicies.push_back(glm::vec3(vertex, vertex + this->width + 1, vertex + 1));
 		}
 	}
 
@@ -71,6 +92,11 @@ void Terrain::buildVAO()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
+	//Register Normals Buffer
+	glBindBuffer(GL_ARRAY_BUFFER, this->normals_VBO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
 	//Register any other VBOs
 	
 	//Bind EBO
@@ -81,6 +107,7 @@ void Terrain::buildVAO()
 	glBindVertexArray(0);
 }
 
+//modified implementation of concept, Reference: https://www.reddit.com/r/gamedev/comments/1g4eae/need_help_generating_an_island_using_perlin_noise/?st=iuritk3l&sh=594f7e28
 void Terrain::islandMask()
 {	
 	const GLfloat MAGNITUDE = 30.0f;
@@ -118,7 +145,4 @@ void Terrain::islandMask()
 			}
 		}
 	}
-	
-	
-
 }

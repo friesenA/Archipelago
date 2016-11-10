@@ -14,8 +14,9 @@ class Terrain
 	int width;
 	int length;
 
-	GLuint VAO, vertex_VBO, index_EBO;
+	GLuint VAO, vertex_VBO, normals_VBO, index_EBO;
 	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec3> normals;
 	std::vector<glm::vec3> indicies;
 
 public:
@@ -32,6 +33,9 @@ private:
 
 	//Generates plane verticies and loads into VBO
 	void buildVertexVBO();
+
+	//Generates VBO of normals for each vertex
+	void buildNormalsVBO();
 
 	//Generates triangle indicies and loads into EBO
 	void buildIndexEBO();
