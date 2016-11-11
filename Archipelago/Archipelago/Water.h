@@ -1,8 +1,8 @@
 #pragma once
 #include "stdHeader.h"
 
-const int TEXTURE_SIZE = 10;
-const int NUMBER_OF_TILES_ACROSS = 5;
+const int TEXTURE_SIZE = 1;
+const int NUMBER_OF_TILES_ACROSS = 1;
 
 //Creates a plane at y=height, of square dimension based on the size of the texture file and the number of tiles across, centered at the origin
 class Water

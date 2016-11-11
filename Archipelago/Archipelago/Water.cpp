@@ -6,12 +6,12 @@ Water::Water(GLfloat height) : numTiles(NUMBER_OF_TILES_ACROSS), tileSize(TEXTUR
 	std::cout << "Generating Water" << std::endl;
 
 	//build vertex vbo
-	buildVertexVBO();
+//	buildVertexVBO();
 	//build index ebo
-	buildIndexEBO();
+//	buildIndexEBO();
 	//build VAO
-	buildVAO();
-//	fooTriangle();
+//	buildVAO();
+	fooTriangle();
 }
 
 GLuint Water::getVAO()
@@ -32,9 +32,9 @@ void Water::buildVertexVBO()
 		}
 	}
 
-	glGenBuffers(1, &vertex_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, vertex_VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices.front(), GL_STATIC_DRAW);
+	glGenBuffers(1, &this->vertex_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
+	glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(glm::vec3), &this->vertices.front(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -82,9 +82,9 @@ void Water::buildVAO()
 	glEnableVertexAttribArray(0);
 
 	//Register UV Buffer
-	glBindBuffer(GL_ARRAY_BUFFER, this->uv_VBO);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(1);
+//	glBindBuffer(GL_ARRAY_BUFFER, this->uv_VBO);
+//	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
+//	glEnableVertexAttribArray(1);
 
 	//Register any other VBOs
 
@@ -100,9 +100,14 @@ void Water::buildVAO()
 void Water::fooTriangle() {
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] = {
-		-0.5f, -0.5f, 0.0f, // Left  
-		0.5f, -0.5f, 0.0f, // Right 
-		0.0f,  0.5f, 0.0f  // Top   
+//		-0.5f, -0.5f, 0.0f, // Left  
+//		0.5f, -0.5f, 0.0f, // Right 
+//		0.0f,  0.5f, 0.0f  // Top   
+		
+		//triangle on xz plane
+		0.0f, 0.0f, -0.5f, //top
+		-0.5f, 0.0f, 0.5f, //left
+		0.5f, 0.0f, 0.5f //right
 	};
 	GLuint VBO;
 	glGenVertexArrays(1, &VAO);
