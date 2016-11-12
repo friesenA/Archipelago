@@ -46,6 +46,10 @@ public:
 	//Adjusts the camera's direction of view
 	void rotateCamera(GLfloat xOffset, GLfloat yOffset);
 
+	glm::vec3 getPosition() {
+		return position;
+	};
+
 private:
 	//Recalculates all attribute vectors to reflect movement changes
 	void recalculateVectors();

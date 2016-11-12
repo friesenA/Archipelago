@@ -59,5 +59,13 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 void moveCamera();
 
+// Skybox
+//////////////////////////////////////////////////////////////////////////
+Shader * skyboxShader;
+GLuint skyboxVAO;
+GLuint cubemapTexture;
+void generateSkybox();
+GLuint loadCubemap(vector<const GLchar*> faces);
+
 
 
