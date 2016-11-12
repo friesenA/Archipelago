@@ -11,6 +11,7 @@ using namespace glm;
 // Window dimensions
 const GLuint WIDTH = 800;
 const GLuint HEIGHT = 800;
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 // Transform
 //////////////////////////////////////////////////////////////////////////
@@ -20,6 +21,7 @@ mat4 projection;
 GLint modelLoc;
 GLint viewLoc;
 GLint projLoc;
+int main(void);
 void transformViewProj(Shader *shaders);
 
 //////////////////////////////////////////////////////////////////////////////OpenGL
@@ -59,13 +61,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 void moveCamera();
 
-// Skybox
-//////////////////////////////////////////////////////////////////////////
-Shader * skyboxShader;
-GLuint skyboxVAO;
-GLuint cubemapTexture;
-void generateSkybox();
-GLuint loadCubemap(vector<const GLchar*> faces);
+
 
 
 

@@ -8,24 +8,18 @@ Camera::Camera(glm::vec3 position, glm::vec3 forward, glm::vec3 up) : speed(SPEE
 	this->worldUp = glm::normalize(up);
 	this->forward = glm::normalize(forward);
 	this->up = up;
-	//this->worldUp = up;
-	//this->forward = forward;
 
 	this->yaw = atan2(this->forward.z, this->forward.x);
 	this->pitch = asin(this->forward.y);
 
-
-	//Calculate the remaining attribute vectors
 	this->recalculateVectors();
 }
 
-glm::mat4 Camera::getViewMatrix()
-{
+glm::mat4 Camera::getViewMatrix(){
 	return glm::mat4(glm::mat3(glm::lookAt(this->position, this->position + this->forward, this->up)));
 }
 
-void Camera::translateCamera(Movement direction)
-{
+void Camera::translateCamera(Movement direction){
 	if (direction == FORWARD)
 		this->position += this->forward * SPEED;
 
@@ -33,7 +27,6 @@ void Camera::translateCamera(Movement direction)
 		this->position -= this->forward * SPEED;
 
 	if (direction == RIGHT) {
-		//this->position += this->right * SPEED;
 		GLfloat xoffset = 1.0f;
 
 		GLfloat sensitivity = 0.40;	// Change this value to your liking
@@ -48,7 +41,6 @@ void Camera::translateCamera(Movement direction)
 	}
 
 	if (direction == LEFT) {
-		//this->position -= this->right * SPEED;
 		GLfloat xoffset = -1.0f;
 
 		GLfloat sensitivity = 0.40;	// Change this value to your liking

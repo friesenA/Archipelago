@@ -159,6 +159,7 @@
     <ClInclude Include="Archipelago.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Shaders\Shader.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="stdHeader.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Water.h" />
@@ -171,6 +172,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\fragment.shader" />
+    <None Include="Shaders\skyBoxFragment.shader" />
+    <None Include="Shaders\skyBoxVertex.shader" />
     <None Include="Shaders\vertex.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
