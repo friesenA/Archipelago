@@ -6,11 +6,8 @@
 
 #include "Archipelago.h"
 
-//Camera facing down y = -1;
-Camera camera(glm::vec3(0.0f, .0f, 40.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-
-//Camera facing forward z = -1;
-//Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
+//Camera facing forward default z = -1;
+Camera camera(glm::vec3(0.0f, 10.0f, 0.0f));
 
 //Key tracking
 bool keys[1024];
@@ -37,7 +34,6 @@ int main(void) {
 	glfwSetErrorCallback(error_callback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
-	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
 	// GLEW
 	//////////////////////////////////////////////////////////////////////////
@@ -72,7 +68,7 @@ int main(void) {
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
+		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);
 
 		//Camera
 		moveCamera();
@@ -82,8 +78,10 @@ int main(void) {
 		shader.Use();
 		transformViewProj(&shader);
 
+		//for easier development viewing
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindVertexArray(water.getVAO());
-		glDrawElements(GL_TRIANGLES, 100, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, water.getSize(), GL_UNSIGNED_INT, 0);
 		//glDrawArrays(GL_TRIANGLES, 0, 20);
 		glBindVertexArray(0);
 
@@ -165,18 +163,7 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	lastX = xpos;
 	lastY = ypos;
 
-	if (clickedLeftButton) {
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 		camera.rotateCamera(xOffset, yOffset);
-	}
-}
-
-
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
-
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-		clickedLeftButton = true;
-	}
-	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
-		clickedLeftButton = false;
 	}
 }
