@@ -4,25 +4,20 @@
  * Team 7
  */
 
-#include "stdHeader.h"
 #include "Archipelago.h"
-#include "Camera.h"
-#include "Water.h"
-#include "Terrain.h"
 
-using namespace std;
+//Camera facing down y = -1;
+Camera camera(glm::vec3(0.0f, .0f, 40.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 
-// Window dimensions
-const GLuint WIDTH = 800;
-const GLuint HEIGHT = 800;
-
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+//Camera facing forward z = -1;
+//Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
 
 //Key tracking
 bool keys[1024];
 
 //Mouse tracking
 bool initializeMouse = true;
+bool clickedLeftButton = false;
 GLfloat lastX;
 GLfloat lastY;
 
@@ -39,10 +34,10 @@ int main(void) {
 	//////////////////////////////////////////////////////////////////////////
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetErrorCallback(error_callback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
 	// GLEW
 	//////////////////////////////////////////////////////////////////////////
@@ -59,22 +54,39 @@ int main(void) {
 
 	glViewport(0, 0, width, height);
 
-	// Object Creation
+	//Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	Terrain terrain(10);
-	Water water(2.0f);
+	Water water(10.0f);
+
+	// Shader
+	//////////////////////////////////////////////////////////////////////////
+	Shader shader("Shaders/vertex.shader", "Shaders/fragment.shader");
 
 	// Game loop
 	//////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
 
 		glfwPollEvents();
-		moveCamera();
 
-		glm::mat4 view_matrix;
-		view_matrix = camera.getViewMatrix();
-		
-	
+		// Clear buffer
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
+
+		//Camera
+		moveCamera();
+		view = camera.getViewMatrix();
+
+		//Foo water instance
+		shader.Use();
+		transformViewProj(&shader);
+
+		glBindVertexArray(water.getVAO());
+		glDrawElements(GL_TRIANGLES, 100, GL_UNSIGNED_INT, 0);
+		//glDrawArrays(GL_TRIANGLES, 0, 20);
+		glBindVertexArray(0);
+
 		glfwSwapBuffers(window);
 	}
 
@@ -86,24 +98,18 @@ int main(void) {
 }
 
 
-// GLFW
+// Transform
 //////////////////////////////////////////////////////////////////////////
+void transformViewProj(Shader *shaders) {
+	projLoc = glGetUniformLocation(shaders->Program, "projection");
+	viewLoc = glGetUniformLocation(shaders->Program, "view");
+	modelLoc = glGetUniformLocation(shaders->Program, "model");
 
-/**
- * Get a GLFW window instance
- */
-GLFWwindow* getWindowInstance() {
-	GLFWwindow* window;
-	window = glfwCreateWindow(WIDTH, HEIGHT, "Archipelago", NULL, NULL);
-
-	if (window == nullptr) {
-		cout << "Failed to create GLFW window" << endl;
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-	}
-
-	return window;
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 }
+
 
 // Keyboard
 //////////////////////////////////////////////////////////////////////////
@@ -159,5 +165,18 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	lastX = xpos;
 	lastY = ypos;
 
-	camera.rotateCamera(xOffset, yOffset);
+	if (clickedLeftButton) {
+		camera.rotateCamera(xOffset, yOffset);
+	}
+}
+
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
+
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+		clickedLeftButton = true;
+	}
+	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+		clickedLeftButton = false;
+	}
 }
