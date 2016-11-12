@@ -7,7 +7,7 @@
 #include "Archipelago.h"
 
 //Camera facing down y = -1;
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+Camera camera(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 //Camera facing forward z = -1;
 //Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));

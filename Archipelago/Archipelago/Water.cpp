@@ -22,16 +22,17 @@ GLuint Water::getVAO()
 Water::~Water() {}
 
 void Water::buildVertexVBO() {
-	GLfloat vertices[] = {
-		0.5f,  0.5f, 0.0f,  // Top Right
-		0.5f, -0.5f, 0.0f,  // Bottom Right
-		-0.5f, -0.5f, 0.0f,  // Bottom Left
-		-0.5f,  0.5f, 0.0f   // Top Left 
-	};
+	GLfloat half = (GLfloat)numTiles / 2.0f;
+	//Creates a plane at y=height, with given width and length, centered at the origin
+	for (int l = 0; l <= numTiles; l++) {
+		for (int w = 0; w <= numTiles; w++) {
+			vertices.push_back(glm::vec3((GLfloat)(w * tileSize - half * tileSize),height, (GLfloat)(l * tileSize - half * tileSize)));
+		}
+	}
 
 	glGenBuffers(1, &vertex_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, vertex_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices.front(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
@@ -52,14 +53,25 @@ void Water::buildUVVBO() {
 
 void Water::buildIndexEBO()
 {
-	GLuint indices[] = {  // Note that we start from 0!
-		0, 1, 3,  // First Triangle
-		1, 2, 3   // Second Triangle
-	};
+	std::vector<GLuint> indices;
+	for (int i = 0; i < this->numTiles; i++) {
+		for (int j = 0; j < this->numTiles; j++) {
+			GLuint point = i * (this->numTiles + 1) + j;
+
+			//first half triangle
+			indices.push_back(point);
+			indices.push_back(point + (this->numTiles + 1));
+			indices.push_back(point + (this->numTiles + 1) + 1);
+			//second half triangle
+			indices.push_back(point);
+			indices.push_back(point + (this->numTiles + 1) + 1);
+			indices.push_back(point + 1);
+		}
+	}
 
 	glGenBuffers(1, &index_EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices.front(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
@@ -75,7 +87,7 @@ void Water::buildVAO()
 	glEnableVertexAttribArray(0);
 
 	//Bind EBO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_EBO);
 
 	//Unbind VBO & VAO
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
