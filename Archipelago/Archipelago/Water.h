@@ -1,7 +1,7 @@
 #pragma once
 #include "stdHeader.h"
 
-const int TEXTURE_SIZE = 1;
+const int TEXTURE_SIZE = 10;
 const int NUMBER_OF_TILES_ACROSS = 30;
 
 //Creates a plane at y=height, of square dimension based on the size of the texture file and the number of tiles across, centered at the origin
@@ -13,7 +13,7 @@ class Water
 	
 	GLuint VAO, vertex_VBO, uv_VBO, index_EBO;
 	std::vector<glm::vec3> vertices;
-	std::vector<glm::vec3> indicies;
+	std::vector<GLuint> indices;
 	std::vector<glm::vec2> uvCoordinates;
 
 public:
@@ -22,6 +22,9 @@ public:
 
 	//Public access to VAO for rendering
 	GLuint getVAO();
+
+	//Public access to # of indices in plane
+	int getSize();
 
 	~Water();
 
@@ -38,7 +41,5 @@ private:
 
 	//Loads VAO with all water VBO's, EBO's
 	void buildVAO();
-
-	void fooTriangle();
 };
 
