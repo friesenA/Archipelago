@@ -7,7 +7,7 @@
 #include "Archipelago.h"
 
 //Camera facing down y = -1;
-Camera camera(glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 //Camera facing forward z = -1;
 //Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
@@ -83,8 +83,8 @@ int main(void) {
 		transformViewProj(&shader);
 
 		glBindVertexArray(water.getVAO());
-//		glDrawElements(GL_TRIANGLES, 100, GL_UNSIGNED_INT, 0);
-		glDrawArrays(GL_TRIANGLES, 0, 20);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawArrays(GL_TRIANGLES, 0, 20);
 		glBindVertexArray(0);
 
 		glfwSwapBuffers(window);
