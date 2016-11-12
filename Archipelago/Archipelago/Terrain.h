@@ -2,10 +2,10 @@
 #include "stdHeader.h"
 
 // Dimensions of terrain plane
-const int TERRAIN_WIDTH = 600;
-const int TERRAIN_LENGTH = 600;
+const int TERRAIN_WIDTH = 100;
+const int TERRAIN_LENGTH = 100;
 
-const int WATER_BORDER = 100;
+const int WATER_BORDER = 25;
 
 //Currently: Creates a plane at y=0, with given width and length, centered at the origin
 class Terrain

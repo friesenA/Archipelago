@@ -6,9 +6,10 @@ Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGT
 	std::cout << "Generating Terrain" << std::endl;
 	srand(seed);
 
-	//build vertex vbo
+	//build VBO's
 	buildVertexVBO();
-	//build index ebo
+	buildNormalsVBO();
+	//build index EBO
 	buildIndexEBO();
 	//build VAO
 	buildVAO();
@@ -30,7 +31,7 @@ void Terrain::buildVertexVBO()
 	//Creates a plane at y=0, with given width and length, centered at the origin
 	for (int l = 0; l < this->length; l++) {
 		for (int w = 0; w < this->width; w++) {
-			this->vertices.push_back(glm::vec3((GLfloat)w - halfWidth, 0.0f, halfLength - (GLfloat)l));
+			this->vertices.push_back(glm::vec3((GLfloat)w - halfWidth, 0.0f, (GLfloat)l - halfLength));
 		}
 	}
 	//Modify y values with perlin noise?
@@ -45,14 +46,45 @@ void Terrain::buildVertexVBO()
 
 void Terrain::buildNormalsVBO()
 {
-	GLfloat vertex;
+	glm::vec3 normal = glm::vec3(0.0f, 0.0f, 0.0f);
+	int vertex;
 
-	//Find normals. Reference: https://stackoverflow.com/questions/6656358/calculating-normals-in-a-triangle-mesh
-	for (int l = 0; l < this->length - 1; l++) {
-		for (int w = 0; w < this->width - 1; w++) {
+	//Find normals for each vertex
+	for (int l = 0; l < this->length; l++) {
+		for (int w = 0; w < this->width; w++) {
 			vertex = l * this->width + w;
 
-
+			//there are faces above vertex
+			if (l != 0) {
+				//there are faces to the left
+				if (w != 0) {
+					//face UL x L
+					normal += glm::cross(this->vertices[vertex - this->width - 1], this->vertices[vertex - 1]);
+					//face U x UL
+					normal += glm::cross(this->vertices[vertex - this->width], this->vertices[vertex - this->width - 1]);
+				}
+				//there are faces to the right
+				if (w != this->width -1) {
+					//face R x U
+					normal += glm::cross(this->vertices[vertex + 1], this->vertices[vertex - this->width]);
+				}
+			}
+			//there are faces below vertex
+			if (l != this->length - 1) {
+				//there are faces to the left
+				if (w != 0) {
+					//face L x D
+					normal += glm::cross(this->vertices[vertex - 1], this->vertices[vertex + this->width]);
+				}
+				//there are faces to the right
+				if (w != this->width - 1) {
+					//face D x DR
+					normal += glm::cross(this->vertices[vertex + this->width], this->vertices[vertex + this->width + 1]);
+					//face DR x R
+					normal += glm::cross(this->vertices[vertex + this->width + 1], this->vertices[vertex + 1]);
+				}
+			}
+			this->normals.push_back(glm::normalize(normal));
 		}
 	}
 
@@ -110,8 +142,8 @@ void Terrain::buildVAO()
 //modified implementation of concept, Reference: https://www.reddit.com/r/gamedev/comments/1g4eae/need_help_generating_an_island_using_perlin_noise/?st=iuritk3l&sh=594f7e28
 void Terrain::islandMask()
 {	
-	const GLfloat MAGNITUDE = 30.0f;
-	const GLfloat DISTANCE_TO_ZERO = 100;
+	const GLfloat MAGNITUDE = 2.0f;
+	const GLfloat DISTANCE_TO_ZERO = 25;
 
 	int numCentrePoints;
 	int centreXCoord, centerZCoord;
