@@ -4,13 +4,20 @@
 #include <ctime>
 #include <random>
 
+
+
+	const int NOISE_WIDTH = 20;
+	const int NOISE_HEIGH = 30;
+
 class NoiseGeneration
 {
-	std::vector<int> p;
 
 public:
 
 	NoiseGeneration();
+
+
+	GLuint VAO, vertex_VBO, index_EBO; //Need to possublity add
 
 	float generateHeight(int x, int y);
 	float getNoise(int x, int z);

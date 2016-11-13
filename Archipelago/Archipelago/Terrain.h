@@ -8,6 +8,8 @@ const int TERRAIN_LENGTH = 600;
 
 const int WATER_BORDER = 100;
 
+//const int Island_Noise = ###; need to add?
+
 //Currently: Creates a plane at y=0, with given width and length, centered at the origin
 class Terrain
 {	
