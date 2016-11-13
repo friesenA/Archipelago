@@ -35,7 +35,6 @@ float NoiseGeneration::generateHeight(int x, int z) {
 //returns a random number value btwn 1 and -1
 float NoiseGeneration::getNoise(int x, int z) {
 
-	//4:00
 	//?????????????????
 	float setRandomSeed = x* 49632 + z* 325176 + seed;
 	return setRandomSeed; //...
@@ -64,7 +63,7 @@ float NoiseGeneration::getInterpolatedNoise(float x, float z)
 	int fracX = x; //fraction/decimal section of the x value
 	int fracZ = z; //fraction/decimal section of the z value
 
-				   //calutating the height of the nearest points to the noise function
+	 //calutating the height of the nearest points to the noise function
 	float v1 = getSmoothNoise(intX, intZ);
 	float v2 = getSmoothNoise(intX + 1, intZ);
 	float v3 = getSmoothNoise(intX, intZ + 1);
