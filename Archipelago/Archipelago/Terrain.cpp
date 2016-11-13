@@ -135,8 +135,8 @@ void Terrain::buildVAO()
 
 	//Register Normals Buffer
 	glBindBuffer(GL_ARRAY_BUFFER, this->normals_VBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(1);
 
 	//Register any other VBOs
 	
