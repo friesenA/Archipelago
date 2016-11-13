@@ -67,6 +67,10 @@ int main(void) {
 	SkyBox skybox;
 	skybox.generate();
 
+	// OpenGL Settings
+	//////////////////////////////////////////////////////////////////////////
+	glEnable(GL_DEPTH_TEST);
+
 	// Game loop
 	//////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
@@ -83,6 +87,7 @@ int main(void) {
 		//Setup view used for the rest of the scene
 		view = camera.getViewMatrix();
 		glDepthMask(GL_TRUE);
+		glClear(GL_DEPTH_BUFFER_BIT);
 		
 		//Foo water instance
 		waterShader.Use();
