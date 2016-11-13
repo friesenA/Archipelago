@@ -6,12 +6,12 @@ Water::Water(GLfloat height) : numTiles(NUMBER_OF_TILES_ACROSS), tileSize(TEXTUR
 	std::cout << "Generating Water" << std::endl;
 
 	//build vertex vbo
-	//buildVertexVBO();
+	buildVertexVBO();
 	//build index ebo
-	//buildIndexEBO();
+	buildIndexEBO();
 	//build VAO
-	//buildVAO();
-	fooTriangle();
+	buildVAO();
+	//fooTriangle();
 }
 
 GLuint Water::getVAO()
@@ -68,7 +68,7 @@ void Water::buildIndexEBO()
 			indices.push_back(point + 1);
 		}
 	}
-
+	indiceSize = indices.size();
 	glGenBuffers(1, &index_EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices.front(), GL_STATIC_DRAW);

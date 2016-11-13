@@ -51,12 +51,12 @@ public:
 
 		//skybox
 		vector<const GLchar*> faces;
-		faces.push_back("Images/right1.jpg");
-		faces.push_back("Images/left1.jpg");
-		faces.push_back("Images/top1.jpg");
-		faces.push_back("Images/bottom1.jpg");
-		faces.push_back("Images/back1.jpg");
-		faces.push_back("Images/front1.jpg");
+		faces.push_back("Images/right.jpg");
+		faces.push_back("Images/left.jpg");
+		faces.push_back("Images/top.jpg");
+		faces.push_back("Images/bottom.jpg");
+		faces.push_back("Images/back.jpg");
+		faces.push_back("Images/front.jpg");
 		cubemapTexture = loadCubemap(faces);
 
 

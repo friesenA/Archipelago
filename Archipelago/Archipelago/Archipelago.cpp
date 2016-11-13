@@ -19,7 +19,6 @@ bool keys[1024];
 
 //Mouse tracking
 bool initializeMouse = true;
-bool clickedLeftButton = false;
 GLfloat lastX;
 GLfloat lastY;
 
@@ -40,7 +39,6 @@ int main(void) {
 	glfwSetErrorCallback(error_callback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
-	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	// GLEW
@@ -64,7 +62,7 @@ int main(void) {
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	Water water(-0.5f);
+	Water water(2.5f);
 
 	// Skybox
 	//////////////////////////////////////////////////////////////////////////
@@ -83,7 +81,7 @@ int main(void) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//Camera
-		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 200.0f);
+		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);
 		view = camera.getViewMatrix();
 		
 
@@ -95,7 +93,7 @@ int main(void) {
 		transformViewProj(&shader);
 
 		glBindVertexArray(water.getVAO());
-		glDrawElements(GL_TRIANGLES, 100, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, water.getNumIndices(), GL_UNSIGNED_INT, 0);
 		//glDrawArrays(GL_TRIANGLES, 0, 20);
 		glBindVertexArray(0);
 
@@ -191,19 +189,8 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	lastX = xpos;
 	lastY = ypos;
 
-	if (clickedLeftButton) {
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 		camera.rotateCamera(xOffset, yOffset);
-	}
-}
-
-
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
-
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-		clickedLeftButton = true;
-	}
-	else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
-		clickedLeftButton = false;
 	}
 }
 
