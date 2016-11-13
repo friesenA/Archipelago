@@ -4,7 +4,18 @@
  * Team 7
  */
 
+#include "stdHeader.h"
 #include "Archipelago.h"
+#include "Camera.h"
+#include "Water.h"
+#include "Terrain.h"
+
+using namespace std;
+
+// Window dimensions
+const GLuint WIDTH = 800;
+const GLuint HEIGHT = 800;
+
 
 
 //Camera facing forward z = -1;
@@ -15,6 +26,7 @@ bool keys[1024];
 
 //Mouse tracking
 bool initializeMouse = true;
+bool clickedLeftButton = false;
 GLfloat lastX;
 GLfloat lastY;
 
@@ -32,6 +44,7 @@ int main(void) {
 	//////////////////////////////////////////////////////////////////////////
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR);
 	glfwSetErrorCallback(error_callback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
