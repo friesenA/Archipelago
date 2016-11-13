@@ -5,18 +5,23 @@
  */
 
 #include "Archipelago.h"
+#include "SkyBox.h"
 
-//Camera facing forward default z = -1;
-Camera camera(glm::vec3(0.0f, 10.0f, 0.0f));
+//Camera facing down y = -1;
+Camera camera(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+//Camera facing forward z = -1;
+//Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
 
 //Key tracking
 bool keys[1024];
 
 //Mouse tracking
 bool initializeMouse = true;
-bool clickedLeftButton = false;
 GLfloat lastX;
 GLfloat lastY;
+
 
 int main(void) {
 
@@ -34,6 +39,7 @@ int main(void) {
 	glfwSetErrorCallback(error_callback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	// GLEW
 	//////////////////////////////////////////////////////////////////////////
@@ -50,38 +56,44 @@ int main(void) {
 
 	glViewport(0, 0, width, height);
 
-	//Object Creation
-	//////////////////////////////////////////////////////////////////////////
-	Water water(10.0f);
-
 	// Shader
 	//////////////////////////////////////////////////////////////////////////
 	Shader shader("Shaders/vertex.shader", "Shaders/fragment.shader");
+
+	// Object Creation
+	//////////////////////////////////////////////////////////////////////////
+	Water water(2.5f);
+
+	// Skybox
+	//////////////////////////////////////////////////////////////////////////
+	SkyBox skybox;
+	skybox.generate();
 
 	// Game loop
 	//////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
 
 		glfwPollEvents();
+		moveCamera();
 
 		// Clear buffer
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);
-
 		//Camera
-		moveCamera();
+		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);
 		view = camera.getViewMatrix();
+		
+
+		skybox.draw(view, projection);
 
 		//Foo water instance
 		shader.Use();
+		view = glm::lookAt(camera.getPosition(), camera.getPosition() + camera.getForward(), glm::vec3(0.0f, 1.0f, 0.0f));
 		transformViewProj(&shader);
 
-		//for easier development viewing
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindVertexArray(water.getVAO());
-		glDrawElements(GL_TRIANGLES, water.getSize(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, water.getNumIndices(), GL_UNSIGNED_INT, 0);
 		//glDrawArrays(GL_TRIANGLES, 0, 20);
 		glBindVertexArray(0);
 
@@ -108,6 +120,10 @@ void transformViewProj(Shader *shaders) {
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 }
 
+void drawSkyBox() {
+
+}
+
 
 // Keyboard
 //////////////////////////////////////////////////////////////////////////
@@ -127,24 +143,34 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 
 //Seperates key event from callback to handle multiple key presses
 void moveCamera() {
-	if (keys[GLFW_KEY_W])
+	if (keys[GLFW_KEY_W]) {
 		camera.translateCamera(FORWARD);
-
-	if (keys[GLFW_KEY_S])
+		cout << camera.getPosition().x  << " , " << camera.getPosition().z << endl;
+	}
+	if (keys[GLFW_KEY_S]) {
 		camera.translateCamera(BACKWARD);
-
-	if (keys[GLFW_KEY_A])
+		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+	}
+	if (keys[GLFW_KEY_A]) {
 		camera.translateCamera(LEFT);
-
-	if (keys[GLFW_KEY_D])
+		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+	}
+	if (keys[GLFW_KEY_D]) {
 		camera.translateCamera(RIGHT);
+		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+	}
 
 	//included for debugging purposes
-	if (keys[GLFW_KEY_UP])
+	if (keys[GLFW_KEY_UP]) {
 		camera.translateCamera(UP);
+		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+	}
 
-	if (keys[GLFW_KEY_DOWN])
+	if (keys[GLFW_KEY_DOWN]) {
 		camera.translateCamera(DOWN);
+
+		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+	}
 }
 
 // Mouse
@@ -166,4 +192,8 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 		camera.rotateCamera(xOffset, yOffset);
 	}
+}
+
+void framebuffer_size_callback(GLFWwindow * window, int width, int height){
+	glViewport(0, 0, width, height);
 }

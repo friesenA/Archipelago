@@ -13,7 +13,7 @@ class Water
 	
 	GLuint VAO, vertex_VBO, uv_VBO, index_EBO;
 	std::vector<glm::vec3> vertices;
-	std::vector<GLuint> indices;
+	std::vector<GLuint> indicies;
 	std::vector<glm::vec2> uvCoordinates;
 
 public:
@@ -22,9 +22,7 @@ public:
 
 	//Public access to VAO for rendering
 	GLuint getVAO();
-
-	//Public access to # of indices in plane
-	int getSize();
+	GLuint getNumIndices() { return indicies.size(); };
 
 	~Water();
 
@@ -41,5 +39,7 @@ private:
 
 	//Loads VAO with all water VBO's, EBO's
 	void buildVAO();
+
+	void fooTriangle();
 };
 
