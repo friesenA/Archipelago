@@ -171,10 +171,10 @@
     <ClCompile Include="Water.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\fragment.shader" />
+    <None Include="Shaders\waterFragment.shader" />
     <None Include="Shaders\skyBoxFragment.shader" />
     <None Include="Shaders\skyBoxVertex.shader" />
-    <None Include="Shaders\vertex.shader" />
+    <None Include="Shaders\waterVertex.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
