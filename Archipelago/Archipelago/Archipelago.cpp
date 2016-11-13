@@ -7,12 +7,8 @@
 #include "Archipelago.h"
 
 
-//Camera facing down y = -1;
-Camera camera(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
-
 //Camera facing forward z = -1;
-//Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
+Camera camera(glm::vec3(0.0f, 3.0f, 0.0f));
 
 //Key tracking
 bool keys[1024];
@@ -75,18 +71,22 @@ int main(void) {
 		glfwPollEvents();
 		clearScreenAndColor();
 		moveCamera();
+
+		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f); //global for all draws
 	
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		//Skybox must be drawn first
 		drawSkyBox(skybox);
 
 		//Setup view used for the rest of the scene
-		view = glm::lookAt(camera.getPosition(), camera.getPosition() + camera.getForward(), glm::vec3(0.0f, 1.0f, 0.0f));
+		view = camera.getViewMatrix();
 		
 		//Foo water instance
 		waterShader.Use();
 		transformViewProj(&waterShader);
 
 		// Draw water instance
+//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindVertexArray(water.getVAO());
 		glDrawElements(GL_TRIANGLES, water.getNumIndices(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
@@ -115,8 +115,7 @@ void transformViewProj(Shader *shaders) {
 }
 
 void drawSkyBox(SkyBox &skybox) {
-	projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);
-	view = camera.getViewMatrix();
+	view = glm::mat4(glm::mat3(camera.getViewMatrix()));
 	skybox.draw(view, projection);
 }
 
@@ -164,7 +163,6 @@ void moveCamera() {
 
 	if (keys[GLFW_KEY_DOWN]) {
 		camera.translateCamera(DOWN);
-
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
 	}
 }

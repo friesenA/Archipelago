@@ -7,7 +7,6 @@ Camera::Camera(glm::vec3 position, glm::vec3 forward, glm::vec3 up) : speed(SPEE
 	this->position = position;
 	this->worldUp = glm::normalize(up);
 	this->forward = glm::normalize(forward);
-	this->up = up;
 
 	this->yaw = atan2(this->forward.z, this->forward.x);
 	this->pitch = asin(this->forward.y);
@@ -16,7 +15,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 forward, glm::vec3 up) : speed(SPEE
 }
 
 glm::mat4 Camera::getViewMatrix(){
-	return glm::mat4(glm::mat3(glm::lookAt(this->position, this->position + this->forward, this->up)));
+	return glm::mat4(glm::lookAt(this->position, this->position + this->forward, this->up));
 }
 
 void Camera::translateCamera(Movement direction){
@@ -24,7 +23,6 @@ void Camera::translateCamera(Movement direction){
 	if (direction == FORWARD) {
 		this->position += nextPos;
 	}
-		
 
 	if (direction == BACKWARD) {
 		this->position -= nextPos;
@@ -57,7 +55,6 @@ void Camera::translateCamera(Movement direction){
 		front.z = sin(glm::radians(yaw));
 		this->forward = glm::normalize(front);
 	}
-		
 
 	if (direction == UP)
 		this->position += this->up * SPEED;
@@ -75,13 +72,17 @@ void Camera::rotateCamera(GLfloat xOffset, GLfloat yOffset)
 	this->pitch += yOffset;
 
 	//Constrain the pitch so the screen doesn't flip
-	if (this->pitch > 89.0f)
-		this->pitch = 89.0f;
-	if (this->pitch < -89.0f)
-		this->pitch = -89.0f;
+	if (this->pitch > glm::radians(89.0f))
+		this->pitch = glm::radians(89.0f);
+	if (this->pitch < glm::radians(-89.0f))
+		this->pitch = glm::radians(-89.0f);
 
 	recalculateVectors();
+}
 
+glm::vec3 Camera::getPosition()
+{
+		return position;
 }
 
 void Camera::recalculateVectors()
@@ -89,9 +90,9 @@ void Camera::recalculateVectors()
 
 	glm::vec3 front;
 
-	front.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
-	front.y = sin(glm::radians(this->pitch));
-	front.z = sin(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
+	front.x = cos(this->yaw) * cos(this->pitch);
+	front.y = sin(this->pitch);
+	front.z = sin(this->yaw) * cos(this->pitch);
 
 	this->forward = glm::normalize(front);
 	this->right = glm::normalize(glm::cross(this->forward, this->worldUp));  

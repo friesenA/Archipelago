@@ -12,7 +12,7 @@ enum Movement {
 
 //Default Camera values
 const GLfloat SPEED = 0.40f;
-const GLfloat SENSITIVITY = 0.05f;
+const GLfloat SENSITIVITY = 0.002f;
 
 class Camera{
 
@@ -46,13 +46,8 @@ public:
 	//Adjusts the camera's direction of view
 	void rotateCamera(GLfloat xOffset, GLfloat yOffset);
 
-	glm::vec3 getPosition() {
-		return position;
-	};
-
-	glm::vec3 getForward() {
-		return forward;
-	};
+	//Current Position of camera
+	glm::vec3 getPosition();
 
 private:
 	//Recalculates all attribute vectors to reflect movement changes
