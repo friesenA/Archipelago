@@ -5,7 +5,7 @@
  */
 
 #include "Archipelago.h"
-#include "SkyBox.h"
+
 
 //Camera facing down y = -1;
 Camera camera(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -56,9 +56,9 @@ int main(void) {
 
 	glViewport(0, 0, width, height);
 
-	// Shader
+	// Shaders
 	//////////////////////////////////////////////////////////////////////////
-	Shader shader("Shaders/vertex.shader", "Shaders/fragment.shader");
+	Shader waterShader("Shaders/vertex.shader", "Shaders/fragment.shader");
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
@@ -72,29 +72,23 @@ int main(void) {
 	// Game loop
 	//////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
-
 		glfwPollEvents();
+		clearScreenAndColor();
 		moveCamera();
+	
+		//Skybox must be drawn first
+		drawSkyBox(skybox);
 
-		// Clear buffer
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		//Camera
-		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);
-		view = camera.getViewMatrix();
-		
-
-		skybox.draw(view, projection);
-
-		//Foo water instance
-		shader.Use();
+		//Setup view used for the rest of the scene
 		view = glm::lookAt(camera.getPosition(), camera.getPosition() + camera.getForward(), glm::vec3(0.0f, 1.0f, 0.0f));
-		transformViewProj(&shader);
+		
+		//Foo water instance
+		waterShader.Use();
+		transformViewProj(&waterShader);
 
+		// Draw water instance
 		glBindVertexArray(water.getVAO());
 		glDrawElements(GL_TRIANGLES, water.getNumIndices(), GL_UNSIGNED_INT, 0);
-		//glDrawArrays(GL_TRIANGLES, 0, 20);
 		glBindVertexArray(0);
 
 		glfwSwapBuffers(window);
@@ -120,8 +114,10 @@ void transformViewProj(Shader *shaders) {
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 }
 
-void drawSkyBox() {
-
+void drawSkyBox(SkyBox &skybox) {
+	projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f);
+	view = camera.getViewMatrix();
+	skybox.draw(view, projection);
 }
 
 

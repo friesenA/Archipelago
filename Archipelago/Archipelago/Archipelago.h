@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Water.h"
 #include "Terrain.h"
+#include "SkyBox.h"
 
 using namespace std;
 using namespace glm;
@@ -53,12 +54,25 @@ GLFWwindow* getWindowInstance() {
 	return window;
 };
 
+void clearScreenAndColor() {
+	// Clear buffer
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 // Keyboard & Mouse
 //////////////////////////////////////////////////////////////////////////
 void error_callback(int error, const char* description);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 void moveCamera();
+
+// Sky
+//////////////////////////////////////////////////////////////////////////
+void drawSkyBox(SkyBox &skybox);
+
+
+
 
 
 
