@@ -58,7 +58,7 @@ int main(void) {
 
 	// Shaders
 	//////////////////////////////////////////////////////////////////////////
-	Shader waterShader("Shaders/waterVertex.shader", "Shaders/waterFragment.shader");
+	Shader waterShader("Shaders/vertex.shader", "Shaders/fragment.shader");
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
