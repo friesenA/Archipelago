@@ -117,13 +117,13 @@ public:
 		glBindVertexArray(0);
 	};
 
-	void draw() {
+	void draw(mat4 view, mat4 proj) {
 		// Draw skybox 
 		glEnable(GL_DEPTH_CLAMP);
 		glDepthMask(GL_FALSE);// Remember to turn depth writing off
 		skyboxShader->Use();
 		glUniformMatrix4fv(glGetUniformLocation(skyboxShader->Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(glGetUniformLocation(skyboxShader->Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(glGetUniformLocation(skyboxShader->Program, "projection"), 1, GL_FALSE, glm::value_ptr(proj));
 
 		// skybox cube
 		glBindVertexArray(skyboxVAO);

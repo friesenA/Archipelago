@@ -8,7 +8,7 @@
 #include "SkyBox.h"
 
 //Camera facing down y = -1;
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+Camera camera(glm::vec3(0.0f, 3.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 
 //Camera facing forward z = -1;
@@ -64,7 +64,7 @@ int main(void) {
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	Water water(10.0f);
+	Water water(-0.5f);
 
 	// Skybox
 	//////////////////////////////////////////////////////////////////////////
@@ -76,20 +76,22 @@ int main(void) {
 	while (!glfwWindowShouldClose(window)) {
 
 		glfwPollEvents();
+		moveCamera();
 
 		// Clear buffer
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//Camera
-		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
+		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 200.0f);
 		view = camera.getViewMatrix();
-		moveCamera();
+		
 
-		skybox.draw();
+		skybox.draw(view, projection);
 
 		//Foo water instance
 		shader.Use();
+		view = glm::lookAt(camera.getPosition(), camera.getPosition() + camera.getForward(), glm::vec3(0.0f, 1.0f, 0.0f));
 		transformViewProj(&shader);
 
 		glBindVertexArray(water.getVAO());

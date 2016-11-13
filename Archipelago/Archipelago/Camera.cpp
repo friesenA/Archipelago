@@ -20,11 +20,15 @@ glm::mat4 Camera::getViewMatrix(){
 }
 
 void Camera::translateCamera(Movement direction){
-	if (direction == FORWARD)
-		this->position += this->forward * SPEED;
+	glm::vec3 nextPos(this->forward.x * SPEED, 0, this->forward.z * SPEED);
+	if (direction == FORWARD) {
+		this->position += nextPos;
+	}
+		
 
-	if (direction == BACKWARD)
-		this->position -= this->forward * SPEED;
+	if (direction == BACKWARD) {
+		this->position -= nextPos;
+	}
 
 	if (direction == RIGHT) {
 		GLfloat xoffset = 1.0f;

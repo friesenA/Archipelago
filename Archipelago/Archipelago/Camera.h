@@ -50,6 +50,10 @@ public:
 		return position;
 	};
 
+	glm::vec3 getForward() {
+		return forward;
+	};
+
 private:
 	//Recalculates all attribute vectors to reflect movement changes
 	void recalculateVectors();
