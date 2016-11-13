@@ -98,12 +98,12 @@ void Terrain::islandMask()
 	const GLfloat DISTANCE_TO_ZERO = 100;
 
 	int numCentrePoints;
-	int centreXCoord, centerZCoord;
+	int centerXCoord, centerZCoord;
 	GLfloat vertex, distance;
 
 	//generate # of centre points
 		//rule: Any value between 1-5 inclusive
-	numCentrePoints = 1 + rand() % 10;
+	numCentrePoints = 1 + rand() % 5;
 
 	//generate centre point position for each # of points
 		//rule: cannot select points within X distance of the edge
@@ -111,7 +111,7 @@ void Terrain::islandMask()
 		//z coordinate = X + random # between 0 and length - 2X
 
 	for (int i = 0; i < numCentrePoints; i++) {
-		centreXCoord = WATER_BORDER + rand() % (this->width - 2 * WATER_BORDER);
+		centerXCoord = WATER_BORDER + rand() % (this->width - 2 * WATER_BORDER);
 		centerZCoord = WATER_BORDER + rand() % (this->length - 2 * WATER_BORDER);
 
 		//Adjust height values in array for each centre point
@@ -119,7 +119,7 @@ void Terrain::islandMask()
 		for (int l = 0; l < this->length; l++) {
 			for (int w = 0; w < this->width; w++) {
 				vertex = l * this->width + w;
-				distance = std::sqrt(std::pow(centreXCoord - w, 2) + std::pow(centreXCoord - l, 2));
+				distance = std::sqrt(std::pow(centerXCoord - w, 2) + std::pow(centerZCoord - l, 2));
 				
 				//clamp if outside sloping zone;
 				if (distance > DISTANCE_TO_ZERO)
