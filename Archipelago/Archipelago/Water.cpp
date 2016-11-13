@@ -97,10 +97,10 @@ void Water::buildVAO()
 //// Test Triangle ///
 void Water::fooTriangle() {
 	GLfloat vertices[] = {
-		0.5f,  0.5f, 0.0f,  // Top Right
-		0.5f, -0.5f, 0.0f,  // Bottom Right
-		-0.5f, -0.5f, 0.0f,  // Bottom Left
-		-0.5f,  0.5f, 0.0f   // Top Left 
+		50.0f,  -0.5f, 50.0f,  // Top Right
+		50.0f, -0.5f, -50.0f,  // Bottom Right
+		-50.0f, -0.5f, 50.0f,  // Bottom Left
+		-50.0f,  -0.5f, -50.0f   // Top Left
 	};
 	GLuint indices[] = {  // Note that we start from 0!
 		0, 1, 3,  // First Triangle
