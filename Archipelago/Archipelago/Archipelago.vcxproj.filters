@@ -30,6 +30,12 @@
     <ClInclude Include="Water.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Shaders\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Archipelago.cpp">
@@ -44,5 +50,13 @@
     <ClCompile Include="Water.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\skyBoxFragment.shader" />
+    <None Include="Shaders\skyBoxVertex.shader" />
+    <None Include="Shaders\fragment.shader" />
+    <None Include="Shaders\vertex.shader" />
+    <None Include="Shaders\waterVertex.shader" />
+    <None Include="Shaders\waterFragment.shader" />
   </ItemGroup>
 </Project>

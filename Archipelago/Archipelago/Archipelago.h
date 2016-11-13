@@ -1,6 +1,31 @@
 #pragma once
 
-//OpenGL
+#include "stdHeader.h"
+#include "Camera.h"
+#include "Water.h"
+#include "Terrain.h"
+#include "SkyBox.h"
+
+using namespace std;
+using namespace glm;
+
+// Window dimensions
+const GLuint WIDTH = 800;
+const GLuint HEIGHT = 800;
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
+// Transform
+//////////////////////////////////////////////////////////////////////////
+mat4 view;
+mat4 model;
+mat4 projection;
+GLint modelLoc;
+GLint viewLoc;
+GLint projLoc;
+int main(void);
+void transformViewProj(Shader *shaders);
+
+//////////////////////////////////////////////////////////////////////////////OpenGL
 /**
 * Initial GLFW window hints
 */
@@ -13,13 +38,43 @@ void initGLFWHints() {
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 };
 
-// Window
-GLFWwindow* getWindowInstance();
+/**
+* Get a GLFW window instance
+*/
+GLFWwindow* getWindowInstance() {
+	GLFWwindow* window;
+	window = glfwCreateWindow(WIDTH, HEIGHT, "Archipelago", NULL, NULL);
+
+	if (window == nullptr) {
+		cout << "Failed to create GLFW window" << endl;
+		glfwTerminate();
+		exit(EXIT_FAILURE);
+	}
+
+	return window;
+};
+
+void clearScreenAndColor() {
+	// Clear buffer
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
 
 // Keyboard & Mouse
 //////////////////////////////////////////////////////////////////////////
 void error_callback(int error, const char* description);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
-void moveCamera()
+void moveCamera();
+
+// Sky
+//////////////////////////////////////////////////////////////////////////
+void drawSkyBox(SkyBox &skybox);
+
+
+
+
+
+
+
 

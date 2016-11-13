@@ -20,6 +20,11 @@ GLuint Terrain::getVAO()
 	return VAO;
 }
 
+int Terrain::getNumIndices()
+{
+	return indicies.size();
+}
+
 Terrain::~Terrain(){}
 
 
@@ -96,20 +101,24 @@ void Terrain::buildNormalsVBO()
 
 void Terrain::buildIndexEBO()
 {
-	GLuint vertex;
-
 	for (int l = 0; l < this->length-1; l++) {
 		for (int w = 0; w < this->width-1; w++) {
-			vertex = l*width + w;
+			GLuint point = l*width + w;
 
-			this->indicies.push_back(glm::vec3(vertex, vertex + this->width, vertex + this->width + 1));
-			this->indicies.push_back(glm::vec3(vertex, vertex + this->width + 1, vertex + 1));
+			//first half triangle
+			indicies.push_back(point);
+			indicies.push_back(point + (this->width + 1));
+			indicies.push_back(point + (this->width + 1) + 1);
+			//second half triangle
+			indicies.push_back(point);
+			indicies.push_back(point + (this->width + 1) + 1);
+			indicies.push_back(point + 1);
 		}
 	}
-
+	
 	glGenBuffers(1, &this->index_EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indicies.size() * sizeof(glm::vec3), &this->indicies.front(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indicies.size() * sizeof(GLuint), &this->indicies.front(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
@@ -142,8 +151,8 @@ void Terrain::buildVAO()
 //modified implementation of concept, Reference: https://www.reddit.com/r/gamedev/comments/1g4eae/need_help_generating_an_island_using_perlin_noise/?st=iuritk3l&sh=594f7e28
 void Terrain::islandMask()
 {	
-	const GLfloat MAGNITUDE = 2.0f;
-	const GLfloat DISTANCE_TO_ZERO = 25;
+	const GLfloat MAGNITUDE = 0.2f;
+	const GLfloat DISTANCE_TO_ZERO = 100;
 
 	int numCentrePoints;
 	int centreXCoord, centerZCoord;
@@ -151,7 +160,7 @@ void Terrain::islandMask()
 
 	//generate # of centre points
 		//rule: Any value between 1-5 inclusive
-	numCentrePoints = 1 + rand() % 5;
+	numCentrePoints = 1 + rand() % 10;
 
 	//generate centre point position for each # of points
 		//rule: cannot select points within X distance of the edge

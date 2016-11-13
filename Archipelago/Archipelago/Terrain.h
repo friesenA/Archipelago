@@ -2,10 +2,10 @@
 #include "stdHeader.h"
 
 // Dimensions of terrain plane
-const int TERRAIN_WIDTH = 100;
-const int TERRAIN_LENGTH = 100;
+const int TERRAIN_WIDTH = 600;
+const int TERRAIN_LENGTH = 600;
 
-const int WATER_BORDER = 25;
+const int WATER_BORDER = 100;
 
 //Currently: Creates a plane at y=0, with given width and length, centered at the origin
 class Terrain
@@ -16,8 +16,8 @@ class Terrain
 
 	GLuint VAO, vertex_VBO, normals_VBO, index_EBO;
 	std::vector<glm::vec3> vertices;
+	std::vector<GLuint> indicies;
 	std::vector<glm::vec3> normals;
-	std::vector<glm::vec3> indicies;
 
 public:
 	
@@ -26,6 +26,9 @@ public:
 
 	//Public access to VAO for rendering
 	GLuint getVAO();
+
+	//Public access to number of indices for drawing
+	int getNumIndices();
 
 	~Terrain();
 
