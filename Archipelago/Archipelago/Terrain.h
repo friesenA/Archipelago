@@ -1,5 +1,6 @@
 #pragma once
 #include "stdHeader.h"
+#include "NoiseGeneration.h"
 
 // Dimensions of terrain plane
 const int TERRAIN_WIDTH = 600;

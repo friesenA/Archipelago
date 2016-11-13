@@ -37,7 +37,7 @@ float NoiseGeneration::getNoise(int x, int z) {
 
 	//4:00
 	//?????????????????
-	setRandomSeed = x* 49632 + z* 325176 + seed;
+	float setRandomSeed = x* 49632 + z* 325176 + seed;
 	return setRandomSeed; //...
 }
 
