@@ -16,7 +16,7 @@ class Terrain
 
 	GLuint VAO, vertex_VBO, index_EBO;
 	std::vector<glm::vec3> vertices;
-	std::vector<glm::vec3> indicies;
+	std::vector<GLuint> indicies;
 
 public:
 	
@@ -25,6 +25,9 @@ public:
 
 	//Public access to VAO for rendering
 	GLuint getVAO();
+
+	//Public access to number of indices for drawing
+	int getNumIndices();
 
 	~Terrain();
 

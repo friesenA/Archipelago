@@ -54,11 +54,13 @@ int main(void) {
 
 	// Shaders
 	//////////////////////////////////////////////////////////////////////////
-	Shader waterShader("Shaders/vertex.shader", "Shaders/fragment.shader");
+	Shader waterShader("Shaders/waterVertex.shader", "Shaders/waterFragment.shader");
+	Shader terrainShader("Shaders/vertex.shader", "Shaders/fragment.shader");
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	Water water(2.5f);
+	Water water(2.0f);
+	Terrain terrain(63);
 
 	// Skybox
 	//////////////////////////////////////////////////////////////////////////
@@ -80,6 +82,7 @@ int main(void) {
 
 		//Setup view used for the rest of the scene
 		view = camera.getViewMatrix();
+		glDepthMask(GL_TRUE);
 		
 		//Foo water instance
 		waterShader.Use();
@@ -91,6 +94,14 @@ int main(void) {
 		glDrawElements(GL_TRIANGLES, water.getNumIndices(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
+		// Draw terrain instance
+		terrainShader.Use();
+		transformViewProj(&terrainShader);
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glBindVertexArray(terrain.getVAO());
+		glDrawElements(GL_TRIANGLES, terrain.getNumIndices(), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 		glfwSwapBuffers(window);
 	}
 
