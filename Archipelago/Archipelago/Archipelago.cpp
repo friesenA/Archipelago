@@ -13,8 +13,6 @@
 using namespace std;
 
 // Window dimensions
-const GLuint WIDTH = 800;
-const GLuint HEIGHT = 800;
 
 
 
@@ -32,6 +30,9 @@ GLfloat lastY;
 
 
 int main(void) {
+	//Moved this inside the main because for some reason i was getting an error..
+	const GLuint WIDTH = 800;
+	const GLuint HEIGHT = 800;
 
 	// OpenGL Spec
 	initGLFWHints();
