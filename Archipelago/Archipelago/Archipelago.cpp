@@ -4,9 +4,18 @@
  * Team 7
  */
 
+#include "stdHeader.h"
 #include "Archipelago.h"
+#include "Camera.h"
+#include "Water.h"
+#include "Terrain.h"
 
-//Camera facing forward default z = -1;
+using namespace std;
+
+// Window dimensions
+const GLuint WIDTH = 800;
+const GLuint HEIGHT = 800;
+
 Camera camera(glm::vec3(0.0f, 10.0f, 0.0f));
 
 //Key tracking
@@ -31,6 +40,7 @@ int main(void) {
 	//////////////////////////////////////////////////////////////////////////
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR);
 	glfwSetErrorCallback(error_callback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);

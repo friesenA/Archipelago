@@ -1,16 +1,16 @@
 /*CODE FROM:
 https:// solarianprogramer.com/2012/07/18/perlin-noise-cpp-11/
+https:// www.youtube.com/watch?v=yNYwZMmgTJk
+https:// flafla2.github.io/2014/08/09/perlinnoise.html
 */
 
 #include "NoiseGeneration.h"
 
-#include <random>
-#include <algorithm>
-#include <numeric>
 #include <math.h>
 # define M_PI  3.14159265358979323846  /* pi */
 
 NoiseGeneration::NoiseGeneration() {
+	srand(time(0));
 	this->seed = random_number;
 }
 
@@ -36,8 +36,9 @@ float NoiseGeneration::generateHeight(int x, int z) {
 float NoiseGeneration::getNoise(int x, int z) {
 
 	//4:00
-	//return 
-	return 1; //...
+	//?????????????????
+	setRandomSeed = x* 49632 + z* 325176 + seed;
+	return setRandomSeed; //...
 }
 
 float NoiseGeneration::getSmoothNoise(int x, int z)
