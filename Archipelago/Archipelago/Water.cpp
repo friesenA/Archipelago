@@ -19,11 +19,6 @@ GLuint Water::getVAO()
 	return VAO;
 }
 
-int Water::getSize()
-{
-	return this->indices.size();
-}
-
 Water::~Water() {}
 
 void Water::buildVertexVBO() {
@@ -58,25 +53,23 @@ void Water::buildUVVBO() {
 
 void Water::buildIndexEBO()
 {
-	std::vector<GLuint> indices;
 	for (int i = 0; i < this->numTiles; i++) {
 		for (int j = 0; j < this->numTiles; j++) {
 			GLuint point = i * (this->numTiles + 1) + j;
 
 			//first half triangle
-			this->indices.push_back(point);
-			this->indices.push_back(point + (this->numTiles + 1));
-			this->indices.push_back(point + (this->numTiles + 1) + 1);
+			indicies.push_back(point);
+			indicies.push_back(point + (this->numTiles + 1));
+			indicies.push_back(point + (this->numTiles + 1) + 1);
 			//second half triangle
-			this->indices.push_back(point);
-			this->indices.push_back(point + (this->numTiles + 1) + 1);
-			this->indices.push_back(point + 1);
+			indicies.push_back(point);
+			indicies.push_back(point + (this->numTiles + 1) + 1);
+			indicies.push_back(point + 1);
 		}
 	}
-	indiceSize = indices.size();
 	glGenBuffers(1, &index_EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, index_EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices.front(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicies.size() * sizeof(GLuint), &indicies.front(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 

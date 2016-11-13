@@ -10,11 +10,10 @@ class Water
 	GLfloat height;
 	int numTiles;
 	int tileSize;
-	GLuint indiceSize;
 	
 	GLuint VAO, vertex_VBO, uv_VBO, index_EBO;
 	std::vector<glm::vec3> vertices;
-	std::vector<glm::vec3> indicies;
+	std::vector<GLuint> indicies;
 	std::vector<glm::vec2> uvCoordinates;
 
 public:
@@ -23,8 +22,7 @@ public:
 
 	//Public access to VAO for rendering
 	GLuint getVAO();
-
-	GLuint getNumIndices() { return indiceSize; };
+	GLuint getNumIndices() { return indicies.size(); };
 
 	~Water();
 
