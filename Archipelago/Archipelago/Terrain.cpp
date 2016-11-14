@@ -40,12 +40,10 @@ void Terrain::buildVertexVBO()
 	}
 
 	//Modify y values with perlin noise?
-		//function that goes through the  vertices lenght and pulls the x and z from each vec3
-		//and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
-		//place thos into another vector
-
+	this->useNoise();
+		
 	//Modify y values with island mask
-	this->islandMask();
+		//this->islandMask();
 
 	glGenBuffers(1, &this->vertex_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
@@ -136,5 +134,20 @@ void Terrain::islandMask()
 	}
 	
 	
+
+}
+
+//function that goes through the  vertices lenght and pulls the x and z from each vec3
+//and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
+//place thos into vector
+void Terrain::useNoise() {
+	
+
+	for (int i =0; i < this->vertices.size(); i++) {
+		
+		NoiseGeneration noise;
+		vertices[i].y = noise.generateHeight(vertices[i].x, vertices[i].z);		
+
+	}
 
 }

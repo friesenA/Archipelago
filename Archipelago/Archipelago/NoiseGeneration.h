@@ -24,6 +24,10 @@ public:
 	float interpolation(float a, float b, float blend);
 	float getInterpolatedNoise(float x, float z);
 
+	
+	
+
+
 	void buildVertexVBO();
 
 	void buildVAO();

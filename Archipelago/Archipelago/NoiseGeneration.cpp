@@ -10,12 +10,12 @@ https:// flafla2.github.io/2014/08/09/perlinnoise.html
 # define M_PI  3.14159265358979323846  /* pi */
 
 NoiseGeneration::NoiseGeneration() {
-	srand(time(0));
-	this->seed = random_number;
+	//srand(time(0));
+	//this->seed = random_number;
 }
 
 float NoiseGeneration::generateHeight(int x, int z) {
-	//this should be returning a vector of vertices of y values?s
+	//this should be returning a vector of vertices of y values?
 
 
 	//More general function:
@@ -27,25 +27,24 @@ float NoiseGeneration::generateHeight(int x, int z) {
 		total += getInterpolatedNoise(x*frequency, z*frequency)*amplitude;
 	}
 	return total;
-	/*
-	float total = getInterpolatedNoise(x/4.0f, z/4.0f)*AMPLITUDE;
-	total += getInterpolatedNoise(x / 2.0f, z / 2.0f)*AMPLITUDE/3.0f;
-	total += getInterpolatedNoise(x , z )*AMPLITUDE / 9.0f;
-	*/
 }
 
 //Random Number generator 
 //returns a random number value btwn 1 and -1
 float NoiseGeneration::getNoise(int x, int z) {
+	
 
-	//?????????????????
-	float setRandomSeed = x* 49632 + z* 325176 + seed;
-	return setRandomSeed; //...
+	x = (float)rand() / RAND_MAX;
+	z = (float)rand() / RAND_MAX;
+	return x + z;
+
+	//float setRandomSeed = x* 49632 + z* 325176 + random_number; //+ seed;
+	//return setRandomSeed; //...
 }
 
 float NoiseGeneration::getSmoothNoise(int x, int z)
 {
-	float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 16.0f;
+	float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 16.0f; //16.0f is a scaling factor
 	float sides = (getNoise(x - 1, z) + getNoise(x + 1, z) + getNoise(x, z - 1) + getNoise(x, z + 1)) / 8.0f;
 	float center = (getNoise(x, z)) / 4.0f;
 	return corners + sides + center;
@@ -78,6 +77,8 @@ float NoiseGeneration::getInterpolatedNoise(float x, float z)
 
 	return interpolation(i_1, i_2, fracZ);
 }
+
+
 
 void buildVertexVBO() {
 

@@ -47,5 +47,10 @@ private:
 
 	//Modifies vertex height values to form a random number of cone style extrusions
 	void islandMask();
+
+	//function that goes through the  vertices lenght and pulls the x and z from each vec3
+	//and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
+	//place thos into vector
+	void useNoise();
 };
 
