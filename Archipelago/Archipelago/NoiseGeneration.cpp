@@ -15,6 +15,9 @@ NoiseGeneration::NoiseGeneration() {
 }
 
 float NoiseGeneration::generateHeight(int x, int z) {
+	//this should be returning a vector of vertices of y values?s
+
+
 	//More general function:
 	float total = 0;
 	float d = (float)glm::pow(2, OCTAVES - 1);
@@ -76,6 +79,47 @@ float NoiseGeneration::getInterpolatedNoise(float x, float z)
 	return interpolation(i_1, i_2, fracZ);
 }
 
+void buildVertexVBO() {
+
+
+	/*
+	GLfloat half = (GLfloat)this->numTiles / 2.0f;
+	//Creates a plane at y=height, with given width and length, centered at the origin
+	for (int l = 0; l <= this->numTiles; l++) {
+	for (int w = 0; w <= this->numTiles; w++) {
+	this->vertices.push_back(glm::vec3((GLfloat)(w * this->tileSize - half * this->tileSize), this->height, (GLfloat)(l * this->tileSize - half * this->tileSize)));
+	}
+	}
+
+	glGenBuffers(1, &this->vertex_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
+	glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(glm::vec3), &this->vertices.front(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	
+	*/
+}
+
+void buildVAO()
+{
+
+	/*
+	//Bind VAO
+	glGenVertexArrays(1, &this->VAO);
+	glBindVertexArray(this->VAO);
+
+	//Register Vertex Buffer
+	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	//Bind EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
+
+	//Unbind VBO & VAO
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	*/
+}
 
 
 NoiseGeneration::~NoiseGeneration() {}

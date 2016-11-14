@@ -1,5 +1,5 @@
 #include "Terrain.h"
-
+#include "NoiseGeneration.h"
 
 Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGTH)
 {
@@ -38,7 +38,12 @@ void Terrain::buildVertexVBO()
 			this->vertices.push_back(glm::vec3((GLfloat)w - halfWidth, 0.0f, halfLength - (GLfloat)l));
 		}
 	}
+
 	//Modify y values with perlin noise?
+		//function that goes through the  vertices lenght and pulls the x and z from each vec3
+		//and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
+		//place thos into another vector
+
 	//Modify y values with island mask
 	this->islandMask();
 

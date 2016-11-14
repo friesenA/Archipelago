@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "Water.h"
 #include "Terrain.h"
+#include "NoiseGeneration.h"
 
 using namespace std;
 
@@ -75,6 +76,8 @@ int main(void) {
 	//////////////////////////////////////////////////////////////////////////
 	Water water(2.0f);
 	Terrain terrain(63);
+	NoiseGeneration noise;
+	float foo = noise.generateHeight(3.0f, 4.0f);
 
 	// Skybox
 	//////////////////////////////////////////////////////////////////////////
@@ -116,6 +119,7 @@ int main(void) {
 		// Draw terrain instance
 		terrainShader.Use();
 		transformViewProj(&terrainShader);
+
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindVertexArray(terrain.getVAO());

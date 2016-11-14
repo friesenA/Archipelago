@@ -16,15 +16,17 @@ public:
 
 	NoiseGeneration();
 
+	
 
-	GLuint VAO, vertex_VBO, index_EBO; //Need to possublity add
-
-	float generateHeight(int x, int y);
+	float generateHeight(int x, int z);
 	float getNoise(int x, int z);
 	float getSmoothNoise(int x, int z);
 	float interpolation(float a, float b, float blend);
 	float getInterpolatedNoise(float x, float z);
 
+	void buildVertexVBO();
+
+	void buildVAO();
 
 	~NoiseGeneration();
 
@@ -35,6 +37,11 @@ private:
 	int random_number = rand()%10000000;
 	//float setRandomSeed;
 	int seed;// = srand(time(0));
+
+	float noises;
+
+	GLuint VAO, vertex_VBO, index_EBO; //Need to possublity add
+	std::vector<GLfloat> vertices;
 
 };
 
