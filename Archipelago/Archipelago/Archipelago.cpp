@@ -1,20 +1,10 @@
 /**
- * COMP371
- * Archipelago
- * Team 7
- */
+* COMP371
+* Archipelago
+* Team 7
+*/
 
-#include "stdHeader.h"
 #include "Archipelago.h"
-#include "Camera.h"
-#include "Water.h"
-#include "Terrain.h"
-#include "NoiseGeneration.h"
-
-using namespace std;
-
-// Window dimensions
-
 
 
 //Camera facing forward z = -1;
@@ -25,15 +15,11 @@ bool keys[1024];
 
 //Mouse tracking
 bool initializeMouse = true;
-bool clickedLeftButton = false;
 GLfloat lastX;
 GLfloat lastY;
 
 
 int main(void) {
-	//Moved this inside the main because for some reason i was getting an error..
-	const GLuint WIDTH = 800;
-	const GLuint HEIGHT = 800;
 
 	// OpenGL Spec
 	initGLFWHints();
@@ -46,7 +32,6 @@ int main(void) {
 	//////////////////////////////////////////////////////////////////////////
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR);
 	glfwSetErrorCallback(error_callback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
@@ -94,7 +79,7 @@ int main(void) {
 		moveCamera();
 
 		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f); //global for all draws
-	
+
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		//Skybox must be drawn first
 		drawSkyBox(skybox);
@@ -103,13 +88,13 @@ int main(void) {
 		view = camera.getViewMatrix();
 		glDepthMask(GL_TRUE);
 		glClear(GL_DEPTH_BUFFER_BIT);
-		
+
 		//Foo water instance
 		waterShader.Use();
 		transformViewProj(&waterShader);
 
 		// Draw water instance
-//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindVertexArray(water.getVAO());
 		glDrawElements(GL_TRIANGLES, water.getNumIndices(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
@@ -118,7 +103,6 @@ int main(void) {
 		terrainShader.Use();
 		transformViewProj(&terrainShader);
 
-
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindVertexArray(terrain.getVAO());
 		glDrawElements(GL_TRIANGLES, terrain.getNumIndices(), GL_UNSIGNED_INT, 0);
@@ -126,7 +110,7 @@ int main(void) {
 		glfwSwapBuffers(window);
 	}
 
-	// Clean up 
+	// Clean up
 	//////////////////////////////////////////////////////////////////////////
 	glfwDestroyWindow(window);
 	glfwTerminate();
@@ -172,7 +156,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 void moveCamera() {
 	if (keys[GLFW_KEY_W]) {
 		camera.translateCamera(FORWARD);
-		cout << camera.getPosition().x  << " , " << camera.getPosition().z << endl;
+		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
 	}
 	if (keys[GLFW_KEY_S]) {
 		camera.translateCamera(BACKWARD);
@@ -202,7 +186,7 @@ void moveCamera() {
 // Mouse
 //////////////////////////////////////////////////////////////////////////////
 void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
-	
+
 	if (initializeMouse)
 	{
 		lastX = xpos;
@@ -220,6 +204,6 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	}
 }
 
-void framebuffer_size_callback(GLFWwindow * window, int width, int height){
+void framebuffer_size_callback(GLFWwindow * window, int width, int height) {
 	glViewport(0, 0, width, height);
 }

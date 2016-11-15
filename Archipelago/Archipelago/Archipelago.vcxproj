@@ -159,8 +159,8 @@
     <ClInclude Include="Archipelago.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Shaders\Shader.h" />
-    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="NoiseGeneration.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="stdHeader.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Water.h" />
