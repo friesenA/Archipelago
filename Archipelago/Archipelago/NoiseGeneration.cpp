@@ -24,7 +24,7 @@ float NoiseGeneration::generateHeight(int x, int z) {
 	for (int i = 0; i < OCTAVES; i++) {
 		float frequency = (float)(glm::pow(2, 1) / d);
 		float amplitude = (float)glm::pow(ROUGHNESS, i)*AMPLITUDE;
-		total += getInterpolatedNoise(x*frequency, z*frequency)*amplitude;
+		total += (getInterpolatedNoise(x*frequency, z*frequency)*amplitude);
 	}
 	return total;
 }
@@ -34,8 +34,8 @@ float NoiseGeneration::generateHeight(int x, int z) {
 float NoiseGeneration::getNoise(int x, int z) {
 	
 
-	x = (float)rand() / RAND_MAX;
-	z = (float)rand() / RAND_MAX;
+	x = rand()%10;
+	z = rand() % 10;
 	return x + z;
 
 	//float setRandomSeed = x* 49632 + z* 325176 + random_number; //+ seed;
@@ -44,9 +44,9 @@ float NoiseGeneration::getNoise(int x, int z) {
 
 float NoiseGeneration::getSmoothNoise(int x, int z)
 {
-	float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 16.0f; //16.0f is a scaling factor
-	float sides = (getNoise(x - 1, z) + getNoise(x + 1, z) + getNoise(x, z - 1) + getNoise(x, z + 1)) / 8.0f;
-	float center = (getNoise(x, z)) / 4.0f;
+	float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 1600.0f; //16.0f is a scaling factor
+	float sides = (getNoise(x - 1, z) + getNoise(x + 1, z) + getNoise(x, z - 1) + getNoise(x, z + 1)) / 800.0f;
+	float center = (getNoise(x, z)) / 400.0f;
 	return corners + sides + center;
 }
 
