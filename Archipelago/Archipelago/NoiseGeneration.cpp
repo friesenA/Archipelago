@@ -10,8 +10,8 @@ https:// flafla2.github.io/2014/08/09/perlinnoise.html
 # define M_PI  3.14159265358979323846  /* pi */
 
 NoiseGeneration::NoiseGeneration() {
-	//srand(time(0));
-	//this->seed = random_number;
+	srand(time(0));
+	this->seed = random_number;
 }
 
 float NoiseGeneration::generateHeight(int x, int z) {
@@ -33,11 +33,11 @@ float NoiseGeneration::generateHeight(int x, int z) {
 //returns a random number value btwn 1 and -1
 float NoiseGeneration::getNoise(int x, int z) {
 	
-
-	x = rand()%10;
-	z = rand() % 10;
-	return x + z;
-
+	
+	//x = rand()%10;
+	//z = rand() % 10;
+	//return x + z ;
+	return x + z + random_number;
 	//float setRandomSeed = x* 49632 + z* 325176 + random_number; //+ seed;
 	//return setRandomSeed; //...
 }

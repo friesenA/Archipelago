@@ -38,7 +38,8 @@ private:
 	const float AMPLITUDE = 70.0f;
 	const int OCTAVES = 3; //number of noise funtion we use
 	const float ROUGHNESS = 0.3f; //How much we decrease the almplitude by each higher octave
-	int random_number = rand()%10000000;
+	//srand(time(0));
+	int random_number = rand()%1000;
 	//float setRandomSeed;
 	int seed;// = srand(time(0));
 

@@ -126,7 +126,7 @@ int main(void) {
 		glfwSwapBuffers(window);
 	}
 
-	// Clean up
+	// Clean up 
 	//////////////////////////////////////////////////////////////////////////
 	glfwDestroyWindow(window);
 	glfwTerminate();
