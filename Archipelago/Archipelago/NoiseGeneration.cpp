@@ -10,8 +10,8 @@ https:// flafla2.github.io/2014/08/09/perlinnoise.html
 # define M_PI  3.14159265358979323846  /* pi */
 
 NoiseGeneration::NoiseGeneration() {
-	srand(time(0));
-	this->seed = random_number;
+	//srand(time(0));
+	//this->seed = random_number;
 }
 
 float NoiseGeneration::generateHeight(int x, int z) {
@@ -33,11 +33,11 @@ float NoiseGeneration::generateHeight(int x, int z) {
 //returns a random number value btwn 1 and -1
 float NoiseGeneration::getNoise(int x, int z) {
 	
-	
-	//x = rand()%10;
-	//z = rand() % 10;
-	//return x + z ;
-	return x + z + random_number;
+	//srand(time(0));
+	x = rand()%10;
+	z = rand() % 10;
+	return x + z ;
+	//return x + z + random_number;
 	//float setRandomSeed = x* 49632 + z* 325176 + random_number; //+ seed;
 	//return setRandomSeed; //...
 }
@@ -80,47 +80,6 @@ float NoiseGeneration::getInterpolatedNoise(float x, float z)
 
 
 
-void buildVertexVBO() {
-
-
-	/*
-	GLfloat half = (GLfloat)this->numTiles / 2.0f;
-	//Creates a plane at y=height, with given width and length, centered at the origin
-	for (int l = 0; l <= this->numTiles; l++) {
-	for (int w = 0; w <= this->numTiles; w++) {
-	this->vertices.push_back(glm::vec3((GLfloat)(w * this->tileSize - half * this->tileSize), this->height, (GLfloat)(l * this->tileSize - half * this->tileSize)));
-	}
-	}
-
-	glGenBuffers(1, &this->vertex_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
-	glBufferData(GL_ARRAY_BUFFER, this->vertices.size() * sizeof(glm::vec3), &this->vertices.front(), GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	
-	*/
-}
-
-void buildVAO()
-{
-
-	/*
-	//Bind VAO
-	glGenVertexArrays(1, &this->VAO);
-	glBindVertexArray(this->VAO);
-
-	//Register Vertex Buffer
-	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-
-	//Bind EBO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
-
-	//Unbind VBO & VAO
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	*/
-}
 
 
 NoiseGeneration::~NoiseGeneration() {}
