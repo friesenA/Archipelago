@@ -146,7 +146,7 @@ void Terrain::useNoise() {
 	for (int i =0; i < this->vertices.size(); i++) {
 		
 		NoiseGeneration noise;
-		vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z)-7);		
+		vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));		
 
 	}
 

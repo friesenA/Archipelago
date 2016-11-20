@@ -9,21 +9,17 @@ https:// flafla2.github.io/2014/08/09/perlinnoise.html
 #include <math.h>
 # define M_PI  3.14159265358979323846  /* pi */
 
-NoiseGeneration::NoiseGeneration() {
-	//srand(time(0));
-	//this->seed = random_number;
-}
+NoiseGeneration::NoiseGeneration() { }
 
 float NoiseGeneration::generateHeight(int x, int z) {
-	//this should be returning a vector of vertices of y values?
-
-
-	//More general function:
+	//More general function:	
 	float total = 0;
 	float d = (float)glm::pow(2, OCTAVES - 1);
 	for (int i = 0; i < OCTAVES; i++) {
-		float frequency = (float)(glm::pow(2, 1) / d);
+		float frequency = (float)(glm::pow(2.0, i) / d);
 		float amplitude = (float)glm::pow(ROUGHNESS, i)*AMPLITUDE;
+		//total += (getInterpolatedNoise(x*frequency/5, z*frequency/5)*amplitude);
+		//or...
 		total += (getInterpolatedNoise(x*frequency, z*frequency)*amplitude);
 	}
 	return total;
@@ -32,29 +28,28 @@ float NoiseGeneration::generateHeight(int x, int z) {
 //Random Number generator 
 //returns a random number value btwn 1 and -1
 float NoiseGeneration::getNoise(int x, int z) {
-	
-	//srand(time(0));
-	x = rand()%10;
-	z = rand() % 10;
-	return x + z ;
-	//return x + z + random_number;
-	//float setRandomSeed = x* 49632 + z* 325176 + random_number; //+ seed;
-	//return setRandomSeed; //...
+	int n;
+	n = x + z * 57;
+	x = (n << 13) ^ n;
+	return (1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
+	//Ref: http: //pastebin.com/VJ5uvAhY
 }
 
 float NoiseGeneration::getSmoothNoise(int x, int z)
 {
-	float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 1600.0f; //16.0f is a scaling factor
-	float sides = (getNoise(x - 1, z) + getNoise(x + 1, z) + getNoise(x, z - 1) + getNoise(x, z + 1)) / 800.0f;
-	float center = (getNoise(x, z)) / 400.0f;
+	float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 160.0f; //16.0f is a scaling factor
+	float sides = (getNoise(x - 1, z) + getNoise(x + 1, z) + getNoise(x, z - 1) + getNoise(x, z + 1)) / 80.0f;
+	float center = (getNoise(x, z)) / 40.0f;
 	return corners + sides + center;
 }
 
 //cosine interpolations betwen the noise values
 float NoiseGeneration::interpolation(float a, float b, float blend) {
+		
 	double theta = blend * M_PI;
 	float f = (float)(1.0f - glm::cos(theta))* 0.5f; //want a value bten -1 and 1
 	return a*(1.0f - f) + b*f;
+	
 }
 
 float NoiseGeneration::getInterpolatedNoise(float x, float z)
@@ -62,8 +57,8 @@ float NoiseGeneration::getInterpolatedNoise(float x, float z)
 	int intX = (int)x; //interger part of value x
 	int intZ = (int)z; //interger part of value z
 
-	int fracX = x; //fraction/decimal section of the x value
-	int fracZ = z; //fraction/decimal section of the z value
+	int fracX = x - intX; //fraction/decimal section of the x value
+	int fracZ = z - intZ; //fraction/decimal section of the z value
 
 	 //calutating the height of the nearest points to the noise function
 	float v1 = getSmoothNoise(intX, intZ);
@@ -75,7 +70,7 @@ float NoiseGeneration::getInterpolatedNoise(float x, float z)
 	float i_1 = interpolation(v1, v2, fracX);
 	float i_2 = interpolation(v3, v4, fracX);
 
-	return interpolation(i_1, i_2, fracZ);
+	return interpolation(i_1, i_2, fracZ); //This will give us the height (y) of the x, z postion.
 }
 
 
