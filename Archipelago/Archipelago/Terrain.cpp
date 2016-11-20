@@ -24,7 +24,7 @@ int Terrain::getNumIndices()
 	return indicies.size();
 }
 
-Terrain::~Terrain(){}
+Terrain::~Terrain() {}
 
 
 void Terrain::buildVertexVBO()
@@ -40,8 +40,8 @@ void Terrain::buildVertexVBO()
 	}
 
 	//Modify y values with perlin noise?
-		this->useNoise();
-		
+	this->useNoise();
+
 	//Modify y values with island mask
 		//this->islandMask();
 
@@ -53,8 +53,8 @@ void Terrain::buildVertexVBO()
 
 void Terrain::buildIndexEBO()
 {
-	for (int l = 0; l < this->length-1; l++) {
-		for (int w = 0; w < this->width-1; w++) {
+	for (int l = 0; l < this->length - 1; l++) {
+		for (int w = 0; w < this->width - 1; w++) {
 			GLuint point = l*width + w;
 
 			//first half triangle
@@ -67,7 +67,7 @@ void Terrain::buildIndexEBO()
 			indicies.push_back(point + 1);
 		}
 	}
-	
+
 	glGenBuffers(1, &this->index_EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indicies.size() * sizeof(GLuint), &this->indicies.front(), GL_STATIC_DRAW);
@@ -86,7 +86,7 @@ void Terrain::buildVAO()
 	glEnableVertexAttribArray(0);
 
 	//Register any other VBOs
-	
+
 	//Bind EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
 
@@ -96,7 +96,7 @@ void Terrain::buildVAO()
 }
 
 void Terrain::islandMask()
-{	
+{
 	const GLfloat MAGNITUDE = 0.2f;
 	const GLfloat DISTANCE_TO_ZERO = 100;
 
@@ -123,7 +123,7 @@ void Terrain::islandMask()
 			for (int w = 0; w < this->width; w++) {
 				vertex = l * this->width + w;
 				distance = std::sqrt(std::pow(centreXCoord - w, 2) + std::pow(centreXCoord - l, 2));
-				
+
 				//clamp if outside sloping zone;
 				if (distance > DISTANCE_TO_ZERO)
 					distance = DISTANCE_TO_ZERO;
@@ -132,8 +132,8 @@ void Terrain::islandMask()
 			}
 		}
 	}
-	
-	
+
+
 
 }
 
@@ -141,13 +141,10 @@ void Terrain::islandMask()
 //and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
 //place thos into vector
 void Terrain::useNoise() {
-	
 
-	for (int i =0; i < this->vertices.size(); i++) {
-		
-		NoiseGeneration noise;
-		vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));		
+	NoiseGeneration noise;
 
+	for (int i = 0; i < this->vertices.size(); i++) {
+		vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
 	}
-
 }

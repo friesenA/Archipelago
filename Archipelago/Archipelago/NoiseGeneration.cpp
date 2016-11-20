@@ -17,6 +17,7 @@ float NoiseGeneration::generateHeight(int x, int z) {
 	float d = (float)glm::pow(2, OCTAVES - 1);
 	for (int i = 0; i < OCTAVES; i++) {
 		float frequency = (float)(glm::pow(2.0, i) / d);
+		//float amplitude = 1.0f/(float)glm::pow(2, i)*AMPLITUDE;
 		float amplitude = (float)glm::pow(ROUGHNESS, i)*AMPLITUDE;
 		//total += (getInterpolatedNoise(x*frequency/5, z*frequency/5)*amplitude);
 		//or...
