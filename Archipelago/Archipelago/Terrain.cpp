@@ -137,14 +137,29 @@ void Terrain::islandMask()
 
 }
 
-//function that goes through the  vertices lenght and pulls the x and z from each vec3
+//function that goes through the  vertices length and pulls the x and z from each vec3
 //and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
 //place thos into vector
+			// I THINK I NEED TO ADD BOUNDRIES HERE TO AVOID THE EXTRA NOISE LINES BEING GENERATED..
 void Terrain::useNoise() {
 
 	NoiseGeneration noise;
+	int i = 0;
 
-	for (int i = 0; i < this->vertices.size(); i++) {
+	for (int l = 0; l < this->length-2; l++) {
+		for (int w = 0; w < this->width-2; w++) {
+
+				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
+				i++;
+
+		}
+	}
+	//What i had orginally
+	/*
+	for (int i =0; i < this->vertices.size(); i++) {
 		vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
 	}
+	
+	*/
+
 }
