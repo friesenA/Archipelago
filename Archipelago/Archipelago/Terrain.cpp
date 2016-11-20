@@ -41,7 +41,7 @@ void Terrain::buildVertexVBO()
 	}
 	//Modify y values with perlin noise?
 	//Modify y values with island mask
-	//this->islandMask();
+	this->islandMask();
 
 	glGenBuffers(1, &this->vertex_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
@@ -52,6 +52,7 @@ void Terrain::buildVertexVBO()
 void Terrain::buildNormalsVBO()
 {
 	glm::vec3 normal = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec3 U, UL, R, L, D, DR;
 	int vertex;
 
 	//Find normals for each vertex
@@ -59,34 +60,41 @@ void Terrain::buildNormalsVBO()
 		for (int w = 0; w < this->width; w++) {
 			vertex = l * this->width + w;
 
+
 			//there are faces above vertex
 			if (l != 0) {
+				U = glm::vec3(this->vertices[vertex - this->width] - this->vertices[vertex]);
 				//there are faces to the left
 				if (w != 0) {
-					//face UL x L
-					normal += glm::cross(this->vertices[vertex - this->width - 1], this->vertices[vertex - 1]);
-					//face U x UL
-					normal += glm::cross(this->vertices[vertex - this->width], this->vertices[vertex - this->width - 1]);
+					L = glm::vec3(this->vertices[vertex - 1] - this->vertices[vertex]);
+					UL = glm::vec3(this->vertices[vertex - this->width - 1] - this->vertices[vertex]);
+
+					normal += glm::cross(UL, L);
+					normal += glm::cross(U, UL);
 				}
 				//there are faces to the right
 				if (w != this->width -1) {
-					//face R x U
-					normal += glm::cross(this->vertices[vertex + 1], this->vertices[vertex - this->width]);
+					R = glm::vec3(this->vertices[vertex + 1] - this->vertices[vertex]);
+
+					normal += glm::cross(R, U);
 				}
 			}
 			//there are faces below vertex
 			if (l != this->length - 1) {
+				D = glm::vec3(this->vertices[vertex + this->width] - this->vertices[vertex]);
 				//there are faces to the left
 				if (w != 0) {
-					//face L x D
-					normal += glm::cross(this->vertices[vertex - 1], this->vertices[vertex + this->width]);
+					L = glm::vec3(this->vertices[vertex - 1] - this->vertices[vertex]);
+
+					normal += glm::cross(L, D);
 				}
 				//there are faces to the right
 				if (w != this->width - 1) {
-					//face D x DR
-					normal += glm::cross(this->vertices[vertex + this->width], this->vertices[vertex + this->width + 1]);
-					//face DR x R
-					normal += glm::cross(this->vertices[vertex + this->width + 1], this->vertices[vertex + 1]);
+					R = glm::vec3(this->vertices[vertex + 1] - this->vertices[vertex]);
+					R = glm::vec3(this->vertices[vertex + this->width + 1] - this->vertices[vertex]);
+
+					normal += glm::cross(D, DR);
+					normal += glm::cross(DR, R);
 				}
 			}
 			this->normals.push_back(glm::normalize(normal));
