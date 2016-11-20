@@ -41,7 +41,7 @@ void Terrain::buildVertexVBO()
 	}
 	//Modify y values with perlin noise?
 	//Modify y values with island mask
-	this->islandMask();
+	//this->islandMask();
 
 	glGenBuffers(1, &this->vertex_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
@@ -107,11 +107,11 @@ void Terrain::buildIndexEBO()
 
 			//first half triangle
 			indicies.push_back(point);
-			indicies.push_back(point + (this->width + 1));
-			indicies.push_back(point + (this->width + 1) + 1);
+			indicies.push_back(point + (this->width));
+			indicies.push_back(point + (this->width) + 1);
 			//second half triangle
 			indicies.push_back(point);
-			indicies.push_back(point + (this->width + 1) + 1);
+			indicies.push_back(point + (this->width) + 1);
 			indicies.push_back(point + 1);
 		}
 	}
