@@ -15,14 +15,12 @@ Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGT
 	buildVAO();
 }
 
-GLuint Terrain::getVAO()
-{
-	return VAO;
-}
 
-int Terrain::getNumIndices()
+void Terrain::draw()
 {
-	return indicies.size();
+	glBindVertexArray(this->VAO);
+	glDrawElements(GL_TRIANGLES, this->indicies.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
 
 Terrain::~Terrain() {}
