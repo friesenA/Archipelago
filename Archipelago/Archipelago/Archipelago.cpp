@@ -1,8 +1,8 @@
 /**
- * COMP371
- * Archipelago
- * Team 7
- */
+* COMP371
+* Archipelago
+* Team 7
+*/
 
 #include "Archipelago.h"
 
@@ -60,8 +60,7 @@ int main(void) {
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	
-	Water water(2.0f);
+	Water water(-2.0f);
 	Terrain terrain(63);
 
 	// Skybox
@@ -83,7 +82,7 @@ int main(void) {
 		moveCamera();
 
 		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f); //global for all draws
-	
+
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		//Skybox must be drawn first
 		drawSkyBox(skybox);
@@ -92,14 +91,14 @@ int main(void) {
 		view = camera.getViewMatrix();
 		glDepthMask(GL_TRUE);
 		glClear(GL_DEPTH_BUFFER_BIT);
-		
+
 		//Foo water instance
 		waterShader.Use();
 		transformViewProj(&waterShader);
 		lightingSetup(&waterShader);
 
 		// Draw water instance
-//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindVertexArray(water.getVAO());
 		glDrawElements(GL_TRIANGLES, water.getNumIndices(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
@@ -177,7 +176,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 void moveCamera() {
 	if (keys[GLFW_KEY_W]) {
 		camera.translateCamera(FORWARD);
-		cout << camera.getPosition().x  << " , " << camera.getPosition().z << endl;
+		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
 	}
 	if (keys[GLFW_KEY_S]) {
 		camera.translateCamera(BACKWARD);
@@ -207,7 +206,7 @@ void moveCamera() {
 // Mouse
 //////////////////////////////////////////////////////////////////////////////
 void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
-	
+
 	if (initializeMouse)
 	{
 		lastX = xpos;
@@ -225,6 +224,6 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	}
 }
 
-void framebuffer_size_callback(GLFWwindow * window, int width, int height){
+void framebuffer_size_callback(GLFWwindow * window, int width, int height) {
 	glViewport(0, 0, width, height);
 }

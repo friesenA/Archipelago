@@ -1,11 +1,14 @@
 #pragma once
 #include "stdHeader.h"
+#include "NoiseGeneration.h"
 
 // Dimensions of terrain plane
-const int TERRAIN_WIDTH = 600;
-const int TERRAIN_LENGTH = 600;
+const int TERRAIN_WIDTH = 100; //600
+const int TERRAIN_LENGTH = 100; //600
 
 const int WATER_BORDER = 100;
+
+//const int Island_Noise = ###; need to add?
 
 //Currently: Creates a plane at y=0, with given width and length, centered at the origin
 class Terrain
@@ -48,6 +51,11 @@ private:
 
 	//Modifies vertex height values to form a random number of cone style extrusions
 	void islandMask();
+
+	//function that goes through the  vertices lenght and pulls the x and z from each vec3
+	//and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
+	//place thos into vector
+	void useNoise();
 	void shaderTestFoo();
 };
 
