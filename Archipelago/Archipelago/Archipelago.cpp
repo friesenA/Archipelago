@@ -6,6 +6,7 @@
 
 #include "Archipelago.h"
 
+glm::vec3 const SUNLIGHT_DIR(glm::normalize(glm::vec3(1.0f, 2.0f*sqrt(2.0f), -1.0f)));
 
 //Camera facing forward z = -1;
 Camera camera(glm::vec3(0.0f, 3.0f, 0.0f));
@@ -59,13 +60,15 @@ int main(void) {
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
+	
 	Water water(2.0f);
-	Terrain terrain(99);
+	Terrain terrain(63);
 
 	// Skybox
 	//////////////////////////////////////////////////////////////////////////
 	SkyBox skybox;
 	skybox.generate();
+
 
 	// OpenGL Settings
 	//////////////////////////////////////////////////////////////////////////
@@ -92,6 +95,7 @@ int main(void) {
 		//Foo water instance
 		waterShader.Use();
 		transformViewProj(&waterShader);
+		lightingSetup(&waterShader);
 
 		// Draw water instance
 //		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -102,8 +106,9 @@ int main(void) {
 		// Draw terrain instance
 		terrainShader.Use();
 		transformViewProj(&terrainShader);
+		lightingSetup(&terrainShader);
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindVertexArray(terrain.getVAO());
 		glDrawElements(GL_TRIANGLES, terrain.getNumIndices(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
@@ -128,6 +133,21 @@ void transformViewProj(Shader *shaders) {
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+}
+
+// Lighting
+////////////////////////////////////////////////////////////////////////////
+void lightingSetup(Shader *shaders) {
+	glm::vec3 camPos = camera.getPosition();
+
+	GLint lightDir = glGetUniformLocation(shaders->Program, "lightDirection");
+	GLint lightCol = glGetUniformLocation(shaders->Program, "lightColor");
+	GLint viewPos = glGetUniformLocation(shaders->Program, "viewerPos");
+
+	glUniform3f(lightDir, SUNLIGHT_DIR.x, SUNLIGHT_DIR.y, SUNLIGHT_DIR.z);
+	glUniform3f(lightCol, 1.0f, 1.0f, 1.0f);
+	glUniform3f(viewPos, camPos.x, camPos.y, camPos.z);
+
 }
 
 void drawSkyBox(SkyBox &skybox) {

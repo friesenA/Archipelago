@@ -9,6 +9,7 @@ Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGT
 	//build VBO's
 	buildVertexVBO();
 	buildNormalsVBO();
+	shaderTestFoo();
 	//build index EBO
 	buildIndexEBO();
 	//build VAO
@@ -60,7 +61,6 @@ void Terrain::buildNormalsVBO()
 		for (int w = 0; w < this->width; w++) {
 			vertex = l * this->width + w;
 
-
 			//there are faces above vertex
 			if (l != 0) {
 				U = glm::vec3(this->vertices[vertex - this->width] - this->vertices[vertex]);
@@ -69,14 +69,14 @@ void Terrain::buildNormalsVBO()
 					L = glm::vec3(this->vertices[vertex - 1] - this->vertices[vertex]);
 					UL = glm::vec3(this->vertices[vertex - this->width - 1] - this->vertices[vertex]);
 
-					normal += glm::cross(UL, L);
-					normal += glm::cross(U, UL);
+					normal += glm::normalize(glm::cross(UL, L));
+					normal += glm::normalize(glm::cross(U, UL));
 				}
 				//there are faces to the right
 				if (w != this->width -1) {
 					R = glm::vec3(this->vertices[vertex + 1] - this->vertices[vertex]);
 
-					normal += glm::cross(R, U);
+					normal += glm::normalize(glm::cross(R, U));
 				}
 			}
 			//there are faces below vertex
@@ -86,17 +86,18 @@ void Terrain::buildNormalsVBO()
 				if (w != 0) {
 					L = glm::vec3(this->vertices[vertex - 1] - this->vertices[vertex]);
 
-					normal += glm::cross(L, D);
+					normal += glm::normalize(glm::cross(L, D));
 				}
 				//there are faces to the right
 				if (w != this->width - 1) {
 					R = glm::vec3(this->vertices[vertex + 1] - this->vertices[vertex]);
-					R = glm::vec3(this->vertices[vertex + this->width + 1] - this->vertices[vertex]);
+					DR = glm::vec3(this->vertices[vertex + this->width + 1] - this->vertices[vertex]);
 
-					normal += glm::cross(D, DR);
-					normal += glm::cross(DR, R);
+					normal += glm::normalize(glm::cross(D, DR));
+					normal += glm::normalize(glm::cross(DR, R));
 				}
 			}
+			normal = normal / 6.0f;
 			this->normals.push_back(glm::normalize(normal));
 		}
 	}
@@ -159,7 +160,7 @@ void Terrain::buildVAO()
 //modified implementation of concept, Reference: https://www.reddit.com/r/gamedev/comments/1g4eae/need_help_generating_an_island_using_perlin_noise/?st=iuritk3l&sh=594f7e28
 void Terrain::islandMask()
 {	
-	const GLfloat MAGNITUDE = 0.2f;
+	const GLfloat MAGNITUDE = 0.5f;
 	const GLfloat DISTANCE_TO_ZERO = 100;
 
 	int numCentrePoints;
@@ -194,4 +195,41 @@ void Terrain::islandMask()
 			}
 		}
 	}
+}
+
+void Terrain::shaderTestFoo() {
+	
+	glm::vec3 landColor = glm::vec3(0.0, 1.0, 0.0);
+	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 lightPosition = glm::vec3(0.0f, 200.0f, 0.0f); //world coords
+//	glm::vec3 lightDirection = normalize(lightPosition - glm::vec3(0.0)); //directional light
+	glm::vec3 lightDirection = normalize(glm::vec3(1.0f, 2.0f*sqrt(2.0f), -1.0f)); //directional light
+
+	std::vector<glm::vec3> colors;
+
+	glm::vec3 diffuse_contribution;
+
+	for (int i = 0; i < vertices.size(); i++) {
+		float ambientStrength = 0.15f;
+		glm::vec3 ambient_contribution = ambientStrength * lightColor;
+		glm::vec3 vertexNormal = this->normals[i];
+
+		if (vertexNormal.y < 0.950f ) {
+			//diffuse lighting
+			float incident_degree = max(dot(vertexNormal, lightDirection), 0.0f);
+			diffuse_contribution = incident_degree * lightColor;
+
+		}
+		else {
+			float incident_degree = max(dot(vertexNormal, lightDirection), 0.0f);
+			diffuse_contribution = incident_degree * lightColor;
+		}
+		
+
+		glm::vec3 finalColor = (ambient_contribution + diffuse_contribution) * landColor;
+		
+		colors.push_back(finalColor);
+		
+	}
+																		  //ambient lightin
 }

@@ -48,5 +48,6 @@ private:
 
 	//Modifies vertex height values to form a random number of cone style extrusions
 	void islandMask();
+	void shaderTestFoo();
 };
 
