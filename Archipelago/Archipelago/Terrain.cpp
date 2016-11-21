@@ -6,7 +6,7 @@ Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGT
 	std::cout << "Generating Terrain" << std::endl;
 	srand(seed);
 
-	//build VBO's
+	//build vertex vbo
 	buildVertexVBO();
 	buildNormalsVBO();
 	//build index EBO
@@ -36,7 +36,7 @@ void Terrain::buildVertexVBO()
 	//Creates a plane at y=0, with given width and length, centered at the origin
 	for (int l = 0; l < this->length; l++) {
 		for (int w = 0; w < this->width; w++) {
-			this->vertices.push_back(glm::vec3((GLfloat)w - halfWidth, 0.0f, (GLfloat)l - halfLength));
+			this->vertices.push_back(glm::vec3((GLfloat)w - halfWidth, 0.0f, halfLength - (GLfloat)l));
 		}
 	}
 
