@@ -70,12 +70,11 @@ void Shadows::setupLightSpaceMatrix(glm::vec3 lightDir)
 {
 	//Ortho Projection
 	GLfloat near_plane = 0.1f, far_plane = 1000.0f;
-	GLfloat length = 2 * tan(glm::radians(45.0f / 2)) * 1000;
-	glm::mat4 lightProjection = glm::ortho(-length / 2.0f, length / 2.0f, -length / 2.0f, length / 2.0f, near_plane, far_plane);
+	glm::mat4 lightProjection = glm::ortho(-800.0f, 800.0f, -800.0f, 800.0f, near_plane, far_plane);
 
 	//View from Light Source
-	float factor = 10.0f;//needs testing
-	glm::mat4 lightView = glm::lookAt(factor * lightDir, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); //needs testing
+	float factor = 100.0f;//needs testing
+	glm::mat4 lightView = glm::lookAt(factor * lightDir, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	lightSpaceMatrix = lightProjection * lightView;
 }
