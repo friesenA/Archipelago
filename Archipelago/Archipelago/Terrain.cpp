@@ -1,5 +1,5 @@
 #include "Terrain.h"
-
+#include "NoiseGeneration.h"
 
 Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGTH)
 {
@@ -24,7 +24,7 @@ int Terrain::getNumIndices()
 	return indicies.size();
 }
 
-Terrain::~Terrain(){}
+Terrain::~Terrain() {}
 
 
 void Terrain::buildVertexVBO()
@@ -38,9 +38,12 @@ void Terrain::buildVertexVBO()
 			this->vertices.push_back(glm::vec3((GLfloat)w - halfWidth, 0.0f, halfLength - (GLfloat)l));
 		}
 	}
+
 	//Modify y values with perlin noise?
+	this->useNoise();
+
 	//Modify y values with island mask
-	//this->islandMask();
+		//this->islandMask();
 
 	glGenBuffers(1, &this->vertex_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
@@ -50,21 +53,22 @@ void Terrain::buildVertexVBO()
 
 void Terrain::buildIndexEBO()
 {
-	for (int l = 0; l < this->length-1; l++) {
-		for (int w = 0; w < this->width-1; w++) {
+	for (int l = 0; l < this->length - 1; l++) {
+		for (int w = 0; w < this->width - 1; w++) {
 			GLuint point = l*width + w;
 
 			//first half triangle
 			indicies.push_back(point);
 			indicies.push_back(point + (this->width));
 			indicies.push_back(point + (this->width) + 1);
+			
 			//second half triangle
 			indicies.push_back(point);
 			indicies.push_back(point + (this->width) + 1);
 			indicies.push_back(point + 1);
 		}
 	}
-	
+
 	glGenBuffers(1, &this->index_EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indicies.size() * sizeof(GLuint), &this->indicies.front(), GL_STATIC_DRAW);
@@ -83,7 +87,7 @@ void Terrain::buildVAO()
 	glEnableVertexAttribArray(0);
 
 	//Register any other VBOs
-	
+
 	//Bind EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
 
@@ -93,7 +97,7 @@ void Terrain::buildVAO()
 }
 
 void Terrain::islandMask()
-{	
+{
 	const GLfloat MAGNITUDE = 0.2f;
 	const GLfloat DISTANCE_TO_ZERO = 100;
 
@@ -120,7 +124,7 @@ void Terrain::islandMask()
 			for (int w = 0; w < this->width; w++) {
 				vertex = l * this->width + w;
 				distance = std::sqrt(std::pow(centreXCoord - w, 2) + std::pow(centreXCoord - l, 2));
-				
+
 				//clamp if outside sloping zone;
 				if (distance > DISTANCE_TO_ZERO)
 					distance = DISTANCE_TO_ZERO;
@@ -129,7 +133,34 @@ void Terrain::islandMask()
 			}
 		}
 	}
+
+
+
+}
+
+//function that goes through the  vertices length and pulls the x and z from each vec3
+//and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
+//place thos into vector
+			// I THINK I NEED TO ADD BOUNDRIES HERE TO AVOID THE EXTRA NOISE LINES BEING GENERATED..
+void Terrain::useNoise() {
+
+	NoiseGeneration noise;
+	int i = 0;
+
+	for (int l = 0; l < this->length-2; l++) {
+		for (int w = 0; w < this->width-2; w++) {
+
+				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
+				i++;
+
+		}
+	}
+	//What i had orginally
+	/*
+	for (int i =0; i < this->vertices.size(); i++) {
+		vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
+	}
 	
-	
+	*/
 
 }
