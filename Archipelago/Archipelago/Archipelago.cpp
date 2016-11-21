@@ -17,8 +17,7 @@ bool initializeMouse = true;
 GLfloat lastX;
 GLfloat lastY;
 
-//Viewport Dimensions
-int viewport_width, viewport_height;
+
 
 int main(void) {
 
@@ -45,19 +44,11 @@ int main(void) {
 		cout << "Failed to initialize GLEW" << endl;
 		exit(EXIT_FAILURE);
 	}
-
-	// Viewport
-	//////////////////////////////////////////////////////////////////////////
 	
-	glfwGetFramebufferSize(window, &viewport_width, &viewport_height);
-	glViewport(0, 0, viewport_width, viewport_height);
-
 	// Shaders
 	//////////////////////////////////////////////////////////////////////////
 	Shader waterShader("Shaders/waterVertex.shader", "Shaders/waterFragment.shader");
 	Shader terrainShader("Shaders/terrainVertex.shader", "Shaders/terrainFragment.shader");
-
-	Shadows shadows;
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
@@ -69,31 +60,34 @@ int main(void) {
 	SkyBox skybox;
 	skybox.generate();
 
-
 	// OpenGL Settings
 	//////////////////////////////////////////////////////////////////////////
 	glEnable(GL_DEPTH_TEST); 
 	glEnable(GL_FRAMEBUFFER_SRGB); //gamma correction
+
+	//Register Shadows
+	//////////////////////////////////////////////////////////////////////////
+	Shadows shadows;
+	shadows.initializeShadowMap();
+
+	//Draw Obj instances
+	shadows.drawObj(&water, SUNLIGHT_DIR);
+	shadows.drawObj(&terrain, SUNLIGHT_DIR);
+
+	shadows.endShadowMap();
+
+	// Viewport / needs to be set after the shadow map created
+	//////////////////////////////////////////////////////////////////////////
+	int width, height;
+	glfwGetFramebufferSize(window, &width, &height);
+	glViewport(0, 0, width, height);
 
 	// Game loop
 	//////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 		moveCamera();
-
-		//Register Shadows
-		/////////////////////////////////////////////////////
-		shadows.initializeShadowMap();
 		
-		//Draw Obj instances
-		shadows.drawObj(&water, SUNLIGHT_DIR);
-		shadows.drawObj(&terrain, SUNLIGHT_DIR);
-
-		shadows.endShadowMap();
-		
-		//Draw Scene
-		////////////////////////////////////////////////////
-		glViewport(0, 0, viewport_width, viewport_height);
 		clearScreenAndColor();
 
 		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f); //global for all draws
@@ -232,8 +226,6 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	}
 }
 
-void framebuffer_size_callback(GLFWwindow * window, int new_width, int new_height) {
-	viewport_width = new_width;
-	viewport_height = new_height;
-	glViewport(0, 0, viewport_width, viewport_height);
+void framebuffer_size_callback(GLFWwindow * window, int width, int height) {
+	glViewport(0, 0, width, height);
 }

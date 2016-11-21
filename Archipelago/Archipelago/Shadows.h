@@ -2,8 +2,8 @@
 #include "stdHeader.h"
 #include "Obj.h"
 
-const GLuint SHADOW_WIDTH = 1024;
-const GLuint SHADOW_HEIGHT = 1024;
+const GLuint SHADOW_WIDTH = 2048;
+const GLuint SHADOW_HEIGHT = 2048;
 
 class Shadows
 {
