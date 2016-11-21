@@ -56,6 +56,5 @@ private:
 	//and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
 	//place thos into vector
 	void useNoise();
-	void shaderTestFoo();
 };
 

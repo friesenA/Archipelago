@@ -9,7 +9,6 @@ Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGT
 	//build VBO's
 	buildVertexVBO();
 	buildNormalsVBO();
-	shaderTestFoo();
 	//build index EBO
 	buildIndexEBO();
 	//build VAO
@@ -228,32 +227,4 @@ void Terrain::useNoise() {
 	}
 	
 	*/
-
-	std::vector<glm::vec3> colors;
-
-	glm::vec3 diffuse_contribution;
-
-	for (int i = 0; i < vertices.size(); i++) {
-		float ambientStrength = 0.15f;
-		glm::vec3 ambient_contribution = ambientStrength * lightColor;
-		glm::vec3 vertexNormal = this->normals[i];
-
-		if (vertexNormal.y < 0.950f ) {
-			//diffuse lighting
-			float incident_degree = max(dot(vertexNormal, lightDirection), 0.0f);
-			diffuse_contribution = incident_degree * lightColor;
-
-		}
-		else {
-			float incident_degree = max(dot(vertexNormal, lightDirection), 0.0f);
-			diffuse_contribution = incident_degree * lightColor;
-		}
-		
-
-		glm::vec3 finalColor = (ambient_contribution + diffuse_contribution) * landColor;
-		
-		colors.push_back(finalColor);
-		
-	}
-																		  //ambient lightin
 }
