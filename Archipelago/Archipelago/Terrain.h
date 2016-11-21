@@ -17,9 +17,10 @@ class Terrain
 	int width;
 	int length;
 
-	GLuint VAO, vertex_VBO, index_EBO;
+	GLuint VAO, vertex_VBO, normals_VBO, index_EBO;
 	std::vector<glm::vec3> vertices;
 	std::vector<GLuint> indicies;
+	std::vector<glm::vec3> normals;
 
 public:
 	
@@ -39,6 +40,9 @@ private:
 	//Generates plane verticies and loads into VBO
 	void buildVertexVBO();
 
+	//Generates VBO of normals for each vertex
+	void buildNormalsVBO();
+
 	//Generates triangle indicies and loads into EBO
 	void buildIndexEBO();
 
@@ -47,6 +51,7 @@ private:
 
 	//Modifies vertex height values to form a random number of cone style extrusions
 	void islandMask();
+	void shaderTestFoo();
 
 	//function that goes through the  vertices lenght and pulls the x and z from each vec3
 	//and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices

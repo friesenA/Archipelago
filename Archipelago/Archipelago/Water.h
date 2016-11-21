@@ -11,9 +11,10 @@ class Water
 	int numTiles;
 	int tileSize;
 	
-	GLuint VAO, vertex_VBO, uv_VBO, index_EBO;
+	GLuint VAO, vertex_VBO, normals_VBO, uv_VBO, index_EBO;
 	std::vector<glm::vec3> vertices;
 	std::vector<GLuint> indicies;
+	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> uvCoordinates;
 
 public:
@@ -31,6 +32,9 @@ private:
 	//Generates plane verticies and loads into VBO
 	void buildVertexVBO();
 
+	//Generates VBO of normals for each vertex
+	void buildNormalsVBO();
+
 	//Generates UV coordinates and loads into VBO
 	void buildUVVBO();
 
@@ -39,7 +43,5 @@ private:
 
 	//Loads VAO with all water VBO's, EBO's
 	void buildVAO();
-
-	void fooTriangle();
 };
 
