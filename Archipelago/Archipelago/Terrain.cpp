@@ -59,11 +59,12 @@ void Terrain::buildIndexEBO()
 
 			//first half triangle
 			indicies.push_back(point);
-			indicies.push_back(point + (this->width + 1));
-			indicies.push_back(point + (this->width + 1) + 1);
+			indicies.push_back(point + (this->width));
+			indicies.push_back(point + (this->width) + 1);
+			
 			//second half triangle
 			indicies.push_back(point);
-			indicies.push_back(point + (this->width + 1) + 1);
+			indicies.push_back(point + (this->width) + 1);
 			indicies.push_back(point + 1);
 		}
 	}
