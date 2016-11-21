@@ -92,26 +92,11 @@ int main(void) {
 		glDepthMask(GL_TRUE);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
-		//Foo water instance
-		waterShader.Use();
-		transformViewProj(&waterShader);
-		lightingSetup(&waterShader);
-
-		// Draw water instance
-		//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glBindVertexArray(water.getVAO());
-		glDrawElements(GL_TRIANGLES, water.getNumIndices(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-
+		//Draw water instance
+		drawObj(&water, waterShader);
 		// Draw terrain instance
-		terrainShader.Use();
-		transformViewProj(&terrainShader);
-		lightingSetup(&terrainShader);
+		drawObj(&terrain, terrainShader);
 
-//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glBindVertexArray(terrain.getVAO());
-		glDrawElements(GL_TRIANGLES, terrain.getNumIndices(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
 		glfwSwapBuffers(window);
 	}
 
@@ -122,6 +107,14 @@ int main(void) {
 	exit(EXIT_SUCCESS);
 }
 
+//Draw Obj
+//////////////////////////////////////////////////////////////////////////
+void drawObj(Obj *mesh, Shader &shader) {
+	shader.Use();
+	transformViewProj(&shader);
+	lightingSetup(&shader);
+	mesh->draw();
+}
 
 // Transform
 //////////////////////////////////////////////////////////////////////////
