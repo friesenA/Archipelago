@@ -36,7 +36,7 @@ void Terrain::buildVertexVBO()
 	//Creates a plane at y=0, with given width and length, centered at the origin
 	for (int l = 0; l < this->length; l++) {
 		for (int w = 0; w < this->width; w++) {
-			this->vertices.push_back(glm::vec3((GLfloat)w - halfWidth, 0.0f, halfLength - (GLfloat)l));
+			this->vertices.push_back(glm::vec3((GLfloat)w - halfWidth, 0.0f, (GLfloat)l - halfLength));
 		}
 	}
 
