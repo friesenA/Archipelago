@@ -5,6 +5,7 @@
 #include "Water.h"
 #include "Terrain.h"
 #include "SkyBox.h"
+#include "Shadows.h"
 
 using namespace std;
 using namespace glm;
@@ -28,6 +29,7 @@ void transformViewProj(Shader *shaders);
 //Lighting
 ///////////////////////////////////////////////////////////////////////////
 void lightingSetup(Shader *shaders);
+glm::vec3 const SUNLIGHT_DIR(glm::normalize(glm::vec3(1.0f, 2.0f*sqrt(2.0f), -1.0f)));
 
 //////////////////////////////////////////////////////////////////////////////OpenGL
 /**
@@ -75,10 +77,5 @@ void moveCamera();
 //////////////////////////////////////////////////////////////////////////
 void drawSkyBox(SkyBox &skybox);
 void drawObj(Obj *mesh, Shader &shader);
-
-
-
-
-
 
 

@@ -6,8 +6,6 @@
 
 #include "Archipelago.h"
 
-glm::vec3 const SUNLIGHT_DIR(glm::normalize(glm::vec3(1.0f, 2.0f*sqrt(2.0f), -1.0f)));
-
 //Camera facing forward z = -1;
 Camera camera(glm::vec3(0.0f, 3.0f, 0.0f));
 
@@ -19,6 +17,8 @@ bool initializeMouse = true;
 GLfloat lastX;
 GLfloat lastY;
 
+//Viewport Dimensions
+int viewport_width, viewport_height;
 
 int main(void) {
 
@@ -48,15 +48,16 @@ int main(void) {
 
 	// Viewport
 	//////////////////////////////////////////////////////////////////////////
-	int width, height;
-	glfwGetFramebufferSize(window, &width, &height);
-
-	glViewport(0, 0, width, height);
+	
+	glfwGetFramebufferSize(window, &viewport_width, &viewport_height);
+	glViewport(0, 0, viewport_width, viewport_height);
 
 	// Shaders
 	//////////////////////////////////////////////////////////////////////////
 	Shader waterShader("Shaders/waterVertex.shader", "Shaders/waterFragment.shader");
 	Shader terrainShader("Shaders/terrainVertex.shader", "Shaders/terrainFragment.shader");
+
+	Shadows shadows;
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
@@ -78,8 +79,22 @@ int main(void) {
 	//////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
-		clearScreenAndColor();
 		moveCamera();
+
+		//Register Shadows
+		/////////////////////////////////////////////////////
+		shadows.initializeShadowMap();
+		
+		//Draw Obj instances
+		shadows.drawObj(&water, SUNLIGHT_DIR);
+		shadows.drawObj(&terrain, SUNLIGHT_DIR);
+
+		shadows.endShadowMap();
+		
+		//Draw Scene
+		////////////////////////////////////////////////////
+		glViewport(0, 0, viewport_width, viewport_height);
+		clearScreenAndColor();
 
 		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f); //global for all draws
 
@@ -90,7 +105,7 @@ int main(void) {
 		//Setup view used for the rest of the scene
 		view = camera.getViewMatrix();
 		glDepthMask(GL_TRUE);
-		glClear(GL_DEPTH_BUFFER_BIT);
+		glBindTexture(GL_TEXTURE_2D, shadows.getShadowMapTexture());
 
 		//Draw water instance
 		drawObj(&water, waterShader);
@@ -217,6 +232,8 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	}
 }
 
-void framebuffer_size_callback(GLFWwindow * window, int width, int height) {
-	glViewport(0, 0, width, height);
+void framebuffer_size_callback(GLFWwindow * window, int new_width, int new_height) {
+	viewport_width = new_width;
+	viewport_height = new_height;
+	glViewport(0, 0, viewport_width, viewport_height);
 }
