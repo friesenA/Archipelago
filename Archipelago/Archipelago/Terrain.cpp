@@ -214,8 +214,30 @@ void Terrain::useNoise() {
 	for (int l = 0; l < this->length; l++) {
 		for (int w = 0; w < this->width; w++) {
 
-			vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
-			i++;
+			if (vertices[i].x < 0 || vertices[i].z)
+			{
+				float temp1, temp2;
+				temp1 = -vertices[i].x;
+				temp2 = -vertices[i].z;
+
+				if (vertices[i].x < 0 && vertices[i].z < 0) 
+				{
+					vertices[i].y = (noise.generateHeight(temp1, temp2));
+				}
+				else if (vertices[i].x < 0) {
+					vertices[i].y = (noise.generateHeight(temp1, vertices[i].z));
+				}
+				else {
+					vertices[i].y = (noise.generateHeight(vertices[i].x, temp2));
+				}
+				i++;
+			}
+			else
+			{
+				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
+				i++;
+			}
+
 
 		}
 	}

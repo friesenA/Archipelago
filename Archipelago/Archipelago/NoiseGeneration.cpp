@@ -39,7 +39,7 @@ float NoiseGeneration::getNoise(int x, int z) {
 float NoiseGeneration::getSmoothNoise(int x, int z)
 {
 	float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 160.0f; //before: 160.0f is a scaling factor
-	float sides = (getNoise(x - 1, z) + getNoise(x + 1, z) + getNoise(x, z - 1) + getNoise(x, z + 1)) / 200.0f; //before: 80.0f
+	float sides = (getNoise(x - 1, z) + getNoise(x + 1, z) + getNoise(x, z - 1) + getNoise(x, z + 1)) / 80.0f; //before: 80.0f
 	float center = (getNoise(x, z)) / 40.0f; //before: 40.0f
 	return corners + sides + center;
 }
