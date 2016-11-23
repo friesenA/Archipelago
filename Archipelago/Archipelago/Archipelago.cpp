@@ -54,7 +54,7 @@ int main(void) {
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	Water water(-2.0f);
+	Water water(2.0f);
 	Terrain terrain(63);
 
 	// Skybox
@@ -155,6 +155,9 @@ void lightingSetup(Shader *shaders) {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, shadows.getShadowMapTexture());
 	glUniform1i(glGetUniformLocation(shaders->Program, "shadowTexture"), 0);
+
+	GLint lightCTMLoc = glGetUniformLocation(shaders->Program, "lightSpaceMatrix");
+	glUniformMatrix4fv(lightCTMLoc, 1, GL_FALSE, glm::value_ptr(shadows.getLightSpaceMatrix()));
 }
 
 void drawSkyBox(SkyBox &skybox) {

@@ -39,10 +39,10 @@ void Terrain::buildVertexVBO()
 	}
 
 	//Modify y values with perlin noise?
-	this->useNoise();
+	//this->useNoise();
 
 	//Modify y values with island mask
-		//this->islandMask();
+	this->islandMask();
 
 	glGenBuffers(1, &this->vertex_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);

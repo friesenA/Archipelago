@@ -4,8 +4,8 @@
 #include "Obj.h"
 
 // Dimensions of terrain plane
-const int TERRAIN_WIDTH = 100; //600
-const int TERRAIN_LENGTH = 100; //600
+const int TERRAIN_WIDTH = 600;
+const int TERRAIN_LENGTH = 600;
 
 const int WATER_BORDER = 100;
 
