@@ -1,17 +1,18 @@
 #pragma once
 #include "stdHeader.h"
 #include "NoiseGeneration.h"
+#include "Obj.h"
 
 // Dimensions of terrain plane
-const int TERRAIN_WIDTH = 100; //600
-const int TERRAIN_LENGTH = 100; //600
+const int TERRAIN_WIDTH = 600;
+const int TERRAIN_LENGTH = 600;
 
 const int WATER_BORDER = 100;
 
 //const int Island_Noise = ###; need to add?
 
 //Currently: Creates a plane at y=0, with given width and length, centered at the origin
-class Terrain
+class Terrain : public Obj
 {	
 	unsigned int seed; // random input for the procedural generator
 	int width;
@@ -27,11 +28,8 @@ public:
 	//Constructor initializes the terrain for rendering
 	Terrain(unsigned int seed = 1);
 
-	//Public access to VAO for rendering
-	GLuint getVAO();
-
-	//Public access to number of indices for drawing
-	int getNumIndices();
+	//Public access for rendering
+	void draw();
 
 	~Terrain();
 

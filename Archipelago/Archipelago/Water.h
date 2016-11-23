@@ -1,11 +1,12 @@
 #pragma once
 #include "stdHeader.h"
+#include "Obj.h"
 
 const int TEXTURE_SIZE = 50;
 const int NUMBER_OF_TILES_ACROSS = 30;
 
 //Creates a plane at y=height, of square dimension based on the size of the texture file and the number of tiles across, centered at the origin
-class Water
+class Water : public Obj
 {
 	GLfloat height;
 	int numTiles;
@@ -21,10 +22,8 @@ public:
 	//Constructor initializes the water plane for rendering
 	Water(GLfloat height);
 
-	//Public access to VAO for rendering
-	GLuint getVAO();
-	GLuint getNumIndices() { return indicies.size(); };
-
+	//Public access for rendering
+	void draw();
 	~Water();
 
 private:

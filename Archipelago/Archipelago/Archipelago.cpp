@@ -6,10 +6,10 @@
 
 #include "Archipelago.h"
 
-glm::vec3 const SUNLIGHT_DIR(glm::normalize(glm::vec3(1.0f, 2.0f*sqrt(2.0f), -1.0f)));
-
 //Camera facing forward z = -1;
 Camera camera(glm::vec3(0.0f, 3.0f, 0.0f));
+
+Shadows shadows;
 
 //Key tracking
 bool keys[1024];
@@ -18,6 +18,7 @@ bool keys[1024];
 bool initializeMouse = true;
 GLfloat lastX;
 GLfloat lastY;
+
 
 
 int main(void) {
@@ -45,14 +46,7 @@ int main(void) {
 		cout << "Failed to initialize GLEW" << endl;
 		exit(EXIT_FAILURE);
 	}
-
-	// Viewport
-	//////////////////////////////////////////////////////////////////////////
-	int width, height;
-	glfwGetFramebufferSize(window, &width, &height);
-
-	glViewport(0, 0, width, height);
-
+	
 	// Shaders
 	//////////////////////////////////////////////////////////////////////////
 	Shader waterShader("Shaders/waterVertex.shader", "Shaders/waterFragment.shader");
@@ -60,7 +54,7 @@ int main(void) {
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	Water water(-2.0f);
+	Water water(2.0f);
 	Terrain terrain(63);
 
 	// Skybox
@@ -68,50 +62,50 @@ int main(void) {
 	SkyBox skybox;
 	skybox.generate();
 
-
 	// OpenGL Settings
 	//////////////////////////////////////////////////////////////////////////
 	glEnable(GL_DEPTH_TEST); 
 	glEnable(GL_FRAMEBUFFER_SRGB); //gamma correction
 
+	//Register Shadows
+	//////////////////////////////////////////////////////////////////////////
+	
+	shadows.setupFrameBuffer();
+	shadows.initializeShadowMap();
+
+	//Draw Obj instances
+	shadows.drawObj(&water, SUNLIGHT_DIR);
+	shadows.drawObj(&terrain, SUNLIGHT_DIR);
+
+	shadows.endShadowMap();
+
+	// Viewport / needs to be set after the shadow map created
+	//////////////////////////////////////////////////////////////////////////
+	int width, height;
+	glfwGetFramebufferSize(window, &width, &height);
+	glViewport(0, 0, width, height);
+
 	// Game loop
 	//////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
-		clearScreenAndColor();
 		moveCamera();
+		clearScreenAndColor();
 
 		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f); //global for all draws
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		//Skybox must be drawn first
 		drawSkyBox(skybox);
 
 		//Setup view used for the rest of the scene
 		view = camera.getViewMatrix();
 		glDepthMask(GL_TRUE);
-		glClear(GL_DEPTH_BUFFER_BIT);
 
-		//Foo water instance
-		waterShader.Use();
-		transformViewProj(&waterShader);
-		lightingSetup(&waterShader);
-
-		// Draw water instance
-		//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glBindVertexArray(water.getVAO());
-		glDrawElements(GL_TRIANGLES, water.getNumIndices(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-
+		//Draw water instance
+		drawObj(&water, waterShader);
 		// Draw terrain instance
-		terrainShader.Use();
-		transformViewProj(&terrainShader);
-		lightingSetup(&terrainShader);
+		drawObj(&terrain, terrainShader);
 
-//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glBindVertexArray(terrain.getVAO());
-		glDrawElements(GL_TRIANGLES, terrain.getNumIndices(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
 		glfwSwapBuffers(window);
 	}
 
@@ -122,6 +116,14 @@ int main(void) {
 	exit(EXIT_SUCCESS);
 }
 
+//Draw Obj
+//////////////////////////////////////////////////////////////////////////
+void drawObj(Obj *mesh, Shader &shader) {
+	shader.Use();
+	transformViewProj(&shader);
+	lightingSetup(&shader);
+	mesh->draw();
+}
 
 // Transform
 //////////////////////////////////////////////////////////////////////////
@@ -144,10 +146,18 @@ void lightingSetup(Shader *shaders) {
 	GLint lightCol = glGetUniformLocation(shaders->Program, "lightColor");
 	GLint viewPos = glGetUniformLocation(shaders->Program, "viewerPos");
 
+	//light attributes
 	glUniform3f(lightDir, SUNLIGHT_DIR.x, SUNLIGHT_DIR.y, SUNLIGHT_DIR.z);
 	glUniform3f(lightCol, 1.0f, 1.0f, 1.0f);
 	glUniform3f(viewPos, camPos.x, camPos.y, camPos.z);
 
+	//Shadow texture
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, shadows.getShadowMapTexture());
+	glUniform1i(glGetUniformLocation(shaders->Program, "shadowTexture"), 0);
+
+	GLint lightCTMLoc = glGetUniformLocation(shaders->Program, "lightSpaceMatrix");
+	glUniformMatrix4fv(lightCTMLoc, 1, GL_FALSE, glm::value_ptr(shadows.getLightSpaceMatrix()));
 }
 
 void drawSkyBox(SkyBox &skybox) {

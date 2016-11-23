@@ -15,9 +15,12 @@ Water::Water(GLfloat height) : numTiles(NUMBER_OF_TILES_ACROSS), tileSize(TEXTUR
 	buildVAO();
 }
 
-GLuint Water::getVAO()
+
+void Water::draw()
 {
-	return VAO;
+	glBindVertexArray(this->VAO);
+	glDrawElements(GL_TRIANGLES, this->indicies.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
 
 Water::~Water() {}
