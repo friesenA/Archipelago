@@ -158,8 +158,10 @@
   <ItemGroup>
     <ClInclude Include="Archipelago.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Obj.h" />
     <ClInclude Include="Shaders\Shader.h" />
     <ClInclude Include="NoiseGeneration.h" />
+    <ClInclude Include="Shadows.h" />
     <ClInclude Include="SkyBox.h" />
     <ClInclude Include="stdHeader.h" />
     <ClInclude Include="Terrain.h" />
@@ -169,6 +171,7 @@
     <ClCompile Include="Archipelago.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="NoiseGeneration.cpp" />
+    <ClCompile Include="Shadows.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Water.cpp" />
   </ItemGroup>
