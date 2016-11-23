@@ -44,7 +44,7 @@ void Terrain::buildVertexVBO()
 	this->useNoise();
 
 	//Modify y values with island mask
-		this->islandMask();
+		//this->islandMask();
 
 	glGenBuffers(1, &this->vertex_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, this->vertex_VBO);
@@ -212,19 +212,12 @@ void Terrain::useNoise() {
 	NoiseGeneration noise;
 	int i = 0;
 
-	for (int l = 0; l < this->length-2; l++) {
-		for (int w = 0; w < this->width-2; w++) {
+	for (int l = 0; l < this->length; l++) {
+		for (int w = 0; w < this->width; w++) {
 
 				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
 				i++;
 
 		}
 	}
-	//What i had orginally
-	/*
-	for (int i =0; i < this->vertices.size(); i++) {
-		vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
-	}
-	
-	*/
 }
