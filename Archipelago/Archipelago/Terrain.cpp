@@ -214,7 +214,7 @@ void Terrain::useNoise() {
 
 	for (int l = 0; l < this->length; l++) {
 		for (int w = 0; w < this->width; w++) {
-
+		/*
 			if ((vertices[i].x) < 0 || (vertices[i].z ) < 0)
 			{
 				
@@ -233,11 +233,11 @@ void Terrain::useNoise() {
 				}
 				i++;
 			}
-			else
-			{
+			else*/
+			//{
 				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
 				i++;
-			}
+			//}
 
 
 		}

@@ -29,20 +29,21 @@ float NoiseGeneration::generateHeight(int x, int z) {
 //Random Number generator 
 //returns a random number value btwn 1 and -1
 float NoiseGeneration::getNoise(int x, int z) {
-	int n;
-	n = x + z * 57;
-	x = (n << 13) ^ n;
-	//return (1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
-	return abs((1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0));
-
+	
+		int n;
+		n = x + z * 57;
+		x = (n << 13) ^ n;
+		//return (1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
+		return abs((1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0));
+	
 	//Ref: http: //pastebin.com/VJ5uvAhY
 }
 
 float NoiseGeneration::getSmoothNoise(int x, int z)
 {
-	float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 110.0f; //before: 160.0f, 100.0f is a scaling factor
-	float sides = (getNoise(x - 1, z) + getNoise(x + 1, z) + getNoise(x, z - 1) + getNoise(x, z + 1)) / 60.0f; //before: 80.0f,50.0f
-	float center = (getNoise(x, z)) / 20.0f; //before: 40.0f, 10.0f
+	float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 160.0f; //before: 160.0f, 100.0f is a scaling factor
+	float sides = (getNoise(x - 1, z) + getNoise(x + 1, z) + getNoise(x, z - 1) + getNoise(x, z + 1)) / 80.0f; //before: 80.0f,50.0f
+	float center = (getNoise(x, z)) / 40.0f; //before: 40.0f, 10.0f
 	return corners + sides + center;
 }
 
@@ -60,8 +61,8 @@ float NoiseGeneration::getInterpolatedNoise(float x, float z)
 	int intX = (int)x; //interger part of value x
 	int intZ = (int)z; //interger part of value z
 
-	float fracX = x - intX; //fraction/decimal section of the x value
-	float fracZ = z - intZ; //fraction/decimal section of the z value
+	float fracX = intX - x; //fraction/decimal section of the x value
+	float fracZ = intZ - z; //fraction/decimal section of the z value
 
 	 //calutating the height of the nearest points to the noise function
 	float v1 = getSmoothNoise(intX, intZ);
