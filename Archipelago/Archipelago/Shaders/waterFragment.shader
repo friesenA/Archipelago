@@ -1,6 +1,6 @@
 #version 330 core
 
-in vec3 vertexNormal;
+in vec3 fragmentNormal;
 in vec3 fragmentPos;
 
 out vec4 color;
@@ -18,14 +18,15 @@ void main()
     	vec3 ambient_contribution = ambientStrength * lightColor;
 
 	//diffuse lighting
-	float incident_degree = max(dot(vertexNormal, lightDirection), 0.0f);
+	float incident_degree = max(dot(fragmentNormal, lightDirection), 0.0f);
 	vec3 diffuse_contribution = incident_degree * lightColor;
 
 	//specular lighting
+	float specularStrength = 100.0f;
 	vec3 viewDir = normalize(viewerPos - fragmentPos);
-	vec3 reflectDir = reflect(-lightDirection, vertexNormal);
+	vec3 reflectDir = normalize(reflect(-lightDirection, fragmentNormal));
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64);
-	vec3 specular_contribution = spec * lightColor;  
+	vec3 specular_contribution = specularStrength * spec * lightColor;  
 
 	vec3 finalColor = (ambient_contribution + diffuse_contribution + specular_contribution) * waterColor;
 

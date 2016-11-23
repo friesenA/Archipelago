@@ -4,7 +4,6 @@
 
 Shadows::Shadows()
 {
-	this->setupFrameBuffer();
 }
 
 void Shadows::initializeShadowMap()
@@ -52,10 +51,18 @@ void Shadows::setupFrameBuffer()
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+	if (Status != GL_FRAMEBUFFER_COMPLETE) {
+		printf("FB error, status: 0x%x\n", Status);
+	}
 }
 
 void Shadows::setupDepthTexture()
 {
+	glActiveTexture(GL_TEXTURE0);
+
 	glGenTextures(1, &shadowMapTexture);
 	glBindTexture(GL_TEXTURE_2D, shadowMapTexture);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
