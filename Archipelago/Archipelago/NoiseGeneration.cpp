@@ -32,15 +32,17 @@ float NoiseGeneration::getNoise(int x, int z) {
 	int n;
 	n = x + z * 57;
 	x = (n << 13) ^ n;
+	//return (1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0);
 	return abs((1.0 - ((n * (n * n * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0));
+
 	//Ref: http: //pastebin.com/VJ5uvAhY
 }
 
 float NoiseGeneration::getSmoothNoise(int x, int z)
 {
-	float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 160.0f; //before: 160.0f is a scaling factor
-	float sides = (getNoise(x - 1, z) + getNoise(x + 1, z) + getNoise(x, z - 1) + getNoise(x, z + 1)) / 80.0f; //before: 80.0f
-	float center = (getNoise(x, z)) / 40.0f; //before: 40.0f
+	float corners = (getNoise(x - 1, z - 1) + getNoise(x + 1, z - 1) + getNoise(x - 1, z + 1) + getNoise(x + 1, z + 1)) / 110.0f; //before: 160.0f, 100.0f is a scaling factor
+	float sides = (getNoise(x - 1, z) + getNoise(x + 1, z) + getNoise(x, z - 1) + getNoise(x, z + 1)) / 60.0f; //before: 80.0f,50.0f
+	float center = (getNoise(x, z)) / 20.0f; //before: 40.0f, 10.0f
 	return corners + sides + center;
 }
 

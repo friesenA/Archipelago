@@ -210,15 +210,16 @@ void Terrain::useNoise() {
 
 	NoiseGeneration noise;
 	int i = 0;
+	float temp1, temp2;
 
 	for (int l = 0; l < this->length; l++) {
 		for (int w = 0; w < this->width; w++) {
 
 			if (vertices[i].x < 0 || vertices[i].z)
 			{
-				float temp1, temp2;
-				temp1 = -vertices[i].x;
-				temp2 = -vertices[i].z;
+				
+				temp1 = -vertices[i].x*2;
+				temp2 = -vertices[i].z*6;
 
 				if (vertices[i].x < 0 && vertices[i].z < 0) 
 				{
