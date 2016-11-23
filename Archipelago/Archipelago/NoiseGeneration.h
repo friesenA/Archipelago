@@ -20,7 +20,6 @@ public:
 
 	NoiseGeneration();
 	
-
 	float generateHeight(int x, int z);
 	float getNoise(int x, int z);
 	float getSmoothNoise(int x, int z);
@@ -30,14 +29,10 @@ public:
 	
 	~NoiseGeneration();
 
-private:
-
-	
+private:	
 	
 	int random_number = rand()%1000;
 	int seed = random_number;
-
-	float noises;
 
 	GLuint VAO, vertex_VBO, index_EBO; //Need to possublity add
 	std::vector<GLfloat> vertices;

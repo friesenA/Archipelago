@@ -1,6 +1,7 @@
 #include "Terrain.h"
 #include "NoiseGeneration.h"
 
+
 Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGTH)
 {
 	std::cout << "Generating Terrain" << std::endl;
@@ -215,13 +216,13 @@ void Terrain::useNoise() {
 		for (int w = 0; w < this->width; w++) {
 		
 			//if (-x, -z)
-			if ((vertices[i].x) <= 0 && (vertices[i].z ) <= 0) //used to be ||
+			if ((vertices[i].x) <= 0 && (vertices[i].z ) <= 0) //used to be || //**new
 			{
 				
-				temp1 = -vertices[i].x + (width+1);
-				temp2 = -vertices[i].z + (length+1);
+				temp1 = vertices[i].x + (width+1);
+				temp2 = vertices[i].z + (length+1);
 
-				vertices[i].y = (noise.generateHeight(temp1, temp2));
+				vertices[i].y = (noise.generateHeight(temp1, temp2)) *3;
 			
 				/*
 				if ((vertices[i].x < 0) && (vertices[i].z < 0)) 
@@ -238,7 +239,8 @@ void Terrain::useNoise() {
 				i++;
 			}
 			//if (x, -z)
-			else if((vertices[i].x) > 0 && (vertices[i].z) <= 0){ //**new
+			else if((vertices[i].x) > 0 && (vertices[i].z) <= 0) //**new
+			{ 
 
 				temp1 = vertices[i].x + width;
 				temp2 = vertices[i].z + (length + 1);
@@ -249,7 +251,7 @@ void Terrain::useNoise() {
 			
 			} 
 			//if (-x, z)
-			else if ((vertices[i].x) <= 0 && (vertices[i].z) > 0)
+			else if ((vertices[i].x) <= 0 && (vertices[i].z) > 0) //**new
 			{
 				temp1 = vertices[i].x + (width + 1);
 				temp2 = vertices[i].z + length;
@@ -262,7 +264,7 @@ void Terrain::useNoise() {
 			else
 
 			{
-				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
+				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z))*3;
 				i++;
 			}
 
