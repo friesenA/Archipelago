@@ -75,7 +75,7 @@ void Terrain::buildNormalsVBO()
 					normal += glm::normalize(glm::cross(U, UL));
 				}
 				//there are faces to the right
-				if (w != this->width -1) {
+				if (w != this->width - 1) {
 					R = glm::vec3(this->vertices[vertex + 1] - this->vertices[vertex]);
 
 					normal += glm::normalize(glm::cross(R, U));
@@ -120,7 +120,7 @@ void Terrain::buildIndexEBO()
 			indicies.push_back(point);
 			indicies.push_back(point + (this->width));
 			indicies.push_back(point + (this->width) + 1);
-			
+
 			//second half triangle
 			indicies.push_back(point);
 			indicies.push_back(point + (this->width) + 1);
@@ -162,7 +162,7 @@ void Terrain::buildVAO()
 
 //modified implementation of concept, Reference: https://www.reddit.com/r/gamedev/comments/1g4eae/need_help_generating_an_island_using_perlin_noise/?st=iuritk3l&sh=594f7e28
 void Terrain::islandMask()
-{	
+{
 	const GLfloat MAGNITUDE = 0.5f;
 	const GLfloat DISTANCE_TO_ZERO = 100;
 
@@ -206,7 +206,6 @@ void Terrain::islandMask()
 //function that goes through the  vertices length and pulls the x and z from each vec3
 //and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
 //place thos into vector
-			// I THINK I NEED TO ADD BOUNDRIES HERE TO AVOID THE EXTRA NOISE LINES BEING GENERATED..
 void Terrain::useNoise() {
 
 	NoiseGeneration noise;
@@ -215,8 +214,8 @@ void Terrain::useNoise() {
 	for (int l = 0; l < this->length; l++) {
 		for (int w = 0; w < this->width; w++) {
 
-				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
-				i++;
+			vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
+			i++;
 
 		}
 	}
