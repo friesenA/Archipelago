@@ -40,7 +40,7 @@ void Terrain::buildVertexVBO()
 	}
 
 	//Modify y values with perlin noise?
-	this->useNoise();
+	//this->useNoise();
 
 	//Modify y values with island mask
 	this->islandMask();

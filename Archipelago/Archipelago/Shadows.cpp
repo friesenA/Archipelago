@@ -19,8 +19,8 @@ void Shadows::drawObj(Obj *mesh, glm::vec3 lightDir)
 	
 	shadowShader.Use();
 	setupLightSpaceMatrix(lightDir);
-	lightLoc = glGetUniformLocation(shadowShader.Program, "model");
-
+	
+	lightLoc = glGetUniformLocation(shadowShader.Program, "lightSpaceMatrix");
 	glUniformMatrix4fv(lightLoc, 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 
 	mesh->draw();
@@ -34,6 +34,11 @@ void Shadows::endShadowMap()
 GLuint Shadows::getShadowMapTexture()
 {
 	return shadowMapTexture;
+}
+
+glm::mat4 Shadows::getLightSpaceMatrix()
+{
+	return lightSpaceMatrix;
 }
 
 Shadows::~Shadows()
