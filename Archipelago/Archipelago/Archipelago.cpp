@@ -108,7 +108,7 @@ int main(void) {
 		transformViewProj(&terrainShader);
 		lightingSetup(&terrainShader);
 
-//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindVertexArray(terrain.getVAO());
 		glDrawElements(GL_TRIANGLES, terrain.getNumIndices(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
