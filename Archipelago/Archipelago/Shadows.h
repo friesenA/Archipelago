@@ -16,6 +16,8 @@ class Shadows
 public:
 	Shadows();
 
+	void setupFrameBuffer();
+
 	void initializeShadowMap();
 
 	void drawObj(Obj *mesh, glm::vec3 lightDir);
@@ -24,12 +26,9 @@ public:
 
 	GLuint getShadowMapTexture();
 
-
 	~Shadows();
 
 private:
-
-	void setupFrameBuffer();
 
 	void setupDepthTexture();
 

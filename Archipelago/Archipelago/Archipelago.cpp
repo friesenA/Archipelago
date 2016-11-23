@@ -9,6 +9,8 @@
 //Camera facing forward z = -1;
 Camera camera(glm::vec3(0.0f, 3.0f, 0.0f));
 
+Shadows shadows;
+
 //Key tracking
 bool keys[1024];
 
@@ -67,7 +69,8 @@ int main(void) {
 
 	//Register Shadows
 	//////////////////////////////////////////////////////////////////////////
-	Shadows shadows;
+	
+	shadows.setupFrameBuffer();
 	shadows.initializeShadowMap();
 
 	//Draw Obj instances
@@ -87,19 +90,16 @@ int main(void) {
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 		moveCamera();
-		
 		clearScreenAndColor();
 
 		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f); //global for all draws
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		//Skybox must be drawn first
 		drawSkyBox(skybox);
 
 		//Setup view used for the rest of the scene
 		view = camera.getViewMatrix();
 		glDepthMask(GL_TRUE);
-		glBindTexture(GL_TEXTURE_2D, shadows.getShadowMapTexture());
 
 		//Draw water instance
 		drawObj(&water, waterShader);
@@ -146,10 +146,15 @@ void lightingSetup(Shader *shaders) {
 	GLint lightCol = glGetUniformLocation(shaders->Program, "lightColor");
 	GLint viewPos = glGetUniformLocation(shaders->Program, "viewerPos");
 
+	//light attributes
 	glUniform3f(lightDir, SUNLIGHT_DIR.x, SUNLIGHT_DIR.y, SUNLIGHT_DIR.z);
 	glUniform3f(lightCol, 1.0f, 1.0f, 1.0f);
 	glUniform3f(viewPos, camPos.x, camPos.y, camPos.z);
 
+	//Shadow texture
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, shadows.getShadowMapTexture());
+	glUniform1i(glGetUniformLocation(shaders->Program, "shadowTexture"), 0);
 }
 
 void drawSkyBox(SkyBox &skybox) {
