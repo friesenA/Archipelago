@@ -13,6 +13,7 @@ NoiseGeneration::NoiseGeneration() { }
 
 float NoiseGeneration::generateHeight(int x, int z) {
 	//More general function:	
+	
 	float total = 0;
 	float d = (float)glm::pow(2, OCTAVES - 1);
 	for (int i = 0; i < OCTAVES; i++) {
@@ -61,8 +62,8 @@ float NoiseGeneration::getInterpolatedNoise(float x, float z)
 	int intX = (int)x; //interger part of value x
 	int intZ = (int)z; //interger part of value z
 
-	float fracX = intX - x; //fraction/decimal section of the x value
-	float fracZ = intZ - z; //fraction/decimal section of the z value
+	float fracX = x -intX; //fraction/decimal section of the x value
+	float fracZ = z - intZ; //fraction/decimal section of the z value
 
 	 //calutating the height of the nearest points to the noise function
 	float v1 = getSmoothNoise(intX, intZ);
