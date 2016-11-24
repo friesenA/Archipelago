@@ -35,4 +35,5 @@ void main()
 
 	//color = vec4(finalColor, 1.0f);
 	color = texture(waterTexture, TexCoord) * vec4(finalColor, 1.0f);
+	color.a = 0.9;
 }
