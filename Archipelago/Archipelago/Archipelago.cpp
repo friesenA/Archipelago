@@ -49,12 +49,12 @@ int main(void) {
 	
 	// Shaders
 	//////////////////////////////////////////////////////////////////////////
-	Shader waterShader("Shaders/waterVertex.shader", "Shaders/waterFragment.shader");
+    waterShader = new Shader("Shaders/waterVertex.shader", "Shaders/waterFragment.shader");
 	Shader terrainShader("Shaders/terrainVertex.shader", "Shaders/terrainFragment.shader");
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	Water water(2.0f);
+	 water = new Water(2.0f);
 	Terrain terrain(63);
 
 	// Skybox
@@ -77,7 +77,7 @@ int main(void) {
 	shadows.initializeShadowMap();
 
 	//Draw Obj instances
-	shadows.drawObj(&water, SUNLIGHT_DIR);
+	shadows.drawObj(water, SUNLIGHT_DIR);
 	shadows.drawObj(&terrain, SUNLIGHT_DIR);
 
 	shadows.endShadowMap();
@@ -105,9 +105,9 @@ int main(void) {
 		glDepthMask(GL_TRUE);
 
 		//Draw water instance
-		drawObj(&water, waterShader);
+		drawObj(water, waterShader);
 		// Draw terrain instance
-		drawObj(&terrain, terrainShader);
+		drawObj(&terrain, &terrainShader);
 
 		glfwSwapBuffers(window);
 	}
@@ -121,10 +121,10 @@ int main(void) {
 
 //Draw Obj
 //////////////////////////////////////////////////////////////////////////
-void drawObj(Obj *mesh, Shader &shader) {
-	shader.Use();
-	transformViewProj(&shader);
-	lightingSetup(&shader);
+void drawObj(Obj *mesh, Shader* shader) {
+	shader->Use();
+	transformViewProj(shader);
+	lightingSetup(shader);
 	mesh->draw();
 }
 
@@ -185,34 +185,48 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 		keys[key] = false;
 }
 
+
+void foo() {
+	if (water->getLength() - abs(camera.getPosition().x) <= 50 || water->getLength() - abs(camera.getPosition().z) <= 50) {
+		water->incrementSurface(5);
+		drawObj(water, waterShader);
+	}
+}
+
 //Seperates key event from callback to handle multiple key presses
 void moveCamera() {
 	if (keys[GLFW_KEY_W]) {
 		camera.translateCamera(FORWARD);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		foo();
 	}
 	if (keys[GLFW_KEY_S]) {
 		camera.translateCamera(BACKWARD);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		foo();
 	}
 	if (keys[GLFW_KEY_A]) {
 		camera.translateCamera(LEFT);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		foo();
 	}
 	if (keys[GLFW_KEY_D]) {
 		camera.translateCamera(RIGHT);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		foo();
 	}
 
 	//included for debugging purposes
 	if (keys[GLFW_KEY_UP]) {
 		camera.translateCamera(UP);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		foo();
 	}
 
 	if (keys[GLFW_KEY_DOWN]) {
 		camera.translateCamera(DOWN);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		foo();
 	}
 }
 

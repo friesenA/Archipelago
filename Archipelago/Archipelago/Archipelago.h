@@ -15,6 +15,13 @@ const GLuint WIDTH = 800;
 const GLuint HEIGHT = 800;
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
+//Objects
+Water* water;
+
+// Shaders
+//////////////////////////////////////////////////////////////////////////
+Shader* waterShader;
+
 // Transform
 //////////////////////////////////////////////////////////////////////////
 mat4 view;
@@ -76,6 +83,6 @@ void moveCamera();
 // Draws
 //////////////////////////////////////////////////////////////////////////
 void drawSkyBox(SkyBox &skybox);
-void drawObj(Obj *mesh, Shader &shader);
+void drawObj(Obj *mesh, Shader *shader);
 
 

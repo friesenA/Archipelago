@@ -25,6 +25,22 @@ public:
 
 	//Public access for rendering
 	void draw();
+
+	float getWidth() { return (tileSize*(numTiles / 2)); };
+	float getLength() { return (tileSize*(numTiles / 2)); };
+	void incrementSurface(float scale = 1.0) { 
+		numTiles *= scale; 
+		//build VBO's
+		buildVertexVBO();
+		buildNormalsVBO();
+		buildUVVBO();
+		//build EBO
+		buildIndexEBO();
+		//build VAO
+		buildVAO();
+		buildTexture();
+	};
+
 	~Water();
 
 private:
