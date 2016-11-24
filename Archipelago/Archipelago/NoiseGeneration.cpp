@@ -89,5 +89,4 @@ float NoiseGeneration::getInterpolatedNoise(float x, float z)
 
 
 
-
 NoiseGeneration::~NoiseGeneration() {}
