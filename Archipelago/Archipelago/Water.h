@@ -11,6 +11,7 @@ class Water : public Obj
 	GLfloat height;
 	int numTiles;
 	int tileSize;
+	GLuint waterTexture;
 	
 	GLuint VAO, vertex_VBO, normals_VBO, uv_VBO, index_EBO;
 	std::vector<glm::vec3> vertices;
@@ -42,5 +43,7 @@ private:
 
 	//Loads VAO with all water VBO's, EBO's
 	void buildVAO();
+
+	void buildTexture();
 };
 
