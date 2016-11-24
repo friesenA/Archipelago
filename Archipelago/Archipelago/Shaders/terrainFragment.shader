@@ -48,9 +48,9 @@ void main()
 	vec3 specular_contribution = specularStrength * spec * lightColor;  
 
 	//Shadow
-	float shadow = calculateShadow();
+	//float shadow = calculateShadow();
 
-	vec3 finalColor = (ambient_contribution + shadow * (diffuse_contribution + specular_contribution)) * landColor;
+	vec3 finalColor = (ambient_contribution + 1 * (diffuse_contribution + specular_contribution)) * landColor;
 
 	color = vec4(finalColor, 1.0f);
 }

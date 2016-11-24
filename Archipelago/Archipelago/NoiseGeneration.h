@@ -10,7 +10,7 @@
 	const int NOISE_HEIGH = 30;
 
 	const float AMPLITUDE = 90.0f; //70.0, 90.0f
-	const int OCTAVES = 2; //number of noise funtion we use
+	const int OCTAVES = 3; //number of noise funtion we use
 	const float ROUGHNESS = 0.3f; //0.3f; //How much we decrease the almplitude by each higher octave
 
 class NoiseGeneration
