@@ -49,12 +49,12 @@ int main(void) {
 	
 	// Shaders
 	//////////////////////////////////////////////////////////////////////////
-	Shader waterShader("Shaders/waterVertex.shader", "Shaders/waterFragment.shader");
+    waterShader = new Shader("Shaders/waterVertex.shader", "Shaders/waterFragment.shader");
 	Shader terrainShader("Shaders/terrainVertex.shader", "Shaders/terrainFragment.shader");
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	Water water(2.0f);
+	 water = new Water(2.0f);
 	Terrain terrain(63);
 
 	// Skybox
@@ -77,7 +77,7 @@ int main(void) {
 	shadows.initializeShadowMap();
 
 	//Draw Obj instances
-	shadows.drawObj(&water, SUNLIGHT_DIR);
+	shadows.drawObj(water, SUNLIGHT_DIR);
 	shadows.drawObj(&terrain, SUNLIGHT_DIR);
 
 	shadows.endShadowMap();
@@ -105,9 +105,9 @@ int main(void) {
 		glDepthMask(GL_TRUE);
 
 		//Draw water instance
-		drawObj(&water, waterShader);
+		drawObj(water, waterShader,waterModel);
 		// Draw terrain instance
-		drawObj(&terrain, terrainShader);
+		drawObj(&terrain, &terrainShader,model);
 
 		glfwSwapBuffers(window);
 	}
@@ -121,23 +121,23 @@ int main(void) {
 
 //Draw Obj
 //////////////////////////////////////////////////////////////////////////
-void drawObj(Obj *mesh, Shader &shader) {
-	shader.Use();
-	transformViewProj(&shader);
-	lightingSetup(&shader);
+void drawObj(Obj *mesh, Shader* shader, mat4 modelIn) {
+	shader->Use();
+	transformViewProj(shader,modelIn);
+	lightingSetup(shader);
 	mesh->draw();
 }
 
 // Transform
 //////////////////////////////////////////////////////////////////////////
-void transformViewProj(Shader *shaders) {
+void transformViewProj(Shader *shaders, mat4 modelIn) {
 	projLoc = glGetUniformLocation(shaders->Program, "projection");
 	viewLoc = glGetUniformLocation(shaders->Program, "view");
 	modelLoc = glGetUniformLocation(shaders->Program, "model");
 
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelIn));
 }
 
 // Lighting
@@ -185,34 +185,52 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 		keys[key] = false;
 }
 
+
+void incrementWaterSurface() {
+	cout << "watL: " << water->getLength() << endl;
+	cout << "dist: " << water->getLength() - abs(camera.getPosition().z) << endl;
+	if (water->getLength() - abs(camera.getPosition().x) <= 50 || water->getLength() - abs(camera.getPosition().z) <= 50) {
+		float foo = water->getLength();
+		waterModel = glm::scale(waterModel, glm::vec3(1.3f, 1.0f, 1.0f));
+		waterModel = glm::scale(waterModel, glm::vec3(1.0f, 1.0f, 1.3f));
+		water->incrementSurface(1.1);
+	}
+}
+
 //Seperates key event from callback to handle multiple key presses
 void moveCamera() {
 	if (keys[GLFW_KEY_W]) {
 		camera.translateCamera(FORWARD);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		incrementWaterSurface();
 	}
 	if (keys[GLFW_KEY_S]) {
 		camera.translateCamera(BACKWARD);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		incrementWaterSurface();
 	}
 	if (keys[GLFW_KEY_A]) {
 		camera.translateCamera(LEFT);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		incrementWaterSurface();
 	}
 	if (keys[GLFW_KEY_D]) {
 		camera.translateCamera(RIGHT);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		incrementWaterSurface();
 	}
 
 	//included for debugging purposes
 	if (keys[GLFW_KEY_UP]) {
 		camera.translateCamera(UP);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		incrementWaterSurface();
 	}
 
 	if (keys[GLFW_KEY_DOWN]) {
 		camera.translateCamera(DOWN);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		incrementWaterSurface();
 	}
 }
 
