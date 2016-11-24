@@ -2,12 +2,15 @@
 
 in vec3 fragmentNormal;
 in vec3 fragmentPos;
+in vec2 TexCoord;
 
 out vec4 color;
 
 uniform vec3 lightDirection;
 uniform vec3 lightColor;
 uniform vec3 viewerPos;
+
+uniform sampler2D waterTexture;
 
 void main()
 {
@@ -30,5 +33,6 @@ void main()
 
 	vec3 finalColor = (ambient_contribution + diffuse_contribution + specular_contribution) * waterColor;
 
-	color = vec4(finalColor, 1.0f);
+	//color = vec4(finalColor, 1.0f);
+	color = texture(waterTexture, TexCoord) * vec4(finalColor, 1.0f);
 }
