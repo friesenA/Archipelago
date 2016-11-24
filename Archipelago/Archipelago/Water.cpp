@@ -124,7 +124,7 @@ void Water::buildVAO()
 }
 
 void Water::buildTexture(){
-	char * imgLocation = "Images/grass.jpg"; // seems to look more wavy
+	char * imgLocation = "Images/water.jpg"; // seems to look more wavy
 
 	glGenTextures(1, &waterTexture);
 	glBindTexture(GL_TEXTURE_2D, waterTexture);

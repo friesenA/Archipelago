@@ -23,6 +23,9 @@ class Terrain : public Obj
 	std::vector<GLuint> indicies;
 	std::vector<glm::vec3> normals;
 
+	GLuint islandTexture;
+	std::vector<glm::vec2> uvCoordinates;
+
 public:
 	
 	//Constructor initializes the terrain for rendering
@@ -41,6 +44,9 @@ private:
 	//Generates VBO of normals for each vertex
 	void buildNormalsVBO();
 
+	//Generates VBO of the uv coordinates
+	void buildUVVBO();
+
 	//Generates triangle indicies and loads into EBO
 	void buildIndexEBO();
 
@@ -54,5 +60,10 @@ private:
 	//and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
 	//place thos into vector
 	void useNoise();
+
+	//Adding textures to the island
+	void buildIslandTexture();
+
+
 };
 

@@ -54,7 +54,7 @@ int main(void) {
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	 water = new Water(2.0f);
+	 water = new Water(15.0f);
 	Terrain terrain(63);
 
 	// Skybox

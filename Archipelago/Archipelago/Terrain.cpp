@@ -1,6 +1,8 @@
 #include "Terrain.h"
 #include "NoiseGeneration.h"
 
+
+
 Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGTH)
 {
 	std::cout << "Generating Terrain" << std::endl;
@@ -18,6 +20,7 @@ Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGT
 
 void Terrain::draw()
 {
+	glBindTexture(GL_TEXTURE_2D, islandTexture);
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, this->indicies.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
@@ -39,7 +42,7 @@ void Terrain::buildVertexVBO()
 	}
 
 	//Modify y values with perlin noise?
-	//this->useNoise();
+	this->useNoise();
 
 	//Modify y values with island mask
 	this->islandMask();
@@ -73,7 +76,7 @@ void Terrain::buildNormalsVBO()
 					normal += glm::normalize(glm::cross(U, UL));
 				}
 				//there are faces to the right
-				if (w != this->width -1) {
+				if (w != this->width - 1) {
 					R = glm::vec3(this->vertices[vertex + 1] - this->vertices[vertex]);
 
 					normal += glm::normalize(glm::cross(R, U));
@@ -108,6 +111,10 @@ void Terrain::buildNormalsVBO()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void Terrain::buildUVVBO() {
+
+}
+
 void Terrain::buildIndexEBO()
 {
 	for (int l = 0; l < this->length - 1; l++) {
@@ -118,7 +125,7 @@ void Terrain::buildIndexEBO()
 			indicies.push_back(point);
 			indicies.push_back(point + (this->width));
 			indicies.push_back(point + (this->width) + 1);
-			
+
 			//second half triangle
 			indicies.push_back(point);
 			indicies.push_back(point + (this->width) + 1);
@@ -158,14 +165,36 @@ void Terrain::buildVAO()
 	glBindVertexArray(0);
 }
 
+//adding texture to the island
+void Terrain::buildIslandTexture() {
+	char * imgLocation = "Images/islandText.jpg"; // seems to look more wavy
+
+	glGenTextures(1, &islandTexture);
+	glBindTexture(GL_TEXTURE_2D, islandTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	int width, height;
+	unsigned char* image = SOIL_load_image(imgLocation, &width, &height, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	SOIL_free_image_data(image);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+
 //modified implementation of concept, Reference: https://www.reddit.com/r/gamedev/comments/1g4eae/need_help_generating_an_island_using_perlin_noise/?st=iuritk3l&sh=594f7e28
 void Terrain::islandMask()
-{	
-	const GLfloat MAGNITUDE = 0.5f;
+{
+	const GLfloat MAGNITUDE = 15.0f; //20.0f
 	const GLfloat DISTANCE_TO_ZERO = 100;
 
 	int numCentrePoints;
-	int centreXCoord, centerZCoord;
+	int centerXCoord, centerZCoord;
 	GLfloat vertex, distance;
 
 	//generate # of centre points
@@ -178,7 +207,7 @@ void Terrain::islandMask()
 		//z coordinate = X + random # between 0 and length - 2X
 
 	for (int i = 0; i < numCentrePoints; i++) {
-		centreXCoord = WATER_BORDER + rand() % (this->width - 2 * WATER_BORDER);
+		centerXCoord = WATER_BORDER + rand() % (this->width - 2 * WATER_BORDER);
 		centerZCoord = WATER_BORDER + rand() % (this->length - 2 * WATER_BORDER);
 
 		//Adjust height values in array for each centre point
@@ -186,43 +215,116 @@ void Terrain::islandMask()
 		for (int l = 0; l < this->length; l++) {
 			for (int w = 0; w < this->width; w++) {
 				vertex = l * this->width + w;
-				distance = std::sqrt(std::pow(centreXCoord - w, 2) + std::pow(centreXCoord - l, 2));
+				distance = std::sqrt(std::pow(centerXCoord - w, 2) + std::pow(centerZCoord - l, 2));
 
 				//clamp if outside sloping zone;
 				if (distance > DISTANCE_TO_ZERO)
 					distance = DISTANCE_TO_ZERO;
 
-				this->vertices[vertex].y += (DISTANCE_TO_ZERO - distance) * MAGNITUDE;
+				this->vertices[vertex].y += ((DISTANCE_TO_ZERO - distance)/DISTANCE_TO_ZERO) * MAGNITUDE;
 			}
 		}
 	}
-
-
-
 }
 
 //function that goes through the  vertices length and pulls the x and z from each vec3
 //and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
 //place thos into vector
-			// I THINK I NEED TO ADD BOUNDRIES HERE TO AVOID THE EXTRA NOISE LINES BEING GENERATED..
 void Terrain::useNoise() {
 
 	NoiseGeneration noise;
 	int i = 0;
+	float temp1, temp2;
+	temp1= 0;
+	temp2=0;
+	
+	for (int l = 0; l < this->length; l++) {
+		for (int w = 0; w < this->width; w++) {
 
-	for (int l = 0; l < this->length-2; l++) {
-		for (int w = 0; w < this->width-2; w++) {
+		/*
+			//if (-x, -z)
+			if ((vertices[i].x) < 0 && (vertices[i].z) < 0) //used to be || //**new
+			{
 
+				temp1 = vertices[i].x + (width/2);
+				temp2 = vertices[i].z + (length/2);
+
+				vertices[i].y = noise.generateHeight(temp1, temp2);
+
+				i++;
+			}
+			//if (x, -z)
+			else if ((vertices[i].x) > 0 && (vertices[i].z) < 0) //**new
+			{
+
+				temp1 = vertices[i].x - (width/2);
+				temp2 = vertices[i].z + (length/2);
+
+				vertices[i].y = (noise.generateHeight(temp1, temp2));
+
+				i++;
+
+			}
+			//if (-x, z)
+			else if ((vertices[i].x) < 0 && (vertices[i].z) > 0) //**new
+			{
+				temp1 = vertices[i].x + (width/2);
+				temp2 = vertices[i].z - (length/2);
+
+				vertices[i].y = (noise.generateHeight(temp1, temp2));
+
+				i++;
+			}
+			//if (x,z)
+			else
+
+			{
 				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
 				i++;
+			}
+		*/
+			//if (-x, -z)
+			if ((vertices[i].x) <= 0 && (vertices[i].z ) <= 0) //used to be || //**new
+			{
+				
+				temp1 = vertices[i].x + (width); 
+				temp2 = vertices[i].z + (length);
+
+				vertices[i].y = noise.generateHeight(temp1, temp2);
+
+				i++;
+			}
+			//if (x, -z)
+			else if((vertices[i].x) > 0 && (vertices[i].z) <= 0) //**new
+			{ 
+
+				temp1 = vertices[i].x + width;
+				temp2 = vertices[i].z + (length);
+
+				vertices[i].y = (noise.generateHeight(temp1, temp2));
+
+				i++;
+			
+			} 
+			//if (-x, z)
+			else if ((vertices[i].x) <= 0 && (vertices[i].z) > 0) //**new
+			{
+				temp1 = vertices[i].x + (width);
+				temp2 = vertices[i].z + length;
+
+				vertices[i].y = (noise.generateHeight(temp1, temp2));
+
+				i++;
+			}
+			//if (x,z)
+			else
+
+			{
+				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
+				i++;
+			}
+		
 
 		}
 	}
-	//What i had orginally
-	/*
-	for (int i =0; i < this->vertices.size(); i++) {
-		vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
-	}
-	
-	*/
 }
