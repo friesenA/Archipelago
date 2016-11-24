@@ -23,6 +23,8 @@ class Terrain : public Obj
 	std::vector<GLuint> indicies;
 	std::vector<glm::vec3> normals;
 
+	GLuint islandTexture;
+
 public:
 	
 	//Constructor initializes the terrain for rendering
@@ -54,6 +56,9 @@ private:
 	//and then call the generateHeight(x , z) and then assign it to the y in the vec3 of vertices
 	//place thos into vector
 	void useNoise();
+
+	//Adding textures to the island
+	void buildIslandTexture();
 
 
 };

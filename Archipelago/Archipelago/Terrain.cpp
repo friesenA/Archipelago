@@ -2,6 +2,7 @@
 #include "NoiseGeneration.h"
 
 
+
 Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGTH)
 {
 	std::cout << "Generating Terrain" << std::endl;
@@ -19,6 +20,12 @@ Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGT
 
 void Terrain::draw()
 {
+	glBindVertexArray(this->VAO);
+	glDrawElements(GL_TRIANGLES, this->indicies.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	//textures
+	glBindTexture(GL_TEXTURE_2D, islandTexture);
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, this->indicies.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
@@ -158,6 +165,28 @@ void Terrain::buildVAO()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
+
+//adding texture to the island
+void Terrain::buildIslandTexture() {
+	char * imgLocation = "Images/islandText.jpg"; // seems to look more wavy
+
+	glGenTextures(1, &islandTexture);
+	glBindTexture(GL_TEXTURE_2D, islandTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	int width, height;
+	unsigned char* image = SOIL_load_image(imgLocation, &width, &height, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	SOIL_free_image_data(image);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 
 //modified implementation of concept, Reference: https://www.reddit.com/r/gamedev/comments/1g4eae/need_help_generating_an_island_using_perlin_noise/?st=iuritk3l&sh=594f7e28
 void Terrain::islandMask()
