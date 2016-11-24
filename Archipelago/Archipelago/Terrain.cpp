@@ -11,10 +11,13 @@ Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGT
 	//build vertex vbo
 	buildVertexVBO();
 	buildNormalsVBO();
+	buildUVVBO();
 	//build index EBO
 	buildIndexEBO();
 	//build VAO
 	buildVAO();
+
+	buildIslandTexture();
 }
 
 
@@ -112,7 +115,16 @@ void Terrain::buildNormalsVBO()
 }
 
 void Terrain::buildUVVBO() {
+	for (int l = 0; l < this->length; l++) {
+		for (int w = 0; w < this->width; w++) {
+			this->uvCoordinates.push_back(glm::vec2((GLfloat)l, (GLfloat)w));
+		}
+	}
 
+	glGenBuffers(1, &this->uv_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->uv_VBO);
+	glBufferData(GL_ARRAY_BUFFER, this->uvCoordinates.size() * sizeof(glm::vec2), &this->uvCoordinates.front(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Terrain::buildIndexEBO()
@@ -155,7 +167,10 @@ void Terrain::buildVAO()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(1);
 
-	//Register any other VBOs
+	//Register UV Buffer
+	glBindBuffer(GL_ARRAY_BUFFER, uv_VBO);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(2);
 
 	//Bind EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->index_EBO);
