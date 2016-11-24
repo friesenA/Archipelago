@@ -40,7 +40,7 @@ void Terrain::buildVertexVBO()
 	}
 
 	//Modify y values with perlin noise?
-	//this->useNoise();
+	this->useNoise();
 
 	//Modify y values with island mask
 	this->islandMask();
@@ -213,6 +213,7 @@ void Terrain::useNoise() {
 	for (int l = 0; l < this->length; l++) {
 		for (int w = 0; w < this->width; w++) {
 
+		/*
 			//if (-x, -z)
 			if ((vertices[i].x) < 0 && (vertices[i].z) < 0) //used to be || //**new
 			{
@@ -253,8 +254,8 @@ void Terrain::useNoise() {
 				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
 				i++;
 			}
-		
-		/*	//if (-x, -z)
+		*/
+			//if (-x, -z)
 			if ((vertices[i].x) <= 0 && (vertices[i].z ) <= 0) //used to be || //**new
 			{
 				
@@ -294,7 +295,7 @@ void Terrain::useNoise() {
 				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
 				i++;
 			}
-		*/
+		
 
 		}
 	}
