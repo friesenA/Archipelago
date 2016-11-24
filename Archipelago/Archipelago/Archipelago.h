@@ -15,16 +15,25 @@ const GLuint WIDTH = 800;
 const GLuint HEIGHT = 800;
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
+//Objects
+Water* water;
+
+// Shaders
+//////////////////////////////////////////////////////////////////////////
+Shader* waterShader;
+
 // Transform
 //////////////////////////////////////////////////////////////////////////
 mat4 view;
 mat4 model;
 mat4 projection;
+
+mat4 waterModel;
 GLint modelLoc;
 GLint viewLoc;
 GLint projLoc;
 int main(void);
-void transformViewProj(Shader *shaders);
+void transformViewProj(Shader *shaders, mat4 modelIn);
 
 //Lighting
 ///////////////////////////////////////////////////////////////////////////
@@ -76,6 +85,6 @@ void moveCamera();
 // Draws
 //////////////////////////////////////////////////////////////////////////
 void drawSkyBox(SkyBox &skybox);
-void drawObj(Obj *mesh, Shader &shader);
+void drawObj(Obj *mesh, Shader *shader, mat4 modelIn);
 
 
