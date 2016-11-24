@@ -24,6 +24,7 @@ class Terrain : public Obj
 	std::vector<glm::vec3> normals;
 
 	GLuint islandTexture;
+	std::vector<glm::vec2> uvCoordinates;
 
 public:
 	
@@ -42,6 +43,9 @@ private:
 
 	//Generates VBO of normals for each vertex
 	void buildNormalsVBO();
+
+	//Generates VBO of the uv coordinates
+	void buildUVVBO();
 
 	//Generates triangle indicies and loads into EBO
 	void buildIndexEBO();

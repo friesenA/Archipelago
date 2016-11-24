@@ -20,11 +20,6 @@ Terrain::Terrain(unsigned int seed) : width(TERRAIN_WIDTH), length(TERRAIN_LENGT
 
 void Terrain::draw()
 {
-	glBindVertexArray(this->VAO);
-	glDrawElements(GL_TRIANGLES, this->indicies.size(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
-	//textures
 	glBindTexture(GL_TEXTURE_2D, islandTexture);
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, this->indicies.size(), GL_UNSIGNED_INT, 0);
@@ -114,6 +109,10 @@ void Terrain::buildNormalsVBO()
 	glBindBuffer(GL_ARRAY_BUFFER, this->normals_VBO);
 	glBufferData(GL_ARRAY_BUFFER, this->normals.size() * sizeof(glm::vec3), &this->normals.front(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Terrain::buildUVVBO() {
+
 }
 
 void Terrain::buildIndexEBO()
