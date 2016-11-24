@@ -60,7 +60,7 @@ int main(void) {
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	Water water(6.0f);
+	Water water(15.0f);
 	Terrain terrain(63); //63
 
 	// Skybox

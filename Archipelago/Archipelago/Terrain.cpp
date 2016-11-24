@@ -163,8 +163,8 @@ void Terrain::buildVAO()
 //modified implementation of concept, Reference: https://www.reddit.com/r/gamedev/comments/1g4eae/need_help_generating_an_island_using_perlin_noise/?st=iuritk3l&sh=594f7e28
 void Terrain::islandMask()
 {
-	const GLfloat MAGNITUDE = 0.3f;
-	const GLfloat DISTANCE_TO_ZERO = 50;
+	const GLfloat MAGNITUDE = 20.0f;
+	const GLfloat DISTANCE_TO_ZERO = 100;
 
 	int numCentrePoints;
 	int centerXCoord, centerZCoord;
@@ -194,7 +194,7 @@ void Terrain::islandMask()
 				if (distance > DISTANCE_TO_ZERO)
 					distance = DISTANCE_TO_ZERO;
 
-				this->vertices[vertex].y += (DISTANCE_TO_ZERO - distance) * MAGNITUDE;
+				this->vertices[vertex].y += ((DISTANCE_TO_ZERO - distance)/DISTANCE_TO_ZERO) * MAGNITUDE;
 			}
 		}
 	}

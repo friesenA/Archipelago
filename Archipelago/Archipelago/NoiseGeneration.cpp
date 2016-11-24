@@ -12,15 +12,22 @@ https:// flafla2.github.io/2014/08/09/perlinnoise.html
 NoiseGeneration::NoiseGeneration() { }
 
 float NoiseGeneration::generateHeight(int x, int z) {
-	//More general function:	
+	//More general function:
+	std::vector<glm::vec2> freqAmpArray;
+	freqAmpArray.push_back(glm::vec2(0.05, 300));
+	freqAmpArray.push_back(glm::vec2(0.2, 60));
+	freqAmpArray.push_back(glm::vec2(1.0, 20));
+
 	float frequency= 0;
 	float amplitude = 0;
 	float total = 0;
 	float d = (float)glm::pow(2, OCTAVES - 1);
 	for (int i = 0; i < OCTAVES; i++) {
-		frequency = (float)(glm::pow(2.0, i) / d);
+		//frequency = (float)(glm::pow(2.0, i) / d);
+		frequency = freqAmpArray[i].x;
 		//float amplitude = 1.0f/(float)glm::pow(2, i)*AMPLITUDE;
-		amplitude = (float)glm::pow(ROUGHNESS, i)*AMPLITUDE;
+		//amplitude = (float)glm::pow(ROUGHNESS, i)*AMPLITUDE;
+		amplitude = freqAmpArray[i].y;
 		//total += (getInterpolatedNoise(x*frequency/5, z*frequency/5)*amplitude);
 		//or...
 		total += getInterpolatedNoise(x*frequency, z*frequency)*amplitude;
