@@ -3,8 +3,8 @@
 #include "NoiseGeneration.h"
 
 // Dimensions of terrain plane
-const int TERRAIN_WIDTH = 500; //600
-const int TERRAIN_LENGTH = 500; //600
+const int TERRAIN_WIDTH = 500; //500
+const int TERRAIN_LENGTH = 500; //500
 
 const int WATER_BORDER = 100;
 

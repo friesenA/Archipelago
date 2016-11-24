@@ -164,7 +164,7 @@ void Terrain::buildVAO()
 //modified implementation of concept, Reference: https://www.reddit.com/r/gamedev/comments/1g4eae/need_help_generating_an_island_using_perlin_noise/?st=iuritk3l&sh=594f7e28
 void Terrain::islandMask()
 {
-	const GLfloat MAGNITUDE = 20.0f;
+	const GLfloat MAGNITUDE = 15.0f; //20.0f
 	const GLfloat DISTANCE_TO_ZERO = 100;
 
 	int numCentrePoints;
@@ -211,30 +211,59 @@ void Terrain::useNoise() {
 	float temp1, temp2;
 	temp1= 0;
 	temp2=0;
-
+	
 	for (int l = 0; l < this->length; l++) {
 		for (int w = 0; w < this->width; w++) {
-		
+
 			//if (-x, -z)
+			if ((vertices[i].x) < 0 && (vertices[i].z) < 0) //used to be || //**new
+			{
+
+				temp1 = vertices[i].x + (width/2);
+				temp2 = vertices[i].z + (length/2);
+
+				vertices[i].y = noise.generateHeight(temp1, temp2);
+
+				i++;
+			}
+			//if (x, -z)
+			else if ((vertices[i].x) > 0 && (vertices[i].z) < 0) //**new
+			{
+
+				temp1 = vertices[i].x - (width/2);
+				temp2 = vertices[i].z + (length/2);
+
+				vertices[i].y = (noise.generateHeight(temp1, temp2));
+
+				i++;
+
+			}
+			//if (-x, z)
+			else if ((vertices[i].x) < 0 && (vertices[i].z) > 0) //**new
+			{
+				temp1 = vertices[i].x + (width/2);
+				temp2 = vertices[i].z - (length/2);
+
+				vertices[i].y = (noise.generateHeight(temp1, temp2));
+
+				i++;
+			}
+			//if (x,z)
+			else
+
+			{
+				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
+				i++;
+			}
+		
+		/*	//if (-x, -z)
 			if ((vertices[i].x) <= 0 && (vertices[i].z ) <= 0) //used to be || //**new
 			{
 				
-				temp1 = vertices[i].x + (width+1);
-				temp2 = vertices[i].z + (length+1);
+				temp1 = vertices[i].x + (width); 
+				temp2 = vertices[i].z + (length);
 
 				vertices[i].y = noise.generateHeight(temp1, temp2);
-			
-				/*
-				if ((vertices[i].x < 0) && (vertices[i].z < 0)) 
-				{
-					vertices[i].y = (noise.generateHeight(temp1, temp2));
-				}
-				else if (vertices[i].x < 0) {
-					vertices[i].y = (noise.generateHeight(temp1, vertices[i].z));
-				}
-				else {
-					vertices[i].y = (noise.generateHeight(vertices[i].x, temp2));
-				}*/
 
 				i++;
 			}
@@ -243,7 +272,7 @@ void Terrain::useNoise() {
 			{ 
 
 				temp1 = vertices[i].x + width;
-				temp2 = vertices[i].z + (length + 1);
+				temp2 = vertices[i].z + (length);
 
 				vertices[i].y = (noise.generateHeight(temp1, temp2));
 
@@ -253,21 +282,21 @@ void Terrain::useNoise() {
 			//if (-x, z)
 			else if ((vertices[i].x) <= 0 && (vertices[i].z) > 0) //**new
 			{
-				temp1 = vertices[i].x + (width + 1);
+				temp1 = vertices[i].x + (width);
 				temp2 = vertices[i].z + length;
 
 				vertices[i].y = (noise.generateHeight(temp1, temp2));
 
 				i++;
 			}
-			//if (-x, z) or (x,z)
+			//if (x,z)
 			else
 
 			{
 				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
 				i++;
 			}
-
+		*/
 
 		}
 	}

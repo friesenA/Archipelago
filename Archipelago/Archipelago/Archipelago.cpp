@@ -60,7 +60,7 @@ int main(void) {
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	Water water(15.0f);
+	Water water(16.0f); //16.0f
 	Terrain terrain(63); //63
 
 	// Skybox
@@ -108,7 +108,7 @@ int main(void) {
 		transformViewProj(&terrainShader);
 		lightingSetup(&terrainShader);
 
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBindVertexArray(terrain.getVAO());
 		glDrawElements(GL_TRIANGLES, terrain.getNumIndices(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
