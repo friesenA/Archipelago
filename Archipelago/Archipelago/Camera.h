@@ -49,6 +49,11 @@ public:
 	//Current Position of camera
 	glm::vec3 getPosition();
 
+	glm::vec3 getNextPosition() {
+		glm::vec3 nextPos(this->forward.x * speed, 0, this->forward.z * speed);
+		return nextPos;
+	};
+
 private:
 	//Recalculates all attribute vectors to reflect movement changes
 	void recalculateVectors();

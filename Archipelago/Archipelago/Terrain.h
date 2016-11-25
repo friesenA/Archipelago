@@ -3,6 +3,9 @@
 #include "NoiseGeneration.h"
 #include "Obj.h"
 
+using namespace glm;
+using namespace std;
+
 // Dimensions of terrain plane
 const int TERRAIN_WIDTH = 600;
 const int TERRAIN_LENGTH = 600;
@@ -25,13 +28,22 @@ class Terrain : public Obj
 	std::vector<glm::vec2> uvCoordinates;
 	GLuint islandTexture;
 
+	mat4 terrainModel;
+
 public:
 	
 	//Constructor initializes the terrain for rendering
 	Terrain(unsigned int seed = 1);
-
 	//Public access for rendering
 	void draw();
+
+	int getWidth() { return width; };
+	int getLength() { return length; };
+	vector<vec3>* getVertices() { return &vertices; };
+
+	mat4 getModel() { return terrainModel; };
+	void setModel(mat4 model) { terrainModel = model; };
+
 
 	~Terrain();
 

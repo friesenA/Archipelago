@@ -17,6 +17,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 //Objects
 Water* water;
+vector<Terrain> terrains;
 
 // Shaders
 //////////////////////////////////////////////////////////////////////////
@@ -81,10 +82,13 @@ void error_callback(int error, const char* description);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 void moveCamera();
+void detectTerrainCollision();
 
 // Draws
 //////////////////////////////////////////////////////////////////////////
 void drawSkyBox(SkyBox &skybox);
 void drawObj(Obj *mesh, Shader *shader, mat4 modelIn);
+void incrementWaterSurface();
+
 
 
