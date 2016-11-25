@@ -25,7 +25,7 @@ void main()
 	vec3 diffuse_contribution = incident_degree * lightColor;
 
 	//specular lighting
-	float specularStrength = 100.0f;
+	float specularStrength = 1.0f;
 	vec3 viewDir = normalize(viewerPos - fragmentPos);
 	vec3 reflectDir = normalize(reflect(-lightDirection, fragmentNormal));
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64);
@@ -35,5 +35,5 @@ void main()
 
 	//color = vec4(finalColor, 1.0f);
 	color = texture(waterTexture, TexCoord) * vec4(finalColor, 1.0f);
-	color.a = 0.9;
+	color.a = 0.99;
 }
