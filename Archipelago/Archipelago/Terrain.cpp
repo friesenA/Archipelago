@@ -241,90 +241,11 @@ void Terrain::useNoise() {
 	for (int l = 0; l < this->length; l++) {
 		for (int w = 0; w < this->width; w++) {
 
-		/*
-			//if (-x, -z)
-			if ((vertices[i].x) < 0 && (vertices[i].z) < 0) //used to be || //**new
-			{
+			temp1 = vertices[i].x + (width);
+			temp2 = vertices[i].z + length;
 
-				temp1 = vertices[i].x + (width/2);
-				temp2 = vertices[i].z + (length/2);
-
-				vertices[i].y = noise.generateHeight(temp1, temp2);
-
-				i++;
-			}
-			//if (x, -z)
-			else if ((vertices[i].x) > 0 && (vertices[i].z) < 0) //**new
-			{
-
-				temp1 = vertices[i].x - (width/2);
-				temp2 = vertices[i].z + (length/2);
-
-				vertices[i].y = (noise.generateHeight(temp1, temp2));
-
-				i++;
-
-			}
-			//if (-x, z)
-			else if ((vertices[i].x) < 0 && (vertices[i].z) > 0) //**new
-			{
-				temp1 = vertices[i].x + (width/2);
-				temp2 = vertices[i].z - (length/2);
-
-				vertices[i].y = (noise.generateHeight(temp1, temp2));
-
-				i++;
-			}
-			//if (x,z)
-			else
-
-			{
-				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
-				i++;
-			}
-		*/
-			//if (-x, -z)
-			if ((vertices[i].x) <= 0 && (vertices[i].z ) <= 0) //used to be || //**new
-			{
-				
-				temp1 = vertices[i].x + (width); 
-				temp2 = vertices[i].z + (length);
-
-				vertices[i].y = noise.generateHeight(temp1, temp2);
-
-				i++;
-			}
-			//if (x, -z)
-			else if((vertices[i].x) > 0 && (vertices[i].z) <= 0) //**new
-			{ 
-
-				temp1 = vertices[i].x + width;
-				temp2 = vertices[i].z + (length);
-
-				vertices[i].y = (noise.generateHeight(temp1, temp2));
-
-				i++;
-			
-			} 
-			//if (-x, z)
-			else if ((vertices[i].x) <= 0 && (vertices[i].z) > 0) //**new
-			{
-				temp1 = vertices[i].x + (width);
-				temp2 = vertices[i].z + length;
-
-				vertices[i].y = (noise.generateHeight(temp1, temp2));
-
-				i++;
-			}
-			//if (x,z)
-			else
-
-			{
-				vertices[i].y = (noise.generateHeight(vertices[i].x, vertices[i].z));
-				i++;
-			}
-		
-
+			vertices[i].y = (noise.generateHeight(temp1, temp2));
+			i++;
 		}
 	}
 }

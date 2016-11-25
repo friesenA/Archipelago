@@ -104,10 +104,11 @@ int main(void) {
 		view = camera.getViewMatrix();
 		glDepthMask(GL_TRUE);
 
+		// Draw terrain instance
+		drawObj(&terrain, &terrainShader, model);
 		//Draw water instance
 		drawObj(water, waterShader,waterModel);
-		// Draw terrain instance
-		drawObj(&terrain, &terrainShader,model);
+		
 
 		glfwSwapBuffers(window);
 	}
