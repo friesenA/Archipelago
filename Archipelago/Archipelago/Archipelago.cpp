@@ -7,7 +7,7 @@
 #include "Archipelago.h"
 
 //Camera facing forward z = -1;
-Camera camera(glm::vec3(0.0f, 3.0f, 0.0f));
+Camera camera(glm::vec3(0.0f, 17.0f, 0.0f));
 
 Shadows shadows;
 
@@ -55,7 +55,7 @@ int main(void) {
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
 	 water = new Water(15.0f);
-	Terrain terrain(63);
+	Terrain terrain(90);
 
 	// Skybox
 	//////////////////////////////////////////////////////////////////////////
@@ -188,9 +188,8 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 
 
 void incrementWaterSurface() {
-	cout << "watL: " << water->getLength() << endl;
-	cout << "dist: " << water->getLength() - abs(camera.getPosition().z) << endl;
-	if (water->getLength() - abs(camera.getPosition().x) <= 50 || water->getLength() - abs(camera.getPosition().z) <= 50) {
+	float distanceToEdge = 100;
+	if (water->getLength() - abs(camera.getPosition().x) <= distanceToEdge || water->getLength() - abs(camera.getPosition().z) <= distanceToEdge) {
 		float foo = water->getLength();
 		waterModel = glm::scale(waterModel, glm::vec3(1.3f, 1.0f, 1.0f));
 		waterModel = glm::scale(waterModel, glm::vec3(1.0f, 1.0f, 1.3f));

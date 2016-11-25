@@ -32,7 +32,7 @@ float calculateShadow()
 
 void main()
 {
-	vec3 landColor = vec3(0.0, 0.5, 0.0);
+	vec3 landColor = vec3(0.0, 0.3, 0.0);
 
 	//ambient lighting
 	float ambientStrength = 0.05f;
