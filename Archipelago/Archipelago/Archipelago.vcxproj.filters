@@ -73,5 +73,9 @@
     <None Include="Shaders\vertex.shader" />
     <None Include="Shaders\waterVertex.shader" />
     <None Include="Shaders\waterFragment.shader" />
+    <None Include="Shaders\terrainFragment.shader" />
+    <None Include="Shaders\terrainVertex.shader" />
+    <None Include="Shaders\shadowFragment.shader" />
+    <None Include="Shaders\shadowVertex.shader" />
   </ItemGroup>
 </Project>

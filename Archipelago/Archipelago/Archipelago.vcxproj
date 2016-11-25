@@ -177,8 +177,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\fragment.shader" />
+    <None Include="Shaders\shadowFragment.shader" />
+    <None Include="Shaders\shadowVertex.shader" />
     <None Include="Shaders\skyBoxFragment.shader" />
     <None Include="Shaders\skyBoxVertex.shader" />
+    <None Include="Shaders\terrainFragment.shader" />
+    <None Include="Shaders\terrainVertex.shader" />
     <None Include="Shaders\vertex.shader" />
     <None Include="Shaders\waterFragment.shader" />
     <None Include="Shaders\waterVertex.shader" />
