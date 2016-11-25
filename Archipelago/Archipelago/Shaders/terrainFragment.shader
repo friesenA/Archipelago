@@ -3,6 +3,7 @@
 in vec3 fragmentNormal;
 in vec3 fragmentPos;
 in vec4 fragmentPosLightSpace;
+in vec2 TexCoord;
 
 out vec4 color;
 
@@ -11,6 +12,7 @@ uniform vec3 lightColor;
 uniform vec3 viewerPos;
 
 uniform sampler2D shadowTexture;
+uniform sampler2D terrainTexture;
 
 float calculateShadow()
 {	
@@ -30,7 +32,7 @@ float calculateShadow()
 
 void main()
 {
-	vec3 landColor = vec3(0.0, 1.0, 0.0);
+	vec3 landColor = vec3(0.0, 0.3, 0.0);
 
 	//ambient lighting
 	float ambientStrength = 0.05f;
@@ -48,9 +50,9 @@ void main()
 	vec3 specular_contribution = specularStrength * spec * lightColor;  
 
 	//Shadow
-	float shadow = calculateShadow();
+	//float shadow = calculateShadow();
 
-	vec3 finalColor = (ambient_contribution + shadow * (diffuse_contribution + specular_contribution)) * landColor;
+	vec3 finalColor = (ambient_contribution + 1 * (diffuse_contribution + specular_contribution)) * landColor;
 
-	color = vec4(finalColor, 1.0f);
+	color = texture(terrainTexture, TexCoord)*vec4(finalColor, 1.0f);
 }

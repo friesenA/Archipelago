@@ -19,48 +19,21 @@ glm::mat4 Camera::getViewMatrix(){
 }
 
 void Camera::translateCamera(Movement direction){
-	glm::vec3 nextPos(this->forward.x * SPEED, 0, this->forward.z * SPEED);
-	if (direction == FORWARD) {
+
+	glm::vec3 nextPos(this->forward.x * speed, 0, this->forward.z * speed);
+
+	if (direction == FORWARD)
 		this->position += nextPos;
-	}
-
-	if (direction == BACKWARD) {
+	if (direction == BACKWARD)
 		this->position -= nextPos;
-	}
-
-	if (direction == RIGHT) {
-		GLfloat xoffset = 1.0f;
-
-		GLfloat sensitivity = 0.40;	// Change this value to your liking
-		xoffset *= sensitivity;
-
-		yaw += xoffset;
-
-		glm::vec3 front;
-		front.x = cos(glm::radians(yaw));
-		front.z = sin(glm::radians(yaw));
-		this->forward = glm::normalize(front);
-	}
-
-	if (direction == LEFT) {
-		GLfloat xoffset = -1.0f;
-
-		GLfloat sensitivity = 0.40;	// Change this value to your liking
-		xoffset *= sensitivity;
-
-		yaw += xoffset;
-
-		glm::vec3 front;
-		front.x = cos(glm::radians(yaw));
-		front.z = sin(glm::radians(yaw));
-		this->forward = glm::normalize(front);
-	}
-
+	if (direction == RIGHT)
+		this->position += this->right;
+	if (direction == LEFT)
+		this->position -= this->right;
 	if (direction == UP)
-		this->position += this->up * SPEED;
-
+		this->position += this->up;
 	if (direction == DOWN)
-		this->position -= this->up * SPEED;
+		this->position -= this->up;
 }
 
 void Camera::rotateCamera(GLfloat xOffset, GLfloat yOffset)

@@ -18,13 +18,12 @@ class Terrain : public Obj
 	int width;
 	int length;
 
-	GLuint VAO, vertex_VBO, normals_VBO, index_EBO;
+	GLuint VAO, vertex_VBO, normals_VBO, uv_VBO,index_EBO;
 	std::vector<glm::vec3> vertices;
 	std::vector<GLuint> indicies;
 	std::vector<glm::vec3> normals;
-
-	GLuint islandTexture;
 	std::vector<glm::vec2> uvCoordinates;
+	GLuint islandTexture;
 
 public:
 	

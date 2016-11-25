@@ -11,7 +11,7 @@ enum Movement {
 };
 
 //Default Camera values
-const GLfloat SPEED = 0.40f;
+const GLfloat SPEED = 0.99f;
 const GLfloat SENSITIVITY = 0.002f;
 
 class Camera{

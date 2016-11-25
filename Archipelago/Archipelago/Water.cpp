@@ -9,7 +9,7 @@ Water::Water(GLfloat height) : numTiles(NUMBER_OF_TILES_ACROSS), tileSize(TEXTUR
 	buildVertexVBO();
 	buildNormalsVBO();
 	buildUVVBO();
-	//build EBO
+	//build EBO	
 	buildIndexEBO();
 	//build VAO
 	buildVAO();
