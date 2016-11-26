@@ -7,7 +7,8 @@
 #include "Archipelago.h"
 
 //Camera facing forward z = -1;
-Camera camera(glm::vec3(0.0f, 17.0f, 0.0f));
+float camStartingYLoc = 17.0f;
+Camera camera(glm::vec3(0.0f, camStartingYLoc, 0.0f));
 
 Shadows shadows;
 
@@ -18,8 +19,6 @@ bool keys[1024];
 bool initializeMouse = true;
 GLfloat lastX;
 GLfloat lastY;
-
-
 
 int main(void) {
 
@@ -46,16 +45,25 @@ int main(void) {
 		cout << "Failed to initialize GLEW" << endl;
 		exit(EXIT_FAILURE);
 	}
-	
+
 	// Shaders
 	//////////////////////////////////////////////////////////////////////////
-    waterShader = new Shader("Shaders/waterVertex.shader", "Shaders/waterFragment.shader");
+	waterShader = new Shader("Shaders/waterVertex.shader", "Shaders/waterFragment.shader");
 	Shader terrainShader("Shaders/terrainVertex.shader", "Shaders/terrainFragment.shader");
 
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
-	 water = new Water(15.0f);
-	Terrain terrain(90);
+	water = new Water(15.0f);
+	
+	Terrain t(90);
+	Terrain t1(60);
+	mat4 mod, mod1, mod2;
+	vec3 translation(400, 0, 400);
+	mod = glm::translate(mod, translation);
+	t.setModel(mod);
+	t1.setModel(mod1);
+	terrains.push_back(t);
+	terrains.push_back(t1);
 
 	// Skybox
 	//////////////////////////////////////////////////////////////////////////
@@ -64,21 +72,20 @@ int main(void) {
 
 	// OpenGL Settings
 	//////////////////////////////////////////////////////////////////////////
-	glEnable(GL_DEPTH_TEST); 
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_FRAMEBUFFER_SRGB); //gamma correction
-	// Enable blending
+								   // Enable blending
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	//Register Shadows
 	//////////////////////////////////////////////////////////////////////////
-	
 	shadows.setupFrameBuffer();
 	shadows.initializeShadowMap();
 
 	//Draw Obj instances
 	shadows.drawObj(water, SUNLIGHT_DIR);
-	shadows.drawObj(&terrain, SUNLIGHT_DIR);
+	shadows.drawObj(&terrains.front(), SUNLIGHT_DIR);
 
 	shadows.endShadowMap();
 
@@ -96,19 +103,19 @@ int main(void) {
 		clearScreenAndColor();
 
 		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f); //global for all draws
-
-		//Skybox must be drawn first
-		drawSkyBox(skybox);
+		drawSkyBox(skybox);//Skybox must be drawn first
 
 		//Setup view used for the rest of the scene
 		view = camera.getViewMatrix();
 		glDepthMask(GL_TRUE);
 
 		// Draw terrain instance
-		drawObj(&terrain, &terrainShader, model);
+		for (vector<Terrain>::iterator terrain = terrains.begin(); terrain != terrains.end(); terrain++) {
+			drawObj(&(*terrain), &terrainShader, terrain->getModel());
+		}
+
 		//Draw water instance
-		drawObj(water, waterShader,waterModel);
-		
+		drawObj(water, waterShader, waterModel);
 
 		glfwSwapBuffers(window);
 	}
@@ -124,9 +131,19 @@ int main(void) {
 //////////////////////////////////////////////////////////////////////////
 void drawObj(Obj *mesh, Shader* shader, mat4 modelIn) {
 	shader->Use();
-	transformViewProj(shader,modelIn);
+	transformViewProj(shader, modelIn);
 	lightingSetup(shader);
 	mesh->draw();
+}
+
+void incrementWaterSurface() {
+	float distanceToEdge = 100;
+	if (water->getLength() - abs(camera.getPosition().x) <= distanceToEdge || water->getLength() - abs(camera.getPosition().z) <= distanceToEdge) {
+		float foo = water->getLength();
+		waterModel = glm::scale(waterModel, glm::vec3(1.3f, 1.0f, 1.0f));
+		waterModel = glm::scale(waterModel, glm::vec3(1.0f, 1.0f, 1.3f));
+		water->incrementSurface(1.3);
+	}
 }
 
 // Transform
@@ -186,22 +203,11 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 		keys[key] = false;
 }
 
-
-void incrementWaterSurface() {
-	float distanceToEdge = 100;
-	if (water->getLength() - abs(camera.getPosition().x) <= distanceToEdge || water->getLength() - abs(camera.getPosition().z) <= distanceToEdge) {
-		float foo = water->getLength();
-		waterModel = glm::scale(waterModel, glm::vec3(1.3f, 1.0f, 1.0f));
-		waterModel = glm::scale(waterModel, glm::vec3(1.0f, 1.0f, 1.3f));
-		water->incrementSurface(1.1);
-	}
-}
-
 //Seperates key event from callback to handle multiple key presses
 void moveCamera() {
 	if (keys[GLFW_KEY_W]) {
 		camera.translateCamera(FORWARD);
-		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		cout << camera.getPosition().x << " , " << camera.getPosition().y << " , " << camera.getPosition().z << endl;
 		incrementWaterSurface();
 	}
 	if (keys[GLFW_KEY_S]) {
@@ -231,6 +237,68 @@ void moveCamera() {
 		camera.translateCamera(DOWN);
 		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
 		incrementWaterSurface();
+	}
+
+	detectTerrainCollision();
+}
+
+// Collision
+//////////////////////////////////////////////////////////////////////////
+void detectTerrainCollision() {
+	if (currentTerrain != nullptr) {
+		vec3 terrainPosition(currentTerrain->getModel()[3]);
+		Terrain * terrain = currentTerrain;
+
+		// Determine if cam will be in terrain
+		bool camIsInTerrain = (camera.getPosition().x <= (terrainPosition.x + (terrain->getWidth() / 2)) && camera.getPosition().x >= (terrainPosition.x - (terrain->getWidth() / 2))) &&
+			(camera.getPosition().z <= (terrainPosition.z + (terrain->getLength() / 2)) && camera.getPosition().z >= (terrainPosition.z - (terrain->getLength() / 2)));
+
+		if (camIsInTerrain) {
+			calculateTerrainCollision(currentTerrain);
+			return;
+		}
+	}
+
+	for (vector<Terrain>::iterator terrain = terrains.begin(); terrain != terrains.end(); terrain++) {
+		calculateTerrainCollision(&(*terrain));
+	}
+}
+
+void calculateTerrainCollision(Terrain* terrain) {
+	vec3 terrainPosition(terrain->getModel()[3]);
+	vec3 nexPosition = camera.getPosition() + camera.getNextPosition();
+
+	// Determine if cam will be in terrain
+	bool camIsInTerrain = (camera.getPosition().x <= (terrainPosition.x + (terrain->getWidth() / 2)) && camera.getPosition().x >= (terrainPosition.x - (terrain->getWidth() / 2))) &&
+		(camera.getPosition().z <= (terrainPosition.z + (terrain->getLength() / 2)) && camera.getPosition().z >= (terrainPosition.z - (terrain->getLength() / 2)));
+
+	if (!camIsInTerrain) { 
+		currentTerrain = nullptr;
+		return; 
+	}
+	currentTerrain = terrain;
+
+	// Remove translation effect and find location vertices vector
+	// current position
+	int lineOne = ((int)(camera.getPosition().z < 0 ? camera.getPosition().z + terrainPosition.z : camera.getPosition().z - terrainPosition.z) + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
+	int currentLoc = (camera.getPosition().x < 0 ? camera.getPosition().x + terrainPosition.x : camera.getPosition().x - terrainPosition.x) + ((int)terrain->getWidth() / 2) + lineOne;
+
+	// next position
+	int lineTwo = ((int)(nexPosition.z < 0 ? nexPosition.z + terrainPosition.z : nexPosition.z - terrainPosition.z) + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
+	int theLocation = (nexPosition.x < 0 ? nexPosition.x + terrainPosition.x : nexPosition.x - terrainPosition.x) + ((int)terrain->getWidth() / 2) + lineTwo;
+
+	try {
+		float offset = 2.0f;
+		float pos = terrain->getVertices()->at(currentLoc).y;
+		float next = terrain->getVertices()->at(theLocation).y;
+		pos = (next + pos) / 2;
+		if (pos > camStartingYLoc) {
+
+			camera.climbAt(pos + offset);
+		}
+	}
+	catch (exception e) {
+		cout << "Location not found!" << endl;
 	}
 }
 

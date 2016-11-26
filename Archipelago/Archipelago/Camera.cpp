@@ -20,7 +20,7 @@ glm::mat4 Camera::getViewMatrix(){
 
 void Camera::translateCamera(Movement direction){
 
-	glm::vec3 nextPos(this->forward.x * speed, 0, this->forward.z * speed);
+	glm::vec3 nextPos(this->getNextPosition());
 
 	if (direction == FORWARD)
 		this->position += nextPos;
@@ -51,6 +51,10 @@ void Camera::rotateCamera(GLfloat xOffset, GLfloat yOffset)
 		this->pitch = glm::radians(-89.0f);
 
 	recalculateVectors();
+}
+
+void Camera::climbAt(float y){
+	position.y = y;
 }
 
 glm::vec3 Camera::getPosition()
