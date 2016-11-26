@@ -7,8 +7,8 @@
 #include "Archipelago.h"
 
 //Camera facing forward z = -1;
-float camYLoc = 17.0f;
-Camera camera(glm::vec3(0.0f, camYLoc, 0.0f));
+float camStartingYLoc = 17.0f;
+Camera camera(glm::vec3(0.0f, camStartingYLoc, 0.0f));
 
 
 Shadows shadows;
@@ -239,48 +239,32 @@ void detectTerrainCollision() {
 		vec3 terrainPosition(terrain->getModel()[3]);
 		vec3  nexPosition = camera.getPosition() + camera.getNextPosition();
 
-		// Determine if cam is in terrain
+		// Determine if cam will be in terrain
 		bool camIsInTerrain = abs(camera.getPosition().x) <= terrainPosition.x + (terrain->getWidth()/2) &&
 							  abs(camera.getPosition().z)<= terrainPosition.z + (terrain->getLength()/2);
 
-		if (camIsInTerrain) {
-			cout <<"Cam: "<< camera.getPosition().x << " , " << camera.getPosition().z << endl;
-			//// Get terrain height at location
-			int a = (int)nexPosition.z;
-			int b = (int)(terrain->getLength() / 2);
-			int c = (int)terrain->getWidth();
-			int d = (int)nexPosition.x;
-			int e = ((int)terrain->getWidth() / 2);
-
+		if (!camIsInTerrain) {return;}
 
 			// current position
-			int foobar = ((int)camera.getPosition().z + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
-			int currentLoc = (int)camera.getPosition().x + ((int)terrain->getWidth() / 2) + foobar;
+			int lineOne = ((int)camera.getPosition().z + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
+			int currentLoc = (int)camera.getPosition().x + ((int)terrain->getWidth() / 2) + lineOne;
 
 			// next position
-			int foo = ((int)nexPosition.z + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
-			int theLocation = (int)nexPosition.x + ((int)terrain->getWidth() / 2) + foo;
+			int lineTwo = ((int)nexPosition.z + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
+			int theLocation = (int)nexPosition.x + ((int)terrain->getWidth() / 2) + lineTwo;
 
 			try {
 				float bar = terrain->getVertices().at(theLocation).y;
 				float barfoo = terrain->getVertices().at(currentLoc).y;
 				bar = (barfoo + bar) / 2;
-
-				cout << "the at loc: " << theLocation << endl;
-				cout<< "height at loc: "<< bar <<endl;
-				if (bar > camYLoc) {
+				if (bar > camStartingYLoc) {
 					float offset = 1.5f;
 					camera.climbAt(bar + offset);
-				}else {
-					//camera.climbAt(camYLoc);
 				}
 
 			}catch (exception e) {
-				cout << "not found!" << endl;
+				cout << "Location not found!" << endl;
 			}
-			//cout << "cam is in terrain " << "x:" << nextCamPosition.x << " terrain y:" << nextCamPosition.y << " z:" <<nextCamPosition.z << endl;
-		}
-
 	}
 }
 
