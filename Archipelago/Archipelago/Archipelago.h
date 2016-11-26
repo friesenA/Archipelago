@@ -96,5 +96,6 @@ void incrementWaterSurface();
 //////////////////////////////////////////////////////////////////////////
 void detectTerrainCollision();
 void calculateTerrainCollision(Terrain* terrain);
+bool isCamInTerrain(Terrain* terrain);
 
 

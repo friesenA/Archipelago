@@ -244,16 +244,21 @@ void moveCamera() {
 
 // Collision
 //////////////////////////////////////////////////////////////////////////
+bool isCamInTerrain(Terrain* terrain) {
+	vec3 terrainPosition(terrain->getModel()[3]);
+
+	// Determine if cam will be in terrain
+	bool camIsInTerrain = (camera.getPosition().x <= (terrainPosition.x + (terrain->getWidth() / 2)) && camera.getPosition().x >= (terrainPosition.x - (terrain->getWidth() / 2))) &&
+		(camera.getPosition().z <= (terrainPosition.z + (terrain->getLength() / 2)) && camera.getPosition().z >= (terrainPosition.z - (terrain->getLength() / 2)));
+
+	return camIsInTerrain;
+}
+
 void detectTerrainCollision() {
 	if (currentTerrain != nullptr) {
-		vec3 terrainPosition(currentTerrain->getModel()[3]);
 		Terrain * terrain = currentTerrain;
 
-		// Determine if cam will be in terrain
-		bool camIsInTerrain = (camera.getPosition().x <= (terrainPosition.x + (terrain->getWidth() / 2)) && camera.getPosition().x >= (terrainPosition.x - (terrain->getWidth() / 2))) &&
-			(camera.getPosition().z <= (terrainPosition.z + (terrain->getLength() / 2)) && camera.getPosition().z >= (terrainPosition.z - (terrain->getLength() / 2)));
-
-		if (camIsInTerrain) {
+		if (isCamInTerrain(terrain)) {
 			calculateTerrainCollision(currentTerrain);
 			return;
 		}
@@ -268,11 +273,7 @@ void calculateTerrainCollision(Terrain* terrain) {
 	vec3 terrainPosition(terrain->getModel()[3]);
 	vec3 nexPosition = camera.getPosition() + camera.getNextPosition();
 
-	// Determine if cam will be in terrain
-	bool camIsInTerrain = (camera.getPosition().x <= (terrainPosition.x + (terrain->getWidth() / 2)) && camera.getPosition().x >= (terrainPosition.x - (terrain->getWidth() / 2))) &&
-		(camera.getPosition().z <= (terrainPosition.z + (terrain->getLength() / 2)) && camera.getPosition().z >= (terrainPosition.z - (terrain->getLength() / 2)));
-
-	if (!camIsInTerrain) { 
+	if (!isCamInTerrain(terrain)) {
 		currentTerrain = nullptr;
 		return; 
 	}
