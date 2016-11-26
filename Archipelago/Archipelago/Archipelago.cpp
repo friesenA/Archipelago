@@ -7,7 +7,9 @@
 #include "Archipelago.h"
 
 //Camera facing forward z = -1;
-Camera camera(glm::vec3(0.0f, 17.0f, 0.0f));
+float camYLoc = 17.0f;
+Camera camera(glm::vec3(0.0f, camYLoc, 0.0f));
+
 
 Shadows shadows;
 
@@ -238,16 +240,26 @@ void detectTerrainCollision() {
 		vec3 nextCamPosition = camera.getPosition() + camera.getNextPosition();
 
 		// Determine if cam is in terrain
-		bool camIsInTerrain = abs(nextCamPosition.x) <= terrainPosition.x + (terrain->getWidth()/2) &&
-							  abs(nextCamPosition.z)<= terrainPosition.z + (terrain->getLength()/2);
+		bool camIsInTerrain = abs(camera.getPosition().x) <= terrainPosition.x + (terrain->getWidth()/2) &&
+							  abs(camera.getPosition().z)<= terrainPosition.z + (terrain->getLength()/2);
 
 		if (camIsInTerrain) {
-			cout << "cam is in terrain " << "x:" << nextCamPosition.x << " terrain y:" << nextCamPosition.y << " z:" <<nextCamPosition.z << endl;
-		}
+			// Get terrain height at location
+			int foo = (camera.getPosition().z + ((terrain->getLength() / 2)) *  terrain->getWidth());
+			int theLocation = camera.getPosition().x + (terrain->getWidth() / 2) + foo;
+			try {
+				float bar = terrain->getVertices().at(theLocation).y;
+				float foo = camYLoc + bar;
+				cout << "the at loc: " << theLocation << endl;
+				cout<< "height at loc: "<< bar <<endl;
+				if(foo >= 18.0f)
+					camera.climbAt(foo);
 
-		// Get terrain height at location
-		int verticesHeight = terrain->getVertices()->size() / terrain->getWidth();
-		int zLocation = nextCamPosition.z <= (verticesHeight / 2) ? (verticesHeight / 2) + abs(nextCamPosition.z) : nextCamPosition.z;
+			}catch (exception e) {
+				cout << "not found!" << endl;
+			}
+			//cout << "cam is in terrain " << "x:" << nextCamPosition.x << " terrain y:" << nextCamPosition.y << " z:" <<nextCamPosition.z << endl;
+		}
 
 	}
 }

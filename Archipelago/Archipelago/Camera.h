@@ -46,6 +46,8 @@ public:
 	//Adjusts the camera's direction of view
 	void rotateCamera(GLfloat xOffset, GLfloat yOffset);
 
+	void climbAt(float y);
+
 	//Current Position of camera
 	glm::vec3 getPosition();
 

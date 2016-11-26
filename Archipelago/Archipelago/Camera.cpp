@@ -53,6 +53,10 @@ void Camera::rotateCamera(GLfloat xOffset, GLfloat yOffset)
 	recalculateVectors();
 }
 
+void Camera::climbAt(float y){
+	position.y = y;
+}
+
 glm::vec3 Camera::getPosition()
 {
 		return position;
