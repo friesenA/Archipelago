@@ -237,7 +237,7 @@ void moveCamera() {
 void detectTerrainCollision() {
 	for (vector<Terrain>::iterator terrain = terrains.begin(); terrain != terrains.end(); terrain++) {
 		vec3 terrainPosition(terrain->getModel()[3]);
-		vec3 nextCamPosition = camera.getPosition() + camera.getNextPosition();
+		vec3  nexPosition = camera.getPosition() + camera.getNextPosition();
 
 		// Determine if cam is in terrain
 		bool camIsInTerrain = abs(camera.getPosition().x) <= terrainPosition.x + (terrain->getWidth()/2) &&
@@ -246,21 +246,34 @@ void detectTerrainCollision() {
 		if (camIsInTerrain) {
 			cout <<"Cam: "<< camera.getPosition().x << " , " << camera.getPosition().z << endl;
 			//// Get terrain height at location
-			int a = (int)camera.getPosition().z;
+			int a = (int)nexPosition.z;
 			int b = (int)(terrain->getLength() / 2);
 			int c = (int)terrain->getWidth();
-			int d = (int)camera.getPosition().x;
+			int d = (int)nexPosition.x;
 			int e = ((int)terrain->getWidth() / 2);
 
-			int foo = (a + b) *  c;
-			int theLocation = d + e + foo;
+
+			// current position
+			int foobar = ((int)camera.getPosition().z + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
+			int currentLoc = (int)camera.getPosition().x + ((int)terrain->getWidth() / 2) + foobar;
+
+			// next position
+			int foo = ((int)nexPosition.z + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
+			int theLocation = (int)nexPosition.x + ((int)terrain->getWidth() / 2) + foo;
+
 			try {
 				float bar = terrain->getVertices().at(theLocation).y;
-				float foo = camYLoc + bar;
+				float barfoo = terrain->getVertices().at(currentLoc).y;
+				bar = (barfoo + bar) / 2;
+
 				cout << "the at loc: " << theLocation << endl;
 				cout<< "height at loc: "<< bar <<endl;
-				if(bar >= 17.001f)
-					camera.climbAt(bar);
+				if (bar > camYLoc) {
+					float offset = 1.5f;
+					camera.climbAt(bar + offset);
+				}else {
+					//camera.climbAt(camYLoc);
+				}
 
 			}catch (exception e) {
 				cout << "not found!" << endl;
