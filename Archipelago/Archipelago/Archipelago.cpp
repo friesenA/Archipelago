@@ -10,7 +10,6 @@
 float camStartingYLoc = 17.0f;
 Camera camera(glm::vec3(0.0f, camStartingYLoc, 0.0f));
 
-
 Shadows shadows;
 
 //Key tracking
@@ -55,9 +54,16 @@ int main(void) {
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
 	water = new Water(15.0f);
+	
 	Terrain t(90);
-	t.setModel(model);
+	Terrain t1(90);
+	mat4 mod, mod1, mod2;
+	vec3 translation(400, 0, 400);
+	mod = glm::translate(mod, translation);
+	t.setModel(mod);
+	t1.setModel(mod1);
 	terrains.push_back(t);
+	terrains.push_back(t1);
 
 	// Skybox
 	//////////////////////////////////////////////////////////////////////////
@@ -74,7 +80,6 @@ int main(void) {
 
 	//Register Shadows
 	//////////////////////////////////////////////////////////////////////////
-
 	shadows.setupFrameBuffer();
 	shadows.initializeShadowMap();
 
@@ -105,7 +110,10 @@ int main(void) {
 		glDepthMask(GL_TRUE);
 
 		// Draw terrain instance
-		drawObj(&terrains.front(), &terrainShader, model);
+		for (vector<Terrain>::iterator terrain = terrains.begin(); terrain != terrains.end(); terrain++) {
+			drawObj(&(*terrain), &terrainShader, terrain->getModel());
+		}
+
 		//Draw water instance
 		drawObj(water, waterShader, waterModel);
 
@@ -234,37 +242,63 @@ void moveCamera() {
 	detectTerrainCollision();
 }
 
+// Collision
+//////////////////////////////////////////////////////////////////////////
 void detectTerrainCollision() {
-	for (vector<Terrain>::iterator terrain = terrains.begin(); terrain != terrains.end(); terrain++) {
-		vec3 terrainPosition(terrain->getModel()[3]);
-		vec3  nexPosition = camera.getPosition() + camera.getNextPosition();
+	if (currentTerrain != nullptr) {
+		vec3 terrainPosition(currentTerrain->getModel()[3]);
+		Terrain * terrain = currentTerrain;
 
 		// Determine if cam will be in terrain
-		bool camIsInTerrain = abs(camera.getPosition().x) <= terrainPosition.x + (terrain->getWidth()/2) &&
-							  abs(camera.getPosition().z)<= terrainPosition.z + (terrain->getLength()/2);
+		bool camIsInTerrain = (camera.getPosition().x <= (terrainPosition.x + (terrain->getWidth() / 2)) && camera.getPosition().x >= (terrainPosition.x - (terrain->getWidth() / 2))) &&
+			(camera.getPosition().z <= (terrainPosition.z + (terrain->getLength() / 2)) && camera.getPosition().z >= (terrainPosition.z - (terrain->getLength() / 2)));
 
-		if (!camIsInTerrain) {return;}
+		if (camIsInTerrain) {
+			calculateTerrainCollision(currentTerrain);
+			return;
+		}
+	}
 
-			// current position
-			int lineOne = ((int)camera.getPosition().z + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
-			int currentLoc = (int)camera.getPosition().x + ((int)terrain->getWidth() / 2) + lineOne;
+	for (vector<Terrain>::iterator terrain = terrains.begin(); terrain != terrains.end(); terrain++) {
+		calculateTerrainCollision(&(*terrain));
+	}
+}
 
-			// next position
-			int lineTwo = ((int)nexPosition.z + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
-			int theLocation = (int)nexPosition.x + ((int)terrain->getWidth() / 2) + lineTwo;
+void calculateTerrainCollision(Terrain* terrain) {
+	vec3 terrainPosition(terrain->getModel()[3]);
+	vec3 nexPosition = camera.getPosition() + camera.getNextPosition();
 
-			try {
-				float bar = terrain->getVertices().at(theLocation).y;
-				float barfoo = terrain->getVertices().at(currentLoc).y;
-				bar = (barfoo + bar) / 2;
-				if (bar > camStartingYLoc) {
-					float offset = 1.5f;
-					camera.climbAt(bar + offset);
-				}
+	// Determine if cam will be in terrain
+	bool camIsInTerrain = (camera.getPosition().x <= (terrainPosition.x + (terrain->getWidth() / 2)) && camera.getPosition().x >= (terrainPosition.x - (terrain->getWidth() / 2))) &&
+		(camera.getPosition().z <= (terrainPosition.z + (terrain->getLength() / 2)) && camera.getPosition().z >= (terrainPosition.z - (terrain->getLength() / 2)));
 
-			}catch (exception e) {
-				cout << "Location not found!" << endl;
-			}
+	if (!camIsInTerrain) { 
+		currentTerrain = nullptr;
+		return; 
+	}
+	currentTerrain = terrain;
+
+	// Remove translation effect and find location vertices vector
+	// current position
+	int lineOne = ((int)(camera.getPosition().z < 0 ? camera.getPosition().z + terrainPosition.z : camera.getPosition().z - terrainPosition.z) + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
+	int currentLoc = (camera.getPosition().x < 0 ? camera.getPosition().x + terrainPosition.x : camera.getPosition().x - terrainPosition.x) + ((int)terrain->getWidth() / 2) + lineOne;
+
+	// next position
+	int lineTwo = ((int)(nexPosition.z < 0 ? nexPosition.z + terrainPosition.z : nexPosition.z - terrainPosition.z) + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
+	int theLocation = (nexPosition.x < 0 ? nexPosition.x + terrainPosition.x : nexPosition.x - terrainPosition.x) + ((int)terrain->getWidth() / 2) + lineTwo;
+
+	try {
+		float pos = terrain->getVertices().at(currentLoc).y;
+		float next = terrain->getVertices().at(theLocation).y;
+		pos = (next + pos) / 2;
+		if (pos > camStartingYLoc) {
+			float offset = 1.5f;
+			camera.climbAt(pos + offset);
+		}
+
+	}
+	catch (exception e) {
+		cout << "Location not found!" << endl;
 	}
 }
 
