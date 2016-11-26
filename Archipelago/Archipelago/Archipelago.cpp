@@ -244,16 +244,23 @@ void detectTerrainCollision() {
 							  abs(camera.getPosition().z)<= terrainPosition.z + (terrain->getLength()/2);
 
 		if (camIsInTerrain) {
-			// Get terrain height at location
-			int foo = (camera.getPosition().z + ((terrain->getLength() / 2)) *  terrain->getWidth());
-			int theLocation = camera.getPosition().x + (terrain->getWidth() / 2) + foo;
+			cout <<"Cam: "<< camera.getPosition().x << " , " << camera.getPosition().z << endl;
+			//// Get terrain height at location
+			int a = (int)camera.getPosition().z;
+			int b = (int)(terrain->getLength() / 2);
+			int c = (int)terrain->getWidth();
+			int d = (int)camera.getPosition().x;
+			int e = ((int)terrain->getWidth() / 2);
+
+			int foo = (a + b) *  c;
+			int theLocation = d + e + foo;
 			try {
 				float bar = terrain->getVertices().at(theLocation).y;
 				float foo = camYLoc + bar;
 				cout << "the at loc: " << theLocation << endl;
 				cout<< "height at loc: "<< bar <<endl;
-				if(foo >= 18.0f)
-					camera.climbAt(foo);
+				if(bar >= 17.001f)
+					camera.climbAt(bar);
 
 			}catch (exception e) {
 				cout << "not found!" << endl;
