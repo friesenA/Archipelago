@@ -39,7 +39,7 @@ public:
 
 	int getWidth() { return width; };
 	int getLength() { return length; };
-	vector<vec3> getVertices() { return vertices; };
+	vector<vec3>* getVertices() { return &vertices; };
 
 	mat4 getModel() { return terrainModel; };
 	void setModel(mat4 model) { terrainModel = model; };

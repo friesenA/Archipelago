@@ -56,7 +56,7 @@ int main(void) {
 	water = new Water(15.0f);
 	
 	Terrain t(90);
-	Terrain t1(90);
+	Terrain t1(60);
 	mat4 mod, mod1, mod2;
 	vec3 translation(400, 0, 400);
 	mod = glm::translate(mod, translation);
@@ -207,7 +207,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 void moveCamera() {
 	if (keys[GLFW_KEY_W]) {
 		camera.translateCamera(FORWARD);
-		cout << camera.getPosition().x << " , " << camera.getPosition().z << endl;
+		cout << camera.getPosition().x << " , " << camera.getPosition().y << " , " << camera.getPosition().z << endl;
 		incrementWaterSurface();
 	}
 	if (keys[GLFW_KEY_S]) {
@@ -288,14 +288,14 @@ void calculateTerrainCollision(Terrain* terrain) {
 	int theLocation = (nexPosition.x < 0 ? nexPosition.x + terrainPosition.x : nexPosition.x - terrainPosition.x) + ((int)terrain->getWidth() / 2) + lineTwo;
 
 	try {
-		float pos = terrain->getVertices().at(currentLoc).y;
-		float next = terrain->getVertices().at(theLocation).y;
+		float offset = 2.0f;
+		float pos = terrain->getVertices()->at(currentLoc).y;
+		float next = terrain->getVertices()->at(theLocation).y;
 		pos = (next + pos) / 2;
 		if (pos > camStartingYLoc) {
-			float offset = 1.5f;
+
 			camera.climbAt(pos + offset);
 		}
-
 	}
 	catch (exception e) {
 		cout << "Location not found!" << endl;
