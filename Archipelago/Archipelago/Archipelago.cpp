@@ -136,14 +136,14 @@ void drawObj(Obj *mesh, Shader* shader, mat4 modelIn) {
 	mesh->draw();
 }
 
-void incrementWaterSurface() {
-	float distanceToEdge = 100;
-	if (water->getLength() - abs(camera.getPosition().x) <= distanceToEdge || water->getLength() - abs(camera.getPosition().z) <= distanceToEdge) {
-		float foo = water->getLength();
-		waterModel = glm::scale(waterModel, glm::vec3(1.3f, 1.0f, 1.0f));
-		waterModel = glm::scale(waterModel, glm::vec3(1.0f, 1.0f, 1.3f));
+bool incrementWaterSurface() {
+	if (water->getLength() - abs(camera.getPosition().x) <= CAM_DIST_TO_EDGE || water->getLength() - abs(camera.getPosition().z) <= CAM_DIST_TO_EDGE) {
+		waterModel = glm::scale(waterModel, glm::vec3(1.3f, 1.0f, 1.3f));
 		water->incrementSurface(1.3);
+		return true;
 	}
+
+	return false;
 }
 
 // Transform

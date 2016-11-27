@@ -17,8 +17,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 //Objects
 Water* water;
+const float CAM_DIST_TO_EDGE = 100;
 vector<Terrain> terrains;
-
 Terrain* currentTerrain;
 
 // Shaders
@@ -89,7 +89,7 @@ void moveCamera();
 //////////////////////////////////////////////////////////////////////////
 void drawSkyBox(SkyBox &skybox);
 void drawObj(Obj *mesh, Shader *shader, mat4 modelIn);
-void incrementWaterSurface();
+bool incrementWaterSurface();
 
 
 // Collision
