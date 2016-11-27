@@ -152,10 +152,12 @@ void transformViewProj(Shader *shaders, mat4 modelIn) {
 	projLoc = glGetUniformLocation(shaders->Program, "projection");
 	viewLoc = glGetUniformLocation(shaders->Program, "view");
 	modelLoc = glGetUniformLocation(shaders->Program, "model");
+	
 
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelIn));
+	
 }
 
 // Lighting

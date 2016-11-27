@@ -118,12 +118,17 @@ public:
 	};
 
 	void draw(mat4 view, mat4 proj) {
+		
 		// Draw skybox 
 		glEnable(GL_DEPTH_CLAMP);
 		glDepthMask(GL_FALSE);// Remember to turn depth writing off
 		skyboxShader->Use();
 		glUniformMatrix4fv(glGetUniformLocation(skyboxShader->Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(glGetUniformLocation(skyboxShader->Program, "projection"), 1, GL_FALSE, glm::value_ptr(proj));
+		//Fog stuff	
+		//	mat4 skyColour;	 
+		//	glUniformMatrix4fv(glGetUniformLocation(skyboxShader->Program, "skyColour"), 1, GL_FALSE, glm::value_ptr(skyColour));
+
 
 		// skybox cube
 		glBindVertexArray(skyboxVAO);

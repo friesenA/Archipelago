@@ -35,6 +35,7 @@ mat4 waterModel;
 GLint modelLoc;
 GLint viewLoc;
 GLint projLoc;
+
 int main(void);
 void transformViewProj(Shader *shaders, mat4 modelIn);
 
