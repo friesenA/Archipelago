@@ -22,6 +22,8 @@ bool initializeMouse = true;
 GLfloat lastX;
 GLfloat lastY;
 
+//RANDOM NUMBER
+
 int main(void) {
 
 	// OpenGL Spec
@@ -141,20 +143,42 @@ bool incrementWaterSurface() {
 }
 
 void renderInitIslandSample() {
-	Terrain t(rand() % 80 + 20);
-	Terrain t1(rand() % 80 + 20);
-	Terrain t2(rand() % 80 + 20);
-	Terrain t3(rand() % 80 + 20);
-	Terrain t4(rand() % 80 + 20);
+	srand(time(0));
+
+	int randomNum1 = rand();
+	int randomNum2 = rand();
+	int randomNum3 = rand();
+	int randomNum4 = rand();
+	int randomNum5 = rand();
+
+
+
+	cout << "Random number is: " << randomNum1<<endl;
+	Terrain t(randomNum1);
+
+	cout << "Random number is: " << randomNum2 << endl;
+	Terrain t1(randomNum2);
+
+	cout << "Random number is: " << randomNum3 << endl;
+	Terrain t2(randomNum3);
+
+	cout << "Random number is: " << randomNum4 << endl;
+	Terrain t3(randomNum4);
+
+	cout << "Random number is: " << randomNum5 << endl;
+	Terrain t4(randomNum5);
+
 	mat4 mod, mod1, mod2, mod3;
 	mod =  translate(mod, vec3(t.getWidth(), 0, t.getWidth()));
 	mod1 = translate(mod1, vec3(t.getWidth(), 0, -t.getWidth()));
 	mod2 = translate(mod2, vec3(-t.getWidth(), 0, t.getWidth()));
 	mod3 = translate(mod3, vec3(-t.getWidth(), 0, -t.getWidth()));
+
 	t1.setModel(mod1);
 	t2.setModel(mod2);
 	t3.setModel(mod3);
 	t4.setModel(mod);
+
 	terrains.push_back(t);
 	terrains.push_back(t1);
 	terrains.push_back(t2);
@@ -163,7 +187,8 @@ void renderInitIslandSample() {
 }
 
 void renderMoreIslands() {
-	Terrain t(rand() % 80 + 40);
+	srand(time(0));
+	Terrain t(rand());
 	float xOffset = camera.getPosition().x + (camera.getPosition().x/4);
 	float zOffset = camera.getPosition().z + (camera.getPosition().z / 4);
 	mat4 mod = translate(mod,vec3(xOffset,0, zOffset));
