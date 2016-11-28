@@ -35,6 +35,7 @@ void main()
 
 	vec3 finalColor = (ambient_contribution + diffuse_contribution + specular_contribution) * waterColor;
 
+	//FOG:
 	//color = vec4(finalColor, 1.0f);
 	vec3 difference = fragmentPos - viewerPos;
 	float distance = length(difference)/200;
