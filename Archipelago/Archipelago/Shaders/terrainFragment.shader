@@ -65,7 +65,7 @@ void main()
 	//color = vec4(finalColor, 1.0f);
 	vec3 difference = fragmentPos - viewerPos;
 	float distance = length(difference) / 200;
-	color = (texture(terrainTexture, TexCoord) * vec4(finalColor, 1.0f));
+	color = color + (texture(terrainTexture, TexCoord) * vec4(finalColor, 1.0f));
 	float f = (pow(distance, 4) / 200);
 	color = clamp(color*(1 - f) + (vec4(0.5f, 0.5f, 0.5f, 1.0f)) * f, 0.0f, 1.0f);
 }
