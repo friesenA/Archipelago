@@ -22,6 +22,8 @@ bool initializeMouse = true;
 GLfloat lastX;
 GLfloat lastY;
 
+float t = 0;
+
 //RANDOM NUMBER
 
 int main(void) {
@@ -113,6 +115,8 @@ int main(void) {
 		drawObj(water, waterShader, waterModel);
 
 		glfwSwapBuffers(window);
+
+		t += 0.001f;
 	}
 
 	// Clean up
@@ -126,6 +130,8 @@ int main(void) {
 //////////////////////////////////////////////////////////////////////////
 void drawObj(Obj *mesh, Shader* shader, mat4 modelIn) {
 	shader->Use();
+	GLint waterTime = glGetUniformLocation(shader->Program, "time");
+	glUniform1f(waterTime, t);
 	transformViewProj(shader, modelIn);
 	lightingSetup(shader);
 	mesh->draw();
@@ -216,6 +222,8 @@ void lightingSetup(Shader *shaders) {
 	GLint lightDir = glGetUniformLocation(shaders->Program, "lightDirection");
 	GLint lightCol = glGetUniformLocation(shaders->Program, "lightColor");
 	GLint viewPos = glGetUniformLocation(shaders->Program, "viewerPos");
+	
+
 
 	//light attributes
 	glUniform3f(lightDir, SUNLIGHT_DIR.x, SUNLIGHT_DIR.y, SUNLIGHT_DIR.z);
@@ -230,6 +238,7 @@ void lightingSetup(Shader *shaders) {
 	GLint lightCTMLoc = glGetUniformLocation(shaders->Program, "lightSpaceMatrix");
 	glUniformMatrix4fv(lightCTMLoc, 1, GL_FALSE, glm::value_ptr(shadows.getLightSpaceMatrix()));
 }
+
 
 void drawSkyBox(SkyBox &skybox) {
 	view = glm::mat4(glm::mat3(camera.getViewMatrix()));
