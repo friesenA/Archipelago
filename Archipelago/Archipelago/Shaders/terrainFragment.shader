@@ -54,5 +54,9 @@ void main()
 
 	vec3 finalColor = (ambient_contribution + 1 * (diffuse_contribution + specular_contribution)) * landColor;
 
+	float width = 3.0f;
+	float range = 0.15f;
+	float minCutOff = 8.0f;
 	color = texture(terrainTexture, TexCoord)*vec4(finalColor, 1.0f);
+	color = vec4(range*(-atan((fragmentPos.y / width) - minCutOff) / 3.1415)+ (range/2), color.y, color.z, color.w);
 }
