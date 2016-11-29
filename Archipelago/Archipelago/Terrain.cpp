@@ -201,43 +201,84 @@ void Terrain::buildIslandTexture() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-
-//modified implementation of concept, Reference: https://www.reddit.com/r/gamedev/comments/1g4eae/need_help_generating_an_island_using_perlin_noise/?st=iuritk3l&sh=594f7e28
 void Terrain::islandMask()
 {
-	const GLfloat MAGNITUDE = 15.0f; //20.0f
-	const GLfloat DISTANCE_TO_ZERO = 100;
+	const GLfloat MAGNITUDE = 20.0f;
+	const GLfloat DISTANCE_TO_ZERO = 100.0f;
+	const GLfloat ISLAND_RADIUS = DISTANCE_TO_ZERO * 0.7f;
+	const GLfloat ISLAND_BUFFER = DISTANCE_TO_ZERO * 1.5f;
 
-	int numCentrePoints;
-	int centerXCoord, centerZCoord;
+	//Find number of islands: value from 2 - 7
+	int numOfIslands = 2 + rand() % 5;
+
+	//Find island size: island composed of 1-3 points
+	std::vector<int> islandSize;
+	int size;
+
+	for (int i = 0; i < numOfIslands; i++) {
+		size = 1 + rand() % 3;
+		islandSize.push_back(size);
+	}
+
+	//Find island point positions
+	std::vector<glm::vec2> centerPoints;
+	bool isValid;
+	int centerX, centerZ;
+
+	for (int i = 0; i < numOfIslands; i++) {
+		int j = 0;
+		
+		while(j < islandSize[i]){
+			isValid = true;
+			
+			//Find island primary point
+			if (j == 0) {
+				centerX = WATER_BORDER + rand() % (this->width - 2 * WATER_BORDER);
+				centerZ = WATER_BORDER + rand() % (this->length - 2 * WATER_BORDER);
+			}
+			//Find island tertiary points
+			else {
+				int index = centerPoints.size() - j;
+
+				centerX = centerPoints[index].x + (rand() % (int)(2 * ISLAND_RADIUS) - ISLAND_RADIUS);
+				centerZ = centerPoints[index].y + (rand() % (int)(2 * ISLAND_RADIUS) - ISLAND_RADIUS);
+
+				GLfloat span = std::sqrt(std::pow(centerX - centerPoints[index].x, 2) + std::pow(centerZ - centerPoints[index].y, 2));
+				if (span > ISLAND_RADIUS)
+					continue;
+			}
+			
+			//Check that prospective point is not inside buffer distance of previous points -> distinct islands
+			for(int k = 0; k < centerPoints.size() - j; k++)
+			{
+				if (std::sqrt(std::pow(centerX - centerPoints[k].x, 2) + std::pow(centerZ - centerPoints[k].y, 2)) < ISLAND_BUFFER) {
+					isValid = false;
+					break;
+				}
+			}
+			if (isValid) {
+				centerPoints.push_back(glm::vec2(centerX, centerZ));
+				j++;
+			}
+		}
+	}
+
+	//Adjust height values in array for each centre point
+	//Add distance * magnitude to the height values (y) of all the verticies vector/array
 	GLfloat vertex, distance;
-
-	//generate # of centre points
-		//rule: Any value between 1-5 inclusive
-	numCentrePoints = 1 + rand() % 10;
-
-	//generate centre point position for each # of points
-		//rule: cannot select points within X distance of the edge
-		//x coordinate = X + random # between 0 and width - 2X
-		//z coordinate = X + random # between 0 and length - 2X
-
-	for (int i = 0; i < numCentrePoints; i++) {
-		centerXCoord = WATER_BORDER + rand() % (this->width - 2 * WATER_BORDER);
-		centerZCoord = WATER_BORDER + rand() % (this->length - 2 * WATER_BORDER);
-
-		//Adjust height values in array for each centre point
-		//Add distance * magnitude to the height values (y) of all the verticies vector/array
-		for (int l = 0; l < this->length; l++) {
-			for (int w = 0; w < this->width; w++) {
-				vertex = l * this->width + w;
-				distance = std::sqrt(std::pow(centerXCoord - w, 2) + std::pow(centerZCoord - l, 2));
+	for (int l = 0; l < this->length; l++) {
+		for (int w = 0; w < this->width; w++) {
+			vertex = l * this->width + w;
+			for each (glm::vec2 point in centerPoints)
+			{
+				distance = std::sqrt(std::pow(point.x - w, 2) + std::pow(point.y - l, 2));
 
 				//clamp if outside sloping zone;
 				if (distance > DISTANCE_TO_ZERO)
 					distance = DISTANCE_TO_ZERO;
 
-				this->vertices[vertex].y += ((DISTANCE_TO_ZERO - distance)/DISTANCE_TO_ZERO) * MAGNITUDE;
-			}
+				this->vertices[vertex].y += ((DISTANCE_TO_ZERO - distance) / DISTANCE_TO_ZERO) * MAGNITUDE;
+			}			
 		}
 	}
 }

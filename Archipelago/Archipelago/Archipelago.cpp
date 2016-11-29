@@ -22,6 +22,12 @@ GLfloat lastY;
 
 int main(void) {
 
+	//Console Request
+	///////////////////////////////////////////////////////////////////////////
+	unsigned int seed;
+	std::cout << "Please enter a seed: ";
+	std::cin >> seed;
+
 	// OpenGL Spec
 	initGLFWHints();
 
@@ -54,26 +60,7 @@ int main(void) {
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
 	water = new Water(15.0f);
-	
-	Terrain t(80);
-	Terrain t1(60);
-	Terrain t2(40);
-	Terrain t3(20);
-	Terrain t4(10);
-	mat4 mod, mod1, mod2, mod3;
-	mod = glm::translate(mod, vec3(321, 0, 123));
-	mod1 = glm::translate(mod1, vec3(321, 0, -123));
-	mod2 = glm::translate(mod2, vec3(-321, 0, 123));
-	mod3 = glm::translate(mod3, vec3(-321, 0, -123));
-	t1.setModel(mod1);
-	t2.setModel(mod2);
-	t3.setModel(mod3);
-	t4.setModel(mod);
-	terrains.push_back(t);
-	terrains.push_back(t1);
-	terrains.push_back(t2);
-	terrains.push_back(t3);
-	terrains.push_back(t4);
+	terrain = new Terrain(seed);
 
 	// Skybox
 	//////////////////////////////////////////////////////////////////////////
@@ -95,7 +82,7 @@ int main(void) {
 
 	//Draw Obj instances
 	shadows.drawObj(water, SUNLIGHT_DIR);
-	shadows.drawObj(&terrains.front(), SUNLIGHT_DIR);
+	shadows.drawObj(terrain , SUNLIGHT_DIR);
 
 	shadows.endShadowMap();
 
@@ -120,9 +107,7 @@ int main(void) {
 		glDepthMask(GL_TRUE);
 
 		// Draw terrain instance
-		for (vector<Terrain>::iterator terrain = terrains.begin(); terrain != terrains.end(); terrain++) {
-			drawObj(&(*terrain), &terrainShader, terrain->getModel());
-		}
+		drawObj(terrain, &terrainShader, glm::mat4(1.0f));
 
 		//Draw water instance
 		drawObj(water, waterShader, waterModel);
@@ -255,48 +240,37 @@ void moveCamera() {
 // Collision
 //////////////////////////////////////////////////////////////////////////
 bool isCamInTerrain(Terrain* terrain) {
-	vec3 terrainPosition(terrain->getModel()[3]);
 
 	// Determine if cam will be in terrain
-	bool camIsInTerrain = (camera.getPosition().x <= (terrainPosition.x + (terrain->getWidth() / 2)) && camera.getPosition().x >= (terrainPosition.x - (terrain->getWidth() / 2))) &&
-		(camera.getPosition().z <= (terrainPosition.z + (terrain->getLength() / 2)) && camera.getPosition().z >= (terrainPosition.z - (terrain->getLength() / 2)));
+	bool camIsInTerrain = (camera.getPosition().x <= (terrain->getWidth() / 2)) && (camera.getPosition().x >= -(terrain->getWidth() / 2)) &&
+		(camera.getPosition().z <= (terrain->getLength() / 2)) && (camera.getPosition().z >= -(terrain->getLength() / 2));
 
 	return camIsInTerrain;
 }
 
 void detectTerrainCollision() {
-	if (currentTerrain != nullptr) {
-		Terrain * terrain = currentTerrain;
-
-		if (isCamInTerrain(terrain)) {
-			calculateTerrainCollision(currentTerrain);
-			return;
-		}
+	if (isCamInTerrain(terrain)) {
+		calculateTerrainCollision(terrain);
+		return;
 	}
-
-	for (vector<Terrain>::iterator terrain = terrains.begin(); terrain != terrains.end(); terrain++) {
-		calculateTerrainCollision(&(*terrain));
-	}
+		calculateTerrainCollision(terrain);
 }
 
 void calculateTerrainCollision(Terrain* terrain) {
-	vec3 terrainPosition(terrain->getModel()[3]);
 	vec3 nexPosition = camera.getPosition() + camera.getNextPosition();
 
 	if (!isCamInTerrain(terrain)) {
-		currentTerrain = nullptr;
 		return; 
 	}
-	currentTerrain = terrain;
 
 	// Remove translation effect and find location vertices vector
 	// current position
-	int lineOne = ((int)(camera.getPosition().z < 0 ? camera.getPosition().z + abs(terrainPosition.z) : camera.getPosition().z - terrainPosition.z) + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
-	int currentLoc = (camera.getPosition().x < 0 ? camera.getPosition().x + abs(terrainPosition.x) : camera.getPosition().x - terrainPosition.x) + ((int)terrain->getWidth() / 2) + lineOne;
+	int lineOne = ((int)(camera.getPosition().z < 0 ? camera.getPosition().z : camera.getPosition().z) + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
+	int currentLoc = (camera.getPosition().x < 0 ? camera.getPosition().x : camera.getPosition().x) + ((int)terrain->getWidth() / 2) + lineOne;
 
 	// next position
-	int lineTwo = ((int)(nexPosition.z < 0 ? nexPosition.z + abs(terrainPosition.z) : nexPosition.z - terrainPosition.z) + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
-	int nextLoc = (nexPosition.x < 0 ? nexPosition.x + abs(terrainPosition.x) : nexPosition.x - terrainPosition.x) + ((int)terrain->getWidth() / 2) + lineTwo;
+	int lineTwo = ((int)(nexPosition.z < 0 ? nexPosition.z : nexPosition.z) + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
+	int nextLoc = (nexPosition.x < 0 ? nexPosition.x : nexPosition.x) + ((int)terrain->getWidth() / 2) + lineTwo;
 
 	try {
 		float offset = 2.0f;
