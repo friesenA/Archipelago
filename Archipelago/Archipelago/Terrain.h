@@ -7,8 +7,8 @@ using namespace glm;
 using namespace std;
 
 // Dimensions of terrain plane
-const int TERRAIN_WIDTH = 400;
-const int TERRAIN_LENGTH = 400;
+const int TERRAIN_WIDTH = 250;
+const int TERRAIN_LENGTH = 250;
 
 const int WATER_BORDER = 100;
 

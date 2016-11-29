@@ -49,7 +49,8 @@ public:
 	void climbAt(float y);
 
 	//Current Position of camera
-	glm::vec3 getPosition();
+	glm::vec3 getPosition() { return position; };
+	glm::vec3 getFront() { return forward; };
 
 	glm::vec3 getNextPosition() {
 		glm::vec3 nextPos(this->forward.x * speed, 0, this->forward.z * speed);

@@ -57,11 +57,6 @@ void Camera::climbAt(float y){
 	position.y = y;
 }
 
-glm::vec3 Camera::getPosition()
-{
-		return position;
-}
-
 void Camera::recalculateVectors()
 {
 

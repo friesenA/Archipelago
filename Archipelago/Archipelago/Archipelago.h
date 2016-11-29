@@ -90,6 +90,8 @@ void moveCamera();
 void drawSkyBox(SkyBox &skybox);
 void drawObj(Obj *mesh, Shader *shader, mat4 modelIn);
 bool incrementWaterSurface();
+void renderInitIslandSample();
+void renderMoreIslands();
 
 
 // Collision

@@ -3,7 +3,7 @@
 #include "Obj.h"
 
 const int TEXTURE_SIZE = 50;
-const int NUMBER_OF_TILES_ACROSS = 30;
+const int NUMBER_OF_TILES_ACROSS = 40;
 
 //Creates a plane at y=height, of square dimension based on the size of the texture file and the number of tiles across, centered at the origin
 class Water : public Obj

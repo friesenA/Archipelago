@@ -5,11 +5,13 @@
 */
 
 #include "Archipelago.h"
+#include <thread>
+#include <ctime>
 
 //Camera facing forward z = -1;
 float camStartingYLoc = 17.0f;
 Camera camera(glm::vec3(0.0f, camStartingYLoc, 0.0f));
-
+vector<Terrain> islandBuffer;
 Shadows shadows;
 
 //Key tracking
@@ -19,6 +21,10 @@ bool keys[1024];
 bool initializeMouse = true;
 GLfloat lastX;
 GLfloat lastY;
+
+float t = 0;
+
+//RANDOM NUMBER
 
 int main(void) {
 
@@ -54,26 +60,7 @@ int main(void) {
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
 	water = new Water(15.0f);
-	
-	Terrain t(80);
-	Terrain t1(60);
-	Terrain t2(40);
-	Terrain t3(20);
-	Terrain t4(10);
-	mat4 mod, mod1, mod2, mod3;
-	mod = glm::translate(mod, vec3(321, 0, 123));
-	mod1 = glm::translate(mod1, vec3(321, 0, -123));
-	mod2 = glm::translate(mod2, vec3(-321, 0, 123));
-	mod3 = glm::translate(mod3, vec3(-321, 0, -123));
-	t1.setModel(mod1);
-	t2.setModel(mod2);
-	t3.setModel(mod3);
-	t4.setModel(mod);
-	terrains.push_back(t);
-	terrains.push_back(t1);
-	terrains.push_back(t2);
-	terrains.push_back(t3);
-	terrains.push_back(t4);
+	renderInitIslandSample();
 
 	// Skybox
 	//////////////////////////////////////////////////////////////////////////
@@ -104,7 +91,7 @@ int main(void) {
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
-
+	
 	// Game loop
 	//////////////////////////////////////////////////////////////////////////
 	while (!glfwWindowShouldClose(window)) {
@@ -128,6 +115,8 @@ int main(void) {
 		drawObj(water, waterShader, waterModel);
 
 		glfwSwapBuffers(window);
+
+		t += 0.0005f;
 	}
 
 	// Clean up
@@ -141,6 +130,8 @@ int main(void) {
 //////////////////////////////////////////////////////////////////////////
 void drawObj(Obj *mesh, Shader* shader, mat4 modelIn) {
 	shader->Use();
+	GLint waterTime = glGetUniformLocation(shader->Program, "time");
+	 glUniform1f(waterTime, t);
 	transformViewProj(shader, modelIn);
 	lightingSetup(shader);
 	mesh->draw();
@@ -150,10 +141,65 @@ bool incrementWaterSurface() {
 	if (water->getLength() - abs(camera.getPosition().x) <= CAM_DIST_TO_EDGE || water->getLength() - abs(camera.getPosition().z) <= CAM_DIST_TO_EDGE) {
 		waterModel = glm::scale(waterModel, glm::vec3(1.3f, 1.0f, 1.3f));
 		water->incrementSurface(1.3);
+		renderMoreIslands();
 		return true;
 	}
 
 	return false;
+}
+
+void renderInitIslandSample() {
+	srand(time(0));
+
+	int randomNum1 = rand();
+	int randomNum2 = rand();
+	int randomNum3 = rand();
+	int randomNum4 = rand();
+	int randomNum5 = rand();
+
+
+
+	cout << "Random number is: " << randomNum1<<endl;
+	Terrain t(randomNum1);
+
+	cout << "Random number is: " << randomNum2 << endl;
+	Terrain t1(randomNum2);
+
+	cout << "Random number is: " << randomNum3 << endl;
+	Terrain t2(randomNum3);
+
+	cout << "Random number is: " << randomNum4 << endl;
+	Terrain t3(randomNum4);
+
+	cout << "Random number is: " << randomNum5 << endl;
+	Terrain t4(randomNum5);
+
+	mat4 mod, mod1, mod2, mod3;
+	mod =  translate(mod, vec3(t.getWidth(), 0, t.getWidth()));
+	mod1 = translate(mod1, vec3(t.getWidth(), 0, -t.getWidth()));
+	mod2 = translate(mod2, vec3(-t.getWidth(), 0, t.getWidth()));
+	mod3 = translate(mod3, vec3(-t.getWidth(), 0, -t.getWidth()));
+
+	t1.setModel(mod1);
+	t2.setModel(mod2);
+	t3.setModel(mod3);
+	t4.setModel(mod);
+
+	terrains.push_back(t);
+	terrains.push_back(t1);
+	terrains.push_back(t2);
+	terrains.push_back(t3);
+	terrains.push_back(t4);
+}
+
+void renderMoreIslands() {
+	srand(time(0));
+	Terrain t(rand());
+	float xOffset = camera.getPosition().x + (camera.getPosition().x/4);
+	float zOffset = camera.getPosition().z + (camera.getPosition().z / 4);
+	mat4 mod = translate(mod,vec3(xOffset,0, zOffset));
+	t.setModel(mod);
+	terrains.push_back(t);
 }
 
 // Transform
@@ -176,6 +222,8 @@ void lightingSetup(Shader *shaders) {
 	GLint lightDir = glGetUniformLocation(shaders->Program, "lightDirection");
 	GLint lightCol = glGetUniformLocation(shaders->Program, "lightColor");
 	GLint viewPos = glGetUniformLocation(shaders->Program, "viewerPos");
+	
+
 
 	//light attributes
 	glUniform3f(lightDir, SUNLIGHT_DIR.x, SUNLIGHT_DIR.y, SUNLIGHT_DIR.z);
@@ -190,6 +238,7 @@ void lightingSetup(Shader *shaders) {
 	GLint lightCTMLoc = glGetUniformLocation(shaders->Program, "lightSpaceMatrix");
 	glUniformMatrix4fv(lightCTMLoc, 1, GL_FALSE, glm::value_ptr(shadows.getLightSpaceMatrix()));
 }
+
 
 void drawSkyBox(SkyBox &skybox) {
 	view = glm::mat4(glm::mat3(camera.getViewMatrix()));
@@ -309,6 +358,7 @@ void calculateTerrainCollision(Terrain* terrain) {
 	}
 	catch (exception e) {
 		cout << "Location not found! cur" << currentLoc << " next "<< nextLoc  <<endl;
+		currentTerrain = nullptr;
 	}
 }
 
