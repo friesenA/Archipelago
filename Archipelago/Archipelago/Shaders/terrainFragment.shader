@@ -43,7 +43,7 @@ void main()
 	vec3 diffuse_contribution = incident_degree * lightColor;
 
 	//specular lighting
-	float specularStrength = 1.0f;
+	float specularStrength = 0.5f;
 	vec3 viewDir = normalize(viewerPos - fragmentPos);
 	vec3 reflectDir = normalize(reflect(-lightDirection, fragmentNormal));
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 16);
