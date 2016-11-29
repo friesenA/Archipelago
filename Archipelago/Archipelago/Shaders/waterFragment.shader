@@ -40,8 +40,12 @@ void main()
 	//color = vec4(finalColor, 1.0f);
 	vec3 difference = fragmentPos - viewerPos;
 	float distance = length(difference)/200;
-	color = (texture(waterTexture, TexCoord + normalize(fragmentPos).xz * 0.1f * sin(0.1f * length(fragmentPos.xz) - 2 * 3.1415 * time)) * vec4(finalColor, 1.0f)); //water moving
+	float ampOfWave = 0.1f;
+	float period = 0.1f;
+	float frequency = 2*3.1415;
+	color = (texture(waterTexture, TexCoord + normalize(fragmentPos).xz * ampOfWave * sin(period * length(fragmentPos.xz) - frequency * time)) * vec4(finalColor, 1.0f)); //water moving
 	float f = (pow(distance, 4) / 200);
 	color = clamp(color*(1-f) + (vec4(0.5f, 0.5f, 0.5f, 1.0f)) * f, 0.0f, 1.0f);
 	color.a = 0.99;
+
 }

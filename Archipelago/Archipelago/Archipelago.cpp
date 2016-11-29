@@ -116,7 +116,7 @@ int main(void) {
 
 		glfwSwapBuffers(window);
 
-		t += 0.001f;
+		t += 0.0005f;
 	}
 
 	// Clean up
@@ -131,7 +131,7 @@ int main(void) {
 void drawObj(Obj *mesh, Shader* shader, mat4 modelIn) {
 	shader->Use();
 	GLint waterTime = glGetUniformLocation(shader->Program, "time");
-	glUniform1f(waterTime, t);
+	 glUniform1f(waterTime, t);
 	transformViewProj(shader, modelIn);
 	lightingSetup(shader);
 	mesh->draw();
