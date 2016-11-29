@@ -14,6 +14,8 @@ Camera camera(glm::vec3(0.0f, camStartingYLoc, 0.0f));
 vector<Terrain> islandBuffer;
 Shadows shadows;
 
+int width, height;
+
 //Key tracking
 bool keys[1024];
 
@@ -94,7 +96,6 @@ int main(void) {
 
 	// Viewport / needs to be set after the shadow map created
 	//////////////////////////////////////////////////////////////////////////
-	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 	
@@ -105,7 +106,7 @@ int main(void) {
 		moveCamera();
 		clearScreenAndColor();
 
-		projection = perspective(radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 1000.0f); //global for all draws
+		projection = perspective(radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f); //global for all draws
 		drawSkyBox(skybox);//Skybox must be drawn first
 
 		//Setup view used for the rest of the scene
@@ -120,7 +121,7 @@ int main(void) {
 
 		glfwSwapBuffers(window);
 
-		t += 0.0005f;
+		t += 0.001;
 	}
 
 	// Clean up
@@ -320,6 +321,10 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	}
 }
 
-void framebuffer_size_callback(GLFWwindow * window, int width, int height) {
-	glViewport(0, 0, width, height);
+void framebuffer_size_callback(GLFWwindow * window, int w, int h) {
+	glViewport(0, 0, w, h);
+	projection = perspective(radians(45.0f), (GLfloat)w / (GLfloat)h, 0.1f, 1000.0f);
+	width = w;
+	height = h;
+
 }

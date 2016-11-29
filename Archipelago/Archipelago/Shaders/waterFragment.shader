@@ -46,6 +46,6 @@ void main()
 	color = (texture(waterTexture, TexCoord + normalize(fragmentPos).xz * ampOfWave * sin(period * length(fragmentPos.xz) - frequency * time)) * vec4(finalColor, 1.0f)); //water moving
 	float f = (pow(distance, 4) / 200);
 	color = clamp(color*(1-f) + (vec4(0.5f, 0.5f, 0.5f, 1.0f)) * f, 0.0f, 1.0f);
-	color.a = 1.00;
+	color.a = 0.99;
 
 }

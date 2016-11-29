@@ -57,7 +57,7 @@ void main()
 	//Giving a gradient  of shoreline affect
 	float width = 3.0f;
 	float range = 0.15f;
-	float minCutOff = 8.0f;
+	float minCutOff = 7.0f;
 	color = texture(terrainTexture, TexCoord)*vec4(finalColor, 1.0f);
 	color = vec4(range*(-atan((fragmentPos.y / width) - minCutOff) / 3.1415)+ (range/2), color.y, color.z, color.w);
 
@@ -67,5 +67,5 @@ void main()
 	float distance = length(difference) / 200;
 	color = color + (texture(terrainTexture, TexCoord) * vec4(finalColor, 1.0f));
 	float f = (pow(distance, 4) / 200);
-	color = clamp(color*(1 - f) + (vec4(0.5f, 0.5f, 0.5f, 1.0f)) * f, 0.0f, 1.0f);
+	color = clamp(color*(1 - f) + (vec4(0.5f, 0.6f, 0.7f, 1.0f)) * f, 0.0f, 1.0f);
 }
