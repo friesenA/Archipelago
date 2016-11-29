@@ -296,7 +296,6 @@ void calculateTerrainCollision(Terrain* terrain) {
 	}
 	catch (exception e) {
 		cout << "Location not found! cur" << currentLoc << " next "<< nextLoc  <<endl;
-		currentTerrain = nullptr;
 	}
 }
 
