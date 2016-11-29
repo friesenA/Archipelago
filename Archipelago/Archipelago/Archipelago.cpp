@@ -28,6 +28,12 @@ float t = 0;
 
 int main(void) {
 
+	//Console Request
+	///////////////////////////////////////////////////////////////////////////
+	unsigned int seed;
+	std::cout << "Please enter a seed: ";
+	std::cin >> seed;
+
 	// OpenGL Spec
 	initGLFWHints();
 
@@ -60,7 +66,7 @@ int main(void) {
 	// Object Creation
 	//////////////////////////////////////////////////////////////////////////
 	water = new Water(15.0f);
-	renderInitIslandSample();
+	terrain = new Terrain(seed);
 
 	// Skybox
 	//////////////////////////////////////////////////////////////////////////
@@ -82,7 +88,7 @@ int main(void) {
 
 	//Draw Obj instances
 	shadows.drawObj(water, SUNLIGHT_DIR);
-	shadows.drawObj(&terrains.front(), SUNLIGHT_DIR);
+	shadows.drawObj(terrain , SUNLIGHT_DIR);
 
 	shadows.endShadowMap();
 
@@ -107,9 +113,7 @@ int main(void) {
 		glDepthMask(GL_TRUE);
 
 		// Draw terrain instance
-		for (vector<Terrain>::iterator terrain = terrains.begin(); terrain != terrains.end(); terrain++) {
-			drawObj(&(*terrain), &terrainShader, terrain->getModel());
-		}
+		drawObj(terrain, &terrainShader, glm::mat4(1.0f));
 
 		//Draw water instance
 		drawObj(water, waterShader, waterModel);
@@ -141,65 +145,10 @@ bool incrementWaterSurface() {
 	if (water->getLength() - abs(camera.getPosition().x) <= CAM_DIST_TO_EDGE || water->getLength() - abs(camera.getPosition().z) <= CAM_DIST_TO_EDGE) {
 		waterModel = glm::scale(waterModel, glm::vec3(1.3f, 1.0f, 1.3f));
 		water->incrementSurface(1.3);
-		renderMoreIslands();
 		return true;
 	}
 
 	return false;
-}
-
-void renderInitIslandSample() {
-	srand(time(0));
-
-	int randomNum1 = rand();
-	int randomNum2 = rand();
-	int randomNum3 = rand();
-	int randomNum4 = rand();
-	int randomNum5 = rand();
-
-
-
-	cout << "Random number is: " << randomNum1<<endl;
-	Terrain t(randomNum1);
-
-	cout << "Random number is: " << randomNum2 << endl;
-	Terrain t1(randomNum2);
-
-	cout << "Random number is: " << randomNum3 << endl;
-	Terrain t2(randomNum3);
-
-	cout << "Random number is: " << randomNum4 << endl;
-	Terrain t3(randomNum4);
-
-	cout << "Random number is: " << randomNum5 << endl;
-	Terrain t4(randomNum5);
-
-	mat4 mod, mod1, mod2, mod3;
-	mod =  translate(mod, vec3(t.getWidth(), 0, t.getWidth()));
-	mod1 = translate(mod1, vec3(t.getWidth(), 0, -t.getWidth()));
-	mod2 = translate(mod2, vec3(-t.getWidth(), 0, t.getWidth()));
-	mod3 = translate(mod3, vec3(-t.getWidth(), 0, -t.getWidth()));
-
-	t1.setModel(mod1);
-	t2.setModel(mod2);
-	t3.setModel(mod3);
-	t4.setModel(mod);
-
-	terrains.push_back(t);
-	terrains.push_back(t1);
-	terrains.push_back(t2);
-	terrains.push_back(t3);
-	terrains.push_back(t4);
-}
-
-void renderMoreIslands() {
-	srand(time(0));
-	Terrain t(rand());
-	float xOffset = camera.getPosition().x + (camera.getPosition().x/4);
-	float zOffset = camera.getPosition().z + (camera.getPosition().z / 4);
-	mat4 mod = translate(mod,vec3(xOffset,0, zOffset));
-	t.setModel(mod);
-	terrains.push_back(t);
 }
 
 // Transform
@@ -304,48 +253,37 @@ void moveCamera() {
 // Collision
 //////////////////////////////////////////////////////////////////////////
 bool isCamInTerrain(Terrain* terrain) {
-	vec3 terrainPosition(terrain->getModel()[3]);
 
 	// Determine if cam will be in terrain
-	bool camIsInTerrain = (camera.getPosition().x <= (terrainPosition.x + (terrain->getWidth() / 2)) && camera.getPosition().x >= (terrainPosition.x - (terrain->getWidth() / 2))) &&
-		(camera.getPosition().z <= (terrainPosition.z + (terrain->getLength() / 2)) && camera.getPosition().z >= (terrainPosition.z - (terrain->getLength() / 2)));
+	bool camIsInTerrain = (camera.getPosition().x <= (terrain->getWidth() / 2)) && (camera.getPosition().x >= -(terrain->getWidth() / 2)) &&
+		(camera.getPosition().z <= (terrain->getLength() / 2)) && (camera.getPosition().z >= -(terrain->getLength() / 2));
 
 	return camIsInTerrain;
 }
 
 void detectTerrainCollision() {
-	if (currentTerrain != nullptr) {
-		Terrain * terrain = currentTerrain;
-
-		if (isCamInTerrain(terrain)) {
-			calculateTerrainCollision(currentTerrain);
-			return;
-		}
+	if (isCamInTerrain(terrain)) {
+		calculateTerrainCollision(terrain);
+		return;
 	}
-
-	for (vector<Terrain>::iterator terrain = terrains.begin(); terrain != terrains.end(); terrain++) {
-		calculateTerrainCollision(&(*terrain));
-	}
+		calculateTerrainCollision(terrain);
 }
 
 void calculateTerrainCollision(Terrain* terrain) {
-	vec3 terrainPosition(terrain->getModel()[3]);
 	vec3 nexPosition = camera.getPosition() + camera.getNextPosition();
 
 	if (!isCamInTerrain(terrain)) {
-		currentTerrain = nullptr;
 		return; 
 	}
-	currentTerrain = terrain;
 
 	// Remove translation effect and find location vertices vector
 	// current position
-	int lineOne = ((int)(camera.getPosition().z < 0 ? camera.getPosition().z + abs(terrainPosition.z) : camera.getPosition().z - terrainPosition.z) + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
-	int currentLoc = (camera.getPosition().x < 0 ? camera.getPosition().x + abs(terrainPosition.x) : camera.getPosition().x - terrainPosition.x) + ((int)terrain->getWidth() / 2) + lineOne;
+	int lineOne = ((int)(camera.getPosition().z < 0 ? camera.getPosition().z : camera.getPosition().z) + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
+	int currentLoc = (camera.getPosition().x < 0 ? camera.getPosition().x : camera.getPosition().x) + ((int)terrain->getWidth() / 2) + lineOne;
 
 	// next position
-	int lineTwo = ((int)(nexPosition.z < 0 ? nexPosition.z + abs(terrainPosition.z) : nexPosition.z - terrainPosition.z) + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
-	int nextLoc = (nexPosition.x < 0 ? nexPosition.x + abs(terrainPosition.x) : nexPosition.x - terrainPosition.x) + ((int)terrain->getWidth() / 2) + lineTwo;
+	int lineTwo = ((int)(nexPosition.z < 0 ? nexPosition.z : nexPosition.z) + (int)(terrain->getLength() / 2)) *  (int)terrain->getWidth();
+	int nextLoc = (nexPosition.x < 0 ? nexPosition.x : nexPosition.x) + ((int)terrain->getWidth() / 2) + lineTwo;
 
 	try {
 		float offset = 2.0f;

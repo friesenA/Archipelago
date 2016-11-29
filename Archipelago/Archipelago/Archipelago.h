@@ -18,8 +18,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 //Objects
 Water* water;
 const float CAM_DIST_TO_EDGE = 100;
-vector<Terrain> terrains;
-Terrain* currentTerrain;
+Terrain* terrain;
 
 // Shaders
 //////////////////////////////////////////////////////////////////////////
@@ -41,7 +40,7 @@ void transformViewProj(Shader *shaders, mat4 modelIn);
 //Lighting
 ///////////////////////////////////////////////////////////////////////////
 void lightingSetup(Shader *shaders);
-glm::vec3 const SUNLIGHT_DIR(glm::normalize(glm::vec3(1.0f, 2.0f*sqrt(2.0f), -1.0f)));
+glm::vec3 const SUNLIGHT_DIR(glm::normalize(glm::vec3(sqrt(2.0f), 1.0f, -sqrt(2.0f))));
 
 //////////////////////////////////////////////////////////////////////////////OpenGL
 /**

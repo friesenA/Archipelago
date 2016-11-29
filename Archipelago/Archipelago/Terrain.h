@@ -7,10 +7,10 @@ using namespace glm;
 using namespace std;
 
 // Dimensions of terrain plane
-const int TERRAIN_WIDTH = 250;
-const int TERRAIN_LENGTH = 250;
+const int TERRAIN_WIDTH = 600;
+const int TERRAIN_LENGTH = 600;
 
-const int WATER_BORDER = 100;
+const int WATER_BORDER = 50;
 
 //const int Island_Noise = ###; need to add?
 
@@ -40,10 +40,6 @@ public:
 	int getWidth() { return width; };
 	int getLength() { return length; };
 	vector<vec3>* getVertices() { return &vertices; };
-
-	mat4 getModel() { return terrainModel; };
-	void setModel(mat4 model) { terrainModel = model; };
-
 
 	~Terrain();
 
