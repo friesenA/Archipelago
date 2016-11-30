@@ -12,10 +12,21 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+uniform float time;
+
 void main()
 {
-	gl_Position = projection * view * model * vec4(position, 1.0);
-	fragmentPos = vec3(model * vec4(position, 1.0));
+	//Waves
+	float ampOfWave = 0.050f;
+	float period = 0.1f;
+	float frequency = 3*2*3.1415;
+	float height = position.y * ampOfWave * sin(period*position.x - frequency*time);
+	vec3 newPosition = vec3(position.x, position.y + height, position.z);	
+
+	gl_Position = projection * view * model * vec4(newPosition, 1.0);
+	
+	//fragment shader information
+	fragmentPos = vec3(model * vec4(newPosition, 1.0));
 	fragmentNormal = vec3(model*vec4(normal, 0.0));
 	TexCoord = uvCoord;
 }
